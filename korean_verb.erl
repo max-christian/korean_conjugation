@@ -100,11 +100,29 @@ merge(Character1, Character2) when is_binary(Character1) and is_binary(Character
             join(merge(SplitCharacter1, SplitCharacter2))
     end;
 
+% regulars that look irregular
+merge({character, <<"ᄆ">>, <<"ㅣ">>, <<"ᆮ">>}=Mit, Character2) ->
+    [Mit, Character2];
+
+% 르 irregular
+merge({character, Lead, <<"ㅗ">>, none}, {character, <<"ᄅ">>, <<"ㅡ">>, none}) ->
+        [{character, Lead, <<"ㅗ">>, <<"ᆯ">>}, {character, <<"ᄅ">>, <<"ㅏ">>, none}];
+
+% 드 irregular
 merge({character, Lead, Vowel, <<"ᆮ">>}, {character, <<"ᄋ">>, _, _}=Character2) ->
     [{character, Lead, Vowel, <<"ᆯ">>}, Character2];
 
+% ㅅ irregular
 merge({character, Lead, Vowel, <<"ᆺ">>}, {character, _, <<"ㅏ">>, Padchim}) ->
     [{character, Lead, Vowel, none}, {character, <<"ᄋ">>, <<"ㅏ">>, Padchim}];
+
+% ㅂ irregular
+merge({character, Lead, <<"ㅜ">>=Vowel, <<"ᆸ">>}, {character, <<"ᄋ">>, <<"ㅓ">>, Padchim}) ->
+    [{character, Lead, Vowel, none}, {character, <<"ᄋ">>, <<"ㅝ">>, Padchim}];
+
+% vowel contractions
+merge({character, Lead, <<"ㅐ">>, none}, {character, _, <<"ㅓ">>, Padchim}) ->
+    [{character, Lead, <<"ㅐ">>, Padchim}];
 
 merge({character, Lead, <<"ㅡ">>, none}, {character, _, <<"ㅓ">>, Padchim}) ->
     [{character, Lead, <<"ㅓ">>, Padchim}];
@@ -134,9 +152,6 @@ merge({character, _, _, none}=Character, {character, <<"ᄆ">>, <<"ㅕ">>, <<"�
 
 merge({character, _, _, _}=Character, {character, <<"ᄆ">>, <<"ㅕ">>, <<"ᆫ">>}=Myun) ->
     [Character, {character, <<"ᄋ">>, <<"ㅡ">>, none}, Myun];
-
-merge({character, Lead, <<"ㅗ">>, none}, {character, <<"ᄅ">>, <<"ㅡ">>, none}) ->
-        [{character, Lead, <<"ㅗ">>, <<"ᆯ">>}, {character, <<"ᄅ">>, <<"ㅏ">>, none}];
 
 merge(Character1, Character2) ->
     [Character1, Character2].
@@ -199,6 +214,8 @@ main(_Args) ->
     <<"됐">> = merge(<<"되">>, <<"었">>), 
     <<"몰라">> = merge(<<"모">>, <<"르">>),
     <<"들어">> = merge(<<"듣">>, <<"어">>),
+    <<"추워">> = merge(<<"춥">>, <<"어">>),
+    <<"믿어">> = merge(<<"믿">>, <<"어">>),
     
     % merging conjunctions
     <<"나면">> = merge(<<"나">>, <<"면">>),
@@ -209,4 +226,7 @@ main(_Args) ->
     <<"먹었어">> = past(<<"먹">>),
     <<"봤어">> = past(<<"보">>),
     <<"왔어">> = past(<<"오">>),
-    <<"기다렸어">> = past(<<"기다리">>).
+    <<"기다렸어">> = past(<<"기다리">>),
+    <<"추웠어">> = past(<<"춥">>),
+    <<"꺼냈어">> = past(<<"꺼내">>),
+    <<"구웠어">> = past(<<"굽">>).
