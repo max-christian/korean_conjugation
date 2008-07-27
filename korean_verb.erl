@@ -156,29 +156,35 @@ merge({character, _, _, _}=Character, {character, <<"ᄆ">>, <<"ㅕ">>, <<"ᆫ">
 merge(Character1, Character2) ->
     [Character1, Character2].
 
-past(Character) when is_binary(Character) ->
-    SplitCharacter = split(Character),
-    case is_list(SplitCharacter) of
+past_stem(Verb) when is_binary(Verb) ->
+    SplitVerb = split(Verb),
+    case is_list(SplitVerb) of
         true -> 
-            LeadString = lists:sublist(SplitCharacter, length(SplitCharacter) - 1),
-            EndCharacter = lists:last(SplitCharacter),
-            NewEndString = past(EndCharacter),
+            LeadString = lists:sublist(SplitVerb, length(SplitVerb) - 1),
+            EndCharacter = lists:last(SplitVerb),
+            NewEndString = past_stem(EndCharacter),
             join(LeadString ++ NewEndString);
         false -> 
-            join(past(SplitCharacter))
+            join(past_stem(SplitVerb))
     end;
 
-past(Character) when is_binary(Character) ->
-    join(past(split(Character)));
+past_stem(Verb) when is_binary(Verb) ->
+    join(past_stem(split(Verb)));
 
-past({character, _, <<"ㅗ">>, _}=Character) ->
-    merge(Character, {character, <<"ᄋ">>, <<"ㅏ">>, <<"ᆻ">>}) ++ [{character, <<"ᄋ">>, <<"ㅓ">>, none}];
+past_stem({character, _, <<"ㅗ">>, _}=Verb) ->
+    merge(Verb, {character, <<"ᄋ">>, <<"ㅏ">>, <<"ᆻ">>});
 
-past({character, _, Vowel, _}=Character) when Vowel =:= <<"ㅓ">> orelse Vowel =:= <<"ㅏ">> ->
-    merge(Character, {character, <<"ᄋ">>, Vowel, <<"ᆻ">>}) ++ [{character, <<"ᄋ">>, <<"ㅓ">>, none}];
+past_stem({character, _, Vowel, _}=Verb) when Vowel =:= <<"ㅓ">> orelse Vowel =:= <<"ㅏ">> ->
+    merge(Verb, {character, <<"ᄋ">>, Vowel, <<"ᆻ">>});
     
-past(Character) ->
-    merge(Character, {character, <<"ᄋ">>, <<"ㅓ">>, <<"ᆻ">>}) ++ [{character, <<"ᄋ">>, <<"ㅓ">>, none}].
+past_stem(Verb) ->
+    merge(Verb, {character, <<"ᄋ">>, <<"ㅓ">>, <<"ᆻ">>}).
+
+past_informal(Verb) ->
+    merge(past_stem(Verb), <<"어">>).
+
+past_formal(Verb) ->
+    merge(past_informal(Verb), <<"요">>).
 
 main(_Args) ->
     {padchim, <<"ᆭ">>, 4525} = padchim(<<"않">>),
@@ -221,12 +227,24 @@ main(_Args) ->
     <<"나면">> = merge(<<"나">>, <<"면">>),
     <<"웃으면">> = merge(<<"웃">>, <<"면">>),
     
-    <<"갔어">> = past(<<"가">>),
-    <<"읽었어">> = past(<<"읽">>),
-    <<"먹었어">> = past(<<"먹">>),
-    <<"봤어">> = past(<<"보">>),
-    <<"왔어">> = past(<<"오">>),
-    <<"기다렸어">> = past(<<"기다리">>),
-    <<"추웠어">> = past(<<"춥">>),
-    <<"꺼냈어">> = past(<<"꺼내">>),
-    <<"구웠어">> = past(<<"굽">>).
+    <<"갔">> = past_stem(<<"가">>),
+    <<"읽었">> = past_stem(<<"읽">>),
+    <<"먹었">> = past_stem(<<"먹">>),
+    <<"봤">> = past_stem(<<"보">>),
+    <<"왔">> = past_stem(<<"오">>),
+    <<"기다렸">> = past_stem(<<"기다리">>),
+    <<"추웠">> = past_stem(<<"춥">>),
+    <<"꺼냈">> = past_stem(<<"꺼내">>),
+    <<"구웠">> = past_stem(<<"굽">>),
+    
+    <<"갔어">> = past_informal(<<"가">>),
+    <<"읽었어">> = past_informal(<<"읽">>),
+    <<"먹었어">> = past_informal(<<"먹">>),
+    <<"봤어">> = past_informal(<<"보">>),
+    <<"왔어">> = past_informal(<<"오">>),
+    <<"기다렸어">> = past_informal(<<"기다리">>),
+    <<"추웠어">> = past_informal(<<"춥">>),
+    <<"꺼냈어">> = past_informal(<<"꺼내">>),
+    <<"구웠어">> = past_informal(<<"굽">>),
+    
+    <<"갔어요">> = past_formal(<<"가">>).
