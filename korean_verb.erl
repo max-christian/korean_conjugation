@@ -100,6 +100,9 @@ merge(Character1, Character2) when is_binary(Character1) and is_binary(Character
             join(merge(SplitCharacter1, SplitCharacter2))
     end;
 
+merge({character, Lead, Vowel, <<"ᆮ">>}, {character, <<"ᄋ">>, _, _}=Character2) ->
+    [{character, Lead, Vowel, <<"ᆯ">>}, Character2];
+
 merge({character, Lead, Vowel, <<"ᆺ">>}, {character, _, <<"ㅏ">>, Padchim}) ->
     [{character, Lead, Vowel, none}, {character, <<"ᄋ">>, <<"ㅏ">>, Padchim}];
 
@@ -131,6 +134,9 @@ merge({character, _, _, none}=Character, {character, <<"ᄆ">>, <<"ㅕ">>, <<"�
 
 merge({character, _, _, _}=Character, {character, <<"ᄆ">>, <<"ㅕ">>, <<"ᆫ">>}=Myun) ->
     [Character, {character, <<"ᄋ">>, <<"ㅡ">>, none}, Myun];
+
+merge({character, Lead, <<"ㅗ">>, none}, {character, <<"ᄅ">>, <<"ㅡ">>, none}) ->
+        [{character, Lead, <<"ㅗ">>, <<"ᆯ">>}, {character, <<"ᄅ">>, <<"ㅏ">>, none}];
 
 merge(Character1, Character2) ->
     [Character1, Character2].
@@ -178,6 +184,7 @@ main(_Args) ->
     <<"눨">> = join({character, <<"ᄂ">>, <<"ㅝ">>, <<"ᆯ">>}),
     <<"눠">> = join({character, <<"ᄂ">>, <<"ㅝ">>, none}),
     <<"낫">> = join({character, <<"ᄂ">>, <<"ㅏ">>, <<"ᆺ">>}),
+    <<"몰">> = join([{character, <<"ᄆ">>, <<"ㅗ">>, <<"ᆯ">>}]),
     
     <<"워">> = merge(<<"우">>, <<"어">>),
     <<"나아">> = merge(<<"낫">>, <<"아">>),
@@ -190,6 +197,8 @@ main(_Args) ->
     <<"기다려">> = merge(<<"기다리">>, <<"어">>),
     <<"썼">> = merge(<<"쓰">>, <<"었">>),
     <<"됐">> = merge(<<"되">>, <<"었">>), 
+    <<"몰라">> = merge(<<"모">>, <<"르">>),
+    <<"들어">> = merge(<<"듣">>, <<"어">>),
     
     % merging conjunctions
     <<"나면">> = merge(<<"나">>, <<"면">>),
