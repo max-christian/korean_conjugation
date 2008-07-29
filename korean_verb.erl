@@ -168,9 +168,6 @@ past_stem(Verb) when is_binary(Verb) ->
             join(past_stem(SplitVerb))
     end;
 
-past_stem(Verb) when is_binary(Verb) ->
-    join(past_stem(split(Verb)));
-
 past_stem({character, _, <<"ㅗ">>, _}=Verb) ->
     merge(Verb, {character, <<"ᄋ">>, <<"ㅏ">>, <<"ᆻ">>});
 
