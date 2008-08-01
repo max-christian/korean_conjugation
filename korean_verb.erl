@@ -104,6 +104,8 @@ merge(Character1, Character2) when is_binary(Character1) and is_binary(Character
 merge({character, <<"ᄆ">>, <<"ㅣ">>, <<"ᆮ">>}=Mit, Character2) ->
     [Mit, Character2];
 
+%TODO: hardcode irregular exceptions    
+
 % 르 irregular
 merge({character, Lead, <<"ㅗ">>, none}, {character, <<"ᄅ">>, <<"ㅡ">>, none}) ->
         [{character, Lead, <<"ㅗ">>, <<"ᆯ">>}, {character, <<"ᄅ">>, <<"ㅏ">>, none}];
@@ -120,29 +122,35 @@ merge({character, Lead, Vowel, <<"ᆺ">>}, {character, _, <<"ㅏ">>, Padchim}) -
 merge({character, Lead, <<"ㅜ">>=Vowel, <<"ᆸ">>}, {character, <<"ᄋ">>, <<"ㅓ">>, Padchim}) ->
     [{character, Lead, Vowel, none}, {character, <<"ᄋ">>, <<"ㅝ">>, Padchim}];
 
+merge({character, Lead, Vowel, none}, {character, <<"ᄋ">>, <<"ㅡ">>, <<"ᆸ">>}) ->
+    [{character, Lead, Vowel, <<"ᆸ">>}];
+
+merge(Character, {character, <<"ᄋ">>, <<"ㅡ">>, <<"ᆸ">>}=Eup) ->
+    [Character, Eup];
+
 % vowel contractions
-merge({character, Lead, <<"ㅐ">>, none}, {character, _, <<"ㅓ">>, Padchim}) ->
+merge({character, Lead, <<"ㅐ">>, none}, {character, <<"ᄋ">>, <<"ㅓ">>, Padchim}) ->
     [{character, Lead, <<"ㅐ">>, Padchim}];
 
-merge({character, Lead, <<"ㅡ">>, none}, {character, _, <<"ㅓ">>, Padchim}) ->
+merge({character, Lead, <<"ㅡ">>, none}, {character, <<"ᄋ">>, <<"ㅓ">>, Padchim}) ->
     [{character, Lead, <<"ㅓ">>, Padchim}];
 
-merge({character, Lead, <<"ㅜ">>, none}, {character, _, <<"ㅓ">>, Padchim}) -> 
+merge({character, Lead, <<"ㅜ">>, none}, {character, <<"ᄋ">>, <<"ㅓ">>, Padchim}) -> 
     [{character, Lead, <<"ㅝ">>, Padchim}];
 
-merge({character, Lead, <<"ㅗ">>, none}, {character, _, <<"ㅏ">>, Padchim}) ->
+merge({character, Lead, <<"ㅗ">>, none}, {character, <<"ᄋ">>, <<"ㅏ">>, Padchim}) ->
     [{character, Lead, <<"ㅘ">>, Padchim}];
 
-merge({character, Lead, <<"ㅚ">>, none}, {character, _, <<"ㅓ">>, Padchim}) ->
+merge({character, Lead, <<"ㅚ">>, none}, {character, <<"ᄋ">>, <<"ㅓ">>, Padchim}) ->
     [{character, Lead, <<"ㅙ">>, Padchim}];
 
-merge({character, Lead, <<"ㅏ">>, none}, {character, _, <<"ㅏ">>, Padchim}) ->
+merge({character, Lead, <<"ㅏ">>, none}, {character, <<"ᄋ">>, <<"ㅏ">>, Padchim}) ->
     [{character, Lead, <<"ㅏ">>, Padchim}];
 
-merge({character, Lead, <<"ㅡ">>, none}, {character, _, <<"ㅏ">>, Padchim}) ->
+merge({character, Lead, <<"ㅡ">>, none}, {character, <<"ᄋ">>, <<"ㅏ">>, Padchim}) ->
     [{character, Lead, <<"ㅏ">>, Padchim}];
 
-merge({character, Lead, <<"ㅣ">>, none}, {character, _, <<"ㅓ">>, Padchim}) ->
+merge({character, Lead, <<"ㅣ">>, none}, {character, <<"ᄋ">>, <<"ㅓ">>, Padchim}) ->
     [{character, Lead, <<"ㅕ">>, Padchim}];
 
 % 면 connective
@@ -183,6 +191,46 @@ past_informal(Verb) ->
 past_formal(Verb) ->
     merge(past_informal(Verb), <<"요">>).
 
+past_super_formal(Verb) ->
+    merge(merge(merge(past_stem(Verb), <<"습">>), <<"니">>), <<"다">>).
+
+present_simple(Verb) when is_binary(Verb) ->
+    SplitVerb = split(Verb),
+    case is_list(SplitVerb) of
+        true -> 
+            LeadString = lists:sublist(SplitVerb, length(SplitVerb) - 1),
+            EndCharacter = lists:last(SplitVerb),
+            NewEndString = present_simple(EndCharacter),
+            join(LeadString ++ NewEndString);
+        false -> 
+            join(present_simple(SplitVerb))
+    end;
+
+present_simple(Verb) when is_binary(Verb) ->
+    join(present_simple(split(Verb)));
+
+present_simple({character, _, <<"ㅗ">>, _}=Verb) ->
+    merge(Verb, {character, <<"ᄋ">>, <<"ㅏ">>, none});
+
+present_simple({character, _, <<"ㅜ">>, _}=Verb) ->
+    merge(Verb, {character, <<"ᄋ">>, <<"ㅓ">>, none});
+
+present_simple({character, _, Vowel, _}=Verb) when Vowel =:= <<"ㅓ">> orelse Vowel =:= <<"ㅏ">> ->
+    merge(Verb, {character, <<"ᄋ">>, Vowel, none}).
+
+
+present_formal(Verb) ->
+    merge(present_simple(Verb), <<"요">>).
+
+propositive_informal(Verb) ->
+    merge(Verb, <<"자">>).
+
+propositive_super_formal(Verb) ->
+    merge(merge(merge(Verb, <<"읍">>), <<"시">>), <<"다">>).
+
+imperitive_polite(Verb) ->
+    merge(merge(Verb, <<"세">>), <<"요">>).
+
 main(_Args) ->
     {padchim, <<"ᆭ">>, 4525} = padchim(<<"않">>),
     {padchim, none, 4519} = padchim(<<"아">>),
@@ -195,7 +243,7 @@ main(_Args) ->
     
     {lead, <<"ᄂ">>, _} = lead(<<"난">>),
     {lead, <<"ᄀ">>, _} = lead(<<"간">>),
-    {lead, <<"ᄈ">>, _} = lead(<<"빨">>),
+    {lead, <<"ᄈ">>, _} = lead(<<"빨">>), 
     
     {character, <<"ᄂ">>, <<"ㅏ">>, <<"ᆺ">>} = split(<<"낫">>),
     {character, <<"ᄂ">>, <<"ㅝ">>, <<"ᆯ">>} = split(<<"눨">>),
@@ -219,6 +267,8 @@ main(_Args) ->
     <<"들어">> = merge(<<"듣">>, <<"어">>),
     <<"추워">> = merge(<<"춥">>, <<"어">>),
     <<"믿어">> = merge(<<"믿">>, <<"어">>),
+    
+    <<"갑">> = merge(<<"가">>, <<"읍">>),
     
     % merging conjunctions
     <<"나면">> = merge(<<"나">>, <<"면">>),
@@ -244,4 +294,21 @@ main(_Args) ->
     <<"꺼냈어">> = past_informal(<<"꺼내">>),
     <<"구웠어">> = past_informal(<<"굽">>),
     
-    <<"갔어요">> = past_formal(<<"가">>).
+    <<"갔어요">> = past_formal(<<"가">>),
+    
+    <<"갔습니다">> = past_super_formal(<<"가">>),
+    
+    <<"가">> = present_simple(<<"가">>),
+    <<"와">> = present_simple(<<"오">>),
+    <<"추워">> = present_simple(<<"춥">>),
+    <<"알아">> = present_simple(<<"알">>),
+    
+    <<"와요">> = present_formal(<<"오">>),
+    <<"알아요">> = present_formal(<<"알">>),
+    
+    <<"가자">> = propositive_informal(<<"가">>),
+    
+    <<"갑시다">> = propositive_super_formal(<<"가">>),
+    <<"먹읍시다">> = propositive_super_formal(<<"먹">>),
+    
+    <<"하세요">> = imperitive_polite(<<"하">>).
