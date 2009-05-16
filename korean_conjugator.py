@@ -84,6 +84,8 @@ def apply_rules(x, y, verbose=False, rules=[]):
             return output
 
 def present_simple(infinitive):
+    if infinitive[-1] == '다':
+        infinitive = infinitive[:-1]
     # ㄹ irregular
     if match(infinitive[-1], 'ᄅ', 'ㅡ'):
         new_ending = join(lead(infinitive[-2]), vowel(infinitive[-2]), 'ᆯ')
@@ -102,11 +104,6 @@ def past_simple(infinitive):
         return ps[:-1] + merge(ps[-1], '았')
     else:
         return ps[:-1] + merge(ps[-1], '었')
-
-def conjugate(tense, verb_stem):
-    if verb_stem[-1] == '다':
-        verb_stem = verb_stem[:-1]
-    return conjugate_rules[tense](verb_stem)
 
 merge = partial(apply_rules, rules=merge_rules, verbose=True)
 assert reduce(merge, ['오', '아요']) == '와요'
@@ -131,6 +128,9 @@ assert present_simple('되') == '돼'
 assert present_simple('쓰') == '써'
 assert present_simple('서') == '서'
 assert present_simple('세') == '세'
+assert present_simple('기다리다') == '기다려'
 
 assert past_simple('가') == '갔'
 assert past_simple('기다리') == '기다렸'
+assert past_simple('기다리다') == '기다렸'
+assert past_simple('마르다') == '말랐'
