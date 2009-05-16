@@ -41,15 +41,15 @@ assert vowel('빩') == 'ㅏ'
 assert vowel('법') == 'ㅓ'
 assert vowel('가') == 'ㅏ'
 
-def match(character, l, v, p=''):
-    return all([lead(character) == l or l is None, vowel(character) == v or v is None, padchim(character) == p or p is ''])
+def match(character, l='*', v='*', p='*'):
+    return all([lead(character) == l or l == '*', vowel(character) == v or v == '*', padchim(character) == p or p == '*'])
 
-assert match('아', None, 'ㅏ') == True
-assert match('왅', None, 'ㅏ') == False
+assert match('아', '*', 'ㅏ') == True
+assert match('왅', '*', 'ㅏ') == False
 assert match('아', 'ᄋ', 'ㅏ') == True
 assert match('아', 'ᄋ', 'ㅏ', None) == True
-assert match('읽', None, None, 'ᆰ') == True
-assert match('읽', None, None, None) == False
+assert match('읽', '*', '*', 'ᆰ') == True
+assert match('읽', '*', '*', None) == False
 
 merge_rules = []
 # ㄷ irregular
@@ -64,7 +64,7 @@ merge_rules.append(lambda x, y: padchim(x[-1]) is not None and y[0] == '면' and
 # vowel contractions
 def vowel_contraction(vowel1, vowel2, new_vowel):
     def rule(x, y):
-        return match(x[-1], None, vowel1, None) and match(y[0], 'ᄋ', vowel2) and x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
+        return match(x[-1], '*', vowel1, None) and match(y[0], 'ᄋ', vowel2) and x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
     return rule
 merge_rules.append(vowel_contraction('ㅐ', 'ㅓ', 'ㅐ'))
 merge_rules.append(vowel_contraction('ㅡ', 'ㅓ', 'ㅓ'))
