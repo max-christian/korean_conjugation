@@ -59,20 +59,26 @@ merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆸ' and y[0] == '어' and jo
 # ㅅ irregular
 merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆺ' and y[0] == '아' and join(lead(x[-1]), vowel(x[-1])) + '아' + y[1:])
 # 면 connective
-merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆺ' and y[0] == '면' and join(lead(x[-1]), vowel(x[-1])) + '으면' + y[1:])
+merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆺ' and y[0] == '면' and join(lead(x[-1]), vowel(x[-1])) + '으' + y)
 merge_rules.append(lambda x, y: padchim(x[-1]) is not None and y[0] == '면' and x + '으면' + y[1:])
 # vowel contractions
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅐ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅐ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅡ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅓ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅜ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅝ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅗ', None) and match(y[0], 'ᄋ', 'ㅏ') and x[:-1] + join(lead(x[-1]), 'ㅘ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅚ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅙ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅏ', None) and match(y[0], 'ᄋ', 'ㅏ') and x[:-1] + join(lead(x[-1]), 'ㅏ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅡ', None) and match(y[0], 'ᄋ', 'ㅏ') and x[:-1] + join(lead(x[-1]), 'ㅏ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅣ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅕ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅓ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅓ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅔ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅔ', padchim(y[0])) + y[1:])
-merge_rules.append(lambda x, y: match(x[-1], None, 'ㅕ', None) and match(y[0], 'ᄋ', 'ㅓ') and x[:-1] + join(lead(x[-1]), 'ㅕ', padchim(y[0])) + y[1:])
+def vowel_contraction(vowel1, vowel2, new_vowel):
+    def rule(x, y):
+        return match(x[-1], None, vowel1, None) and match(y[0], 'ᄋ', vowel2) and x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
+    return rule
+merge_rules.append(vowel_contraction('ㅐ', 'ㅓ', 'ㅐ'))
+merge_rules.append(vowel_contraction('ㅡ', 'ㅓ', 'ㅓ'))
+merge_rules.append(vowel_contraction('ㅜ', 'ㅓ', 'ㅝ'))
+merge_rules.append(vowel_contraction('ㅗ', 'ㅏ', 'ㅘ'))
+merge_rules.append(vowel_contraction('ㅚ', 'ㅓ', 'ㅙ'))
+merge_rules.append(vowel_contraction('ㅏ', 'ㅏ', 'ㅏ'))
+merge_rules.append(vowel_contraction('ㅡ', 'ㅏ', 'ㅏ'))
+merge_rules.append(vowel_contraction('ㅣ', 'ㅓ', 'ㅕ'))
+merge_rules.append(vowel_contraction('ㅓ', 'ㅓ', 'ㅓ'))
+merge_rules.append(vowel_contraction('ㅔ', 'ㅓ', 'ㅔ'))
+merge_rules.append(vowel_contraction('ㅕ', 'ㅓ', 'ㅕ'))
+merge_rules.append(vowel_contraction('ㅏ', 'ㅕ', 'ㅐ'))
+merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == '세' and x + '으' + y)
 merge_rules.append(lambda x, y: x + y)
 
 def apply_rules(x, y, verbose=False, rules=[]):
@@ -80,7 +86,7 @@ def apply_rules(x, y, verbose=False, rules=[]):
         output = rule(x, y)
         if output:
             if verbose:
-                print("rule %d: %s, %s => %s" % (i, pformat(x), pformat(y), pformat(output)))
+                print("rule %03d: %s, %s => %s" % (i, pformat(x), pformat(y), pformat(output)))
             return output
 
 def present_simple(infinitive):
@@ -93,6 +99,8 @@ def present_simple(infinitive):
             return infinitive[:-2] + merge(new_ending, '라')
         else:
             return infinitive[:-2] + merge(new_ending, '러')
+    elif infinitive[-1] == '하':
+        return infinitive[:-1] + merge(infinitive[-1], '여')
     elif vowel(infinitive[-1]) in ['ㅗ', 'ㅏ']:
         return infinitive[:-1] + merge(infinitive[-1], '아')
     else:
@@ -106,15 +114,17 @@ def past_simple(infinitive):
         return ps[:-1] + merge(ps[-1], '었')
 
 merge = partial(apply_rules, rules=merge_rules, verbose=True)
-assert reduce(merge, ['오', '아요']) == '와요'
-assert reduce(merge, ['오', '아']) == '와'
-assert reduce(merge, ['갔', '면']) == '갔으면'
-assert reduce(merge, ['가', '면']) == '가면'
-assert reduce(merge, ['일어나', '면']) == '일어나면'
-assert reduce(merge, iter('낫면')) == '나으면'
-assert reduce(merge, iter('짓면')) == '지으면'
-assert reduce(merge, iter('짖면')) == '짖으면'
+assert merge('오', '아요') == '와요'
+assert merge('오', '아') == '와'
+assert merge('갔', '면') == '갔으면'
+assert merge('가', '면') == '가면'
+assert merge('일어나', '면') == '일어나면'
+assert merge('낫', '면') == '나으면'
+assert merge('짓', '면') == '지으면'
+assert merge('짖', '면') == '짖으면'
+assert merge('맡', '세요') == '맡으세요'
 
+assert present_simple('하') == '해'
 assert present_simple('가') == '가'
 assert present_simple('오') == '와'
 assert present_simple('피우') == '피워'
@@ -130,7 +140,11 @@ assert present_simple('서') == '서'
 assert present_simple('세') == '세'
 assert present_simple('기다리다') == '기다려'
 
+assert past_simple('하') == '했'
 assert past_simple('가') == '갔'
 assert past_simple('기다리') == '기다렸'
 assert past_simple('기다리다') == '기다렸'
 assert past_simple('마르다') == '말랐'
+assert past_simple('드르다') == '들렀'
+
+
