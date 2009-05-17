@@ -60,15 +60,22 @@ def apply_rules(x, y, verbose=False, rules=[]):
 
 merge = partial(apply_rules, rules=merge_rules, verbose=True)
 
-class Conjugation:
-    ''''Conjugation is a decorator that simply builds a list of all the conjugation rules'''
+class conjugation:
+    ''''conjugation is a singleton decorator that simply builds a list of all the conjugation rules'''
     def __init__(self):
         self.tenses = {}
+        self.tense_order = []
+
+    def perform(self, infinitive):
+        for tense in self.tense_order:
+            print('%s: %s' % (tense, self.tenses[tense](infinitive)))
+
     def __call__(self, f):
+        self.tense_order.append(f.__name__)
         self.tenses.update({f.__name__: f})
         return f
 
-conjugation = Conjugation()
+conjugation = conjugation()
 
 @conjugation
 def base(infinitive):
@@ -182,7 +189,7 @@ def declarative_future_conditional_formal_high(infinitive):
 
 @conjugation
 def inquisitive_present_informal_low(infinitive):
-    return merge(base(infinitive), '?')
+    return merge(declarative_present_informal_low(infinitive), '?')
 
 @conjugation
 def inquisitive_present_informal_high(infinitive):
@@ -308,6 +315,7 @@ assert declarative_future_conditional_formal_low('가다') == '가겠다'
 assert declarative_future_conditional_formal_high('가다') == '가겠습니다'
 
 assert inquisitive_present_informal_low('가다') == '가?'
+assert inquisitive_present_informal_low('하다') == '해?'
 
 assert inquisitive_present_informal_high('가다') == '가요?'
 
@@ -330,4 +338,5 @@ assert imperative_present_formal_low('서') == '서라'
 assert imperative_present_formal_high('가다') == '가십시오'
 assert imperative_present_formal_high('돕다') == '도우십시오'
 
+conjugation.perform('하다')
 #print(pformat(list(conjugation.tenses.keys())))
