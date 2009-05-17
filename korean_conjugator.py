@@ -37,6 +37,7 @@ merge_rules.append(vowel_contraction('ㅡ', 'ㅓ', 'ㅓ'))
 merge_rules.append(vowel_contraction('ㅜ', 'ㅓ', 'ㅝ'))
 merge_rules.append(vowel_contraction('ㅗ', 'ㅏ', 'ㅘ'))
 merge_rules.append(vowel_contraction('ㅚ', 'ㅓ', 'ㅙ'))
+merge_rules.append(vowel_contraction('ㅝ', 'ㅓ', 'ㅝ'))
 merge_rules.append(vowel_contraction('ㅏ', 'ㅏ', 'ㅏ'))
 merge_rules.append(vowel_contraction('ㅡ', 'ㅏ', 'ㅏ'))
 merge_rules.append(vowel_contraction('ㅣ', 'ㅓ', 'ㅕ'))
@@ -55,10 +56,10 @@ def apply_rules(x, y, verbose=False, rules=[]):
         output = rule(x, y)
         if output:
             if verbose:
-                print("rule %03d: %s, %s => %s" % (i, pformat(x), pformat(y), pformat(output)))
+                print("rule %03d: %s + %s => %s" % (i, pformat(x), pformat(y), pformat(output)))
             return output
 
-merge = partial(apply_rules, rules=merge_rules, verbose=True)
+merge = partial(apply_rules, rules=merge_rules, verbose=False)
 
 class conjugation:
     ''''conjugation is a singleton decorator that simply builds a list of all the conjugation rules'''
@@ -201,7 +202,7 @@ def inquisitive_present_formal_low(infinitive):
 
 @conjugation
 def inquisitive_present_formal_high(infinitive):
-    return merge(base(infinitive), '읍니까?')
+    return merge(base(infinitive), '습니까?')
 
 @conjugation
 def imperative_present_informal_low(infinitive):
@@ -338,5 +339,5 @@ assert imperative_present_formal_low('서') == '서라'
 assert imperative_present_formal_high('가다') == '가십시오'
 assert imperative_present_formal_high('돕다') == '도우십시오'
 
-conjugation.perform('하다')
+conjugation.perform('눕다')
 #print(pformat(list(conjugation.tenses.keys())))
