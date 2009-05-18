@@ -359,5 +359,6 @@ assert connective_if(u'가') == u'가면'
 assert connective_if(u'알') == u'알면'
 assert connective_if(u'살') == u'살면'
 
-print(pformat(conjugation.perform(u'놓다')))
+for x, y in conjugation.perform(u'놓다'):
+    print x, y
 #print(pformat(list(conjugation.tenses.keys())))
