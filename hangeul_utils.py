@@ -1,15 +1,19 @@
 from functools import reduce, partial
 
 class Geulja(str):
-    '''Geulja is used to pass around strings that don't have a padchim but should be treated as if they do.
-       When substrings are extracted the Geulja class keeps this marker for the last character only.'''
+    '''Geulja is used to track modifications that have been made to characters. Currently, it keeps track
+       of characters original padchims (for ㄷ -> ㄹ irregulars) and if the character has no padchim but
+       should be treated as if it does (for ㅅ irregulars). When substrings are extracted the Geulja class 
+       keeps these markers for the last character only.'''
     hidden_padchim = False
+    original_padchim = None
     
     def __getitem__(self, index):
         g = Geulja(str.__getitem__(self, index))
         # only keep the hidden padchim marker for the last item
         if index == -1:
             g.hidden_padchim = self.hidden_padchim
+            g.original_padchim = self.original_padchim
         return g
 
 def join(lead, vowel, padchim=None):
@@ -44,6 +48,8 @@ def vowel(character):
 def padchim(character):
     if getattr(character, 'hidden_padchim', False):
         return True
+    if getattr(character, 'original_padchim', False):
+        return character.original_padchim
     p = chr(((ord(character) - 44032) % 28) + ord('ᆨ') - 1)
     if ord(p) == 4519:
         return None
