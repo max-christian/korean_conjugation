@@ -10,8 +10,8 @@ def no_padchim_rule(character):
     return rule
 
 def vowel_contraction(vowel1, vowel2, new_vowel):
-    '''vowel contraction is a helper function for defining common contractions between characters without a padchim
-       and characters that start with 'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했'''
+    '''vowel contraction is a helper function for defining common contractions between a character without a padchim
+       and a character that starts with 'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했.'''
     def rule(x, y):
         return match(x[-1], '*', vowel1, None) and match(y[0], 'ᄋ', vowel2) and x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
     return rule
