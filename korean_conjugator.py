@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from hangeul_utils import *
 from pprint import pformat
 
 def no_padchim_rule(character):
-    '''no_padchim_rule is a helper function for defining merges where a character will take the padchim of a merged
+    u'''no_padchim_rule is a helper function for defining merges where a character will take the padchim of a merged
        character if the first character doesn't already have a padchim, .e.g. 습 -> 가 + 습니다 -> 갑니다.'''
     def rule(x, y):
         if not padchim(x[-1]) and y[0] == character:
@@ -10,58 +12,57 @@ def no_padchim_rule(character):
     return rule
 
 def vowel_contraction(vowel1, vowel2, new_vowel):
-    '''vowel contraction is a helper function for defining common contractions between a character without a padchim
-       and a character that starts with 'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했.'''
+    u'''vowel contraction is a helper function for defining common contractions between a character without a padchim
+       and a character that starts with u'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했.'''
     def rule(x, y):
-        return match(x[-1], '*', vowel1, None) and match(y[0], 'ᄋ', vowel2) and x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
+        return match(x[-1], u'*', vowel1, None) and match(y[0], u'ᄋ', vowel2) and x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
     return rule
 
 # merge rules is a list of rules that are applied in order when merging a verb stem with a tense ending
 merge_rules = []
 
 # no padchim + 을
-merge_rules.append(no_padchim_rule('을'))
+merge_rules.append(no_padchim_rule(u'을'))
 
 # no padchim + 습, 읍
-merge_rules.append(no_padchim_rule('습'))
-merge_rules.append(no_padchim_rule('읍'))
+merge_rules.append(no_padchim_rule(u'습'))
 
 # no padchim + 는
-merge_rules.append(no_padchim_rule('는')) 
+merge_rules.append(no_padchim_rule(u'는')) 
 
 # ㄹ irregular
 # a true ㄹ pachim (not one that was converted from ㄷ -> ㄹ) is dropped in many merges 
-merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '는' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), 'ᆫ') + y[1:])
-merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '습' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), 'ᆸ') + y[1:])
-merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '니' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
-merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '세' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
-merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '십' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
-merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '면' and x + y)
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'는' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆫ') + y[1:])
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'습' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆸ') + y[1:])
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'니' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'세' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'십' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and x + y)
 
 # 면 connective
-merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == '면' and x + '으면' + y[1:])
+merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'면' and x + u'으면' + y[1:])
 
 # vowel contractions
-merge_rules.append(vowel_contraction('ㅐ', 'ㅓ', 'ㅐ'))
-merge_rules.append(vowel_contraction('ㅡ', 'ㅓ', 'ㅓ'))
-merge_rules.append(vowel_contraction('ㅜ', 'ㅓ', 'ㅝ'))
-merge_rules.append(vowel_contraction('ㅗ', 'ㅏ', 'ㅘ'))
-merge_rules.append(vowel_contraction('ㅚ', 'ㅓ', 'ㅙ'))
-merge_rules.append(vowel_contraction('ㅝ', 'ㅓ', 'ㅝ'))
-merge_rules.append(vowel_contraction('ㅏ', 'ㅏ', 'ㅏ'))
-merge_rules.append(vowel_contraction('ㅡ', 'ㅏ', 'ㅏ'))
-merge_rules.append(vowel_contraction('ㅣ', 'ㅓ', 'ㅕ'))
-merge_rules.append(vowel_contraction('ㅓ', 'ㅓ', 'ㅓ'))
-merge_rules.append(vowel_contraction('ㅔ', 'ㅓ', 'ㅔ'))
-merge_rules.append(vowel_contraction('ㅕ', 'ㅓ', 'ㅕ'))
-merge_rules.append(vowel_contraction('ㅏ', 'ㅕ', 'ㅐ'))
-merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == '세' and x + '으' + y)
+merge_rules.append(vowel_contraction(u'ㅐ', u'ㅓ', u'ㅐ'))
+merge_rules.append(vowel_contraction(u'ㅡ', u'ㅓ', u'ㅓ'))
+merge_rules.append(vowel_contraction(u'ㅜ', u'ㅓ', u'ㅝ'))
+merge_rules.append(vowel_contraction(u'ㅗ', u'ㅏ', u'ㅘ'))
+merge_rules.append(vowel_contraction(u'ㅚ', u'ㅓ', u'ㅙ'))
+merge_rules.append(vowel_contraction(u'ㅝ', u'ㅓ', u'ㅝ'))
+merge_rules.append(vowel_contraction(u'ㅏ', u'ㅏ', u'ㅏ'))
+merge_rules.append(vowel_contraction(u'ㅡ', u'ㅏ', u'ㅏ'))
+merge_rules.append(vowel_contraction(u'ㅣ', u'ㅓ', u'ㅕ'))
+merge_rules.append(vowel_contraction(u'ㅓ', u'ㅓ', u'ㅓ'))
+merge_rules.append(vowel_contraction(u'ㅔ', u'ㅓ', u'ㅔ'))
+merge_rules.append(vowel_contraction(u'ㅕ', u'ㅓ', u'ㅕ'))
+merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
+merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'세' and x + u'으' + y)
 
 # default rule - just append the contents
 merge_rules.append(lambda x, y: x + y)
 
 def apply_rules(x, y, verbose=False, rules=[]):
-    '''apply_rules concatenates every element in a list using the rules to merge the strings'''
+    u'''apply_rules concatenates every element in a list using the rules to merge the strings'''
     for i, rule in enumerate(rules):
         output = rule(x, y)
         if output:
@@ -69,16 +70,16 @@ def apply_rules(x, y, verbose=False, rules=[]):
                 print("rule %03d: %s + %s => %s" % (i, pformat(x), pformat(y), pformat(output)))
             return output
 
-merge = partial(apply_rules, rules=merge_rules, verbose=False)
+merge = lambda x, y: apply_rules(x, y, rules=merge_rules, verbose=False)
 
 class conjugation:
-    ''''conjugation is a singleton decorator that simply builds a list of all the conjugation rules'''
+    u''''conjugation is a singleton decorator that simply builds a list of all the conjugation rules'''
     def __init__(self):
         self.tenses = {}
         self.tense_order = []
 
     def perform(self, infinitive):
-        '''perform returns the result of the application of all of the conjugation rules on one infinitive'''
+        u'''perform returns the result of the application of all of the conjugation rules on one infinitive'''
         results = []
         for tense in self.tense_order:
             results.append((tense, self.tenses[tense](infinitive)))
@@ -93,7 +94,7 @@ conjugation = conjugation()
 
 @conjugation
 def base(infinitive):
-    if infinitive[-1] == '다':
+    if infinitive[-1] == u'다':
         return infinitive[:-1]
     else:
         return infinitive
@@ -102,13 +103,13 @@ def base(infinitive):
 def base2(infinitive):
     infinitive = base(infinitive)
     # ㅂ irregular
-    if match(infinitive[-1], '*', '*', 'ᆸ'):
-        return merge(infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1])), '우')
+    if match(infinitive[-1], u'*', u'*', u'ᆸ'):
+        return merge(infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1])), u'우')
     # ㄷ irregular
-    elif match(infinitive[-1], '*', '*', 'ᆮ') and infinitive not in ['믿', '받', '얻', '닫']:
-        infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]), 'ᆯ'))
-        infinitive.original_padchim = 'ᆮ'
-    elif match(infinitive[-1], '*', '*', 'ᆺ') and infinitive not in ['벗', '웃', '씻', '빗']:
+    elif match(infinitive[-1], u'*', u'*', u'ᆮ') and infinitive not in [u'믿', u'받', u'얻', u'닫']:
+        infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]), u'ᆯ'))
+        infinitive.original_padchim = u'ᆮ'
+    elif match(infinitive[-1], u'*', u'*', u'ᆺ') and infinitive not in [u'벗', u'웃', u'씻', u'빗']:
         infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1])))
         infinitive.hidden_padchim = True
     return infinitive
@@ -117,106 +118,106 @@ def base2(infinitive):
 def declarative_present_informal_low(infinitive):
     infinitive = base2(infinitive)
     # 르 irregular
-    if match(infinitive[-1], 'ᄅ', 'ㅡ'):
-        new_ending = join(lead(infinitive[-2]), vowel(infinitive[-2]), 'ᆯ')
-        if vowel(infinitive[-2]) in ['ㅗ', 'ㅏ']:
-            return infinitive[:-2] + merge(new_ending, '라')
+    if match(infinitive[-1], u'ᄅ', u'ㅡ'):
+        new_ending = join(lead(infinitive[-2]), vowel(infinitive[-2]), u'ᆯ')
+        if vowel(infinitive[-2]) in [u'ㅗ', u'ㅏ']:
+            return infinitive[:-2] + merge(new_ending, u'라')
         else:
-            return infinitive[:-2] + merge(new_ending, '러')
-    elif infinitive[-1] == '하':
-        return infinitive[:-1] + merge(infinitive[-1], '여')
-    elif vowel(infinitive[-1]) in ['ㅗ', 'ㅏ']:
-        return infinitive[:-1] + merge(infinitive[-1], '아')
+            return infinitive[:-2] + merge(new_ending, u'러')
+    elif infinitive[-1] == u'하':
+        return infinitive[:-1] + merge(infinitive[-1], u'여')
+    elif vowel(infinitive[-1]) in [u'ㅗ', u'ㅏ']:
+        return infinitive[:-1] + merge(infinitive[-1], u'아')
     else:
-        return infinitive[:-1] + merge(infinitive[-1], '어')
+        return infinitive[:-1] + merge(infinitive[-1], u'어')
 
 @conjugation
 def declarative_present_informal_high(infinitive):
-    return merge(declarative_present_informal_low(infinitive), '요')
+    return merge(declarative_present_informal_low(infinitive), u'요')
 
 @conjugation
 def declarative_present_formal_low(infinitive):
-    return merge(base(infinitive), '는다')
+    return merge(base(infinitive), u'는다')
 
 @conjugation
 def declarative_present_formal_high(infinitive):
-    return merge(base(infinitive), '습니다')
+    return merge(base(infinitive), u'습니다')
 
 @conjugation
 def past_base(infinitive):
     ps = declarative_present_informal_low(infinitive)
-    if vowel(ps[-1]) in ['ㅗ', 'ㅏ']:
-        return ps[:-1] + merge(ps[-1], '았')
+    if vowel(ps[-1]) in [u'ㅗ', u'ㅏ']:
+        return ps[:-1] + merge(ps[-1], u'았')
     else:
-        return ps[:-1] + merge(ps[-1], '었')
+        return ps[:-1] + merge(ps[-1], u'었')
 
 @conjugation
 def declarative_past_informal_low(infinitive):
-    return merge(past_base(infinitive), '어')
+    return merge(past_base(infinitive), u'어')
 
 @conjugation
 def declarative_past_informal_high(infinitive):
-    return merge(declarative_past_informal_low(infinitive), '요')
+    return merge(declarative_past_informal_low(infinitive), u'요')
 
 @conjugation
 def declarative_past_formal_low(infinitive):
-    return merge(past_base(infinitive), '다')
+    return merge(past_base(infinitive), u'다')
 
 @conjugation
 def declarative_past_formal_high(infinitive):
-    return merge(past_base(infinitive), '습니다')
+    return merge(past_base(infinitive), u'습니다')
 
 @conjugation
 def future_base(infinitive):
-    return merge(base2(infinitive), '을')
+    return merge(base2(infinitive), u'을')
 
 @conjugation
 def declarative_future_informal_low(infinitive):
-    return merge(future_base(infinitive), ' 거야')
+    return merge(future_base(infinitive), u' 거야')
 
 @conjugation
 def declarative_future_informal_high(infinitive):
-    return merge(future_base(infinitive), ' 거예요')
+    return merge(future_base(infinitive), u' 거예요')
 
 @conjugation
 def declarative_future_formal_low(infinitive):
-    return merge(future_base(infinitive), ' 거다')
+    return merge(future_base(infinitive), u' 거다')
 
 @conjugation
 def declarative_future_formal_high(infinitive):
-    return merge(future_base(infinitive), ' 겁니다')
+    return merge(future_base(infinitive), u' 겁니다')
 
 @conjugation
 def declarative_future_conditional_informal_low(infinitive):
-    return merge(base(infinitive), '겠어')
+    return merge(base(infinitive), u'겠어')
 
 @conjugation
 def declarative_future_conditional_informal_high(infinitive):
-    return merge(base(infinitive), '겠어요')
+    return merge(base(infinitive), u'겠어요')
 
 @conjugation
 def declarative_future_conditional_formal_low(infinitive):
-    return merge(base(infinitive), '겠다')
+    return merge(base(infinitive), u'겠다')
 
 @conjugation
 def declarative_future_conditional_formal_high(infinitive):
-    return merge(base(infinitive), '겠습니다')
+    return merge(base(infinitive), u'겠습니다')
 
 @conjugation
 def inquisitive_present_informal_low(infinitive):
-    return merge(declarative_present_informal_low(infinitive), '?')
+    return merge(declarative_present_informal_low(infinitive), u'?')
 
 @conjugation
 def inquisitive_present_informal_high(infinitive):
-    return declarative_present_informal_high(infinitive) + '?'
+    return declarative_present_informal_high(infinitive) + u'?'
 
 @conjugation
 def inquisitive_present_formal_low(infinitive):
-    return merge(base(infinitive), '니?')
+    return merge(base(infinitive), u'니?')
 
 @conjugation
 def inquisitive_present_formal_high(infinitive):
-    return merge(base(infinitive), '습니까?')
+    return merge(base(infinitive), u'습니까?')
 
 @conjugation
 def imperative_present_informal_low(infinitive):
@@ -224,139 +225,139 @@ def imperative_present_informal_low(infinitive):
 
 @conjugation
 def imperative_present_informal_high(infinitive):
-    return merge(base2(infinitive), '세요')
+    return merge(base2(infinitive), u'세요')
 
 @conjugation
 def imperative_present_formal_low(infinitive):
-    return merge(imperative_present_informal_low(infinitive), '라')
+    return merge(imperative_present_informal_low(infinitive), u'라')
 
 @conjugation
 def imperative_present_formal_high(infinitive):
-    return merge(base2(infinitive), '십시오')
+    return merge(base2(infinitive), u'십시오')
 
 @conjugation
 def connective_if(infinitive):
-    return merge(base2(infinitive), '면')
+    return merge(base2(infinitive), u'면')
 
-assert merge('오', '아요') == '와요'
-assert merge('오', '아') == '와'
-assert merge('갔', '면') == '갔으면'
-assert merge('일어나', '면') == '일어나면'
-assert merge('맡', '세요') == '맡으세요'
+assert merge(u'오', u'아요') == u'와요'
+assert merge(u'오', u'아') == u'와'
+assert merge(u'갔', u'면') == u'갔으면'
+assert merge(u'일어나', u'면') == u'일어나면'
+assert merge(u'맡', u'세요') == u'맡으세요'
 
-assert declarative_present_informal_low('하') == '해'
-assert declarative_present_informal_low('가') == '가'
-assert declarative_present_informal_low('오') == '와'
-assert declarative_present_informal_low('피우') == '피워'
-assert declarative_present_informal_low('듣') == '들어'
-assert declarative_present_informal_low('춥') == '추워'
-assert declarative_present_informal_low('낫') == '나아'
-assert declarative_present_informal_low('알') == '알아'
-assert declarative_present_informal_low('기다리') == '기다려'
-assert declarative_present_informal_low('마르') == '말라'
-assert declarative_present_informal_low('부르다') == '불러'
-assert declarative_present_informal_low('되') == '돼'
-assert declarative_present_informal_low('쓰') == '써'
-assert declarative_present_informal_low('서') == '서'
-assert declarative_present_informal_low('세') == '세'
-assert declarative_present_informal_low('기다리다') == '기다려'
-assert declarative_present_informal_low('굽다') == '구워'
-assert declarative_present_informal_low('걷다') == '걸어'
-assert declarative_present_informal_low('짓다') == '지어'
-assert declarative_present_informal_low('웃다') == '웃어'
-assert declarative_present_informal_low('걸다') == '걸어'
-assert declarative_present_informal_low('깨닫다') == '깨달아'
-assert declarative_present_informal_low('남다') == '남아'
-assert declarative_present_informal_low('오르다') == '올라'
+assert declarative_present_informal_low(u'하') == u'해'
+assert declarative_present_informal_low(u'가') == u'가'
+assert declarative_present_informal_low(u'오') == u'와'
+assert declarative_present_informal_low(u'피우') == u'피워'
+assert declarative_present_informal_low(u'듣') == u'들어'
+assert declarative_present_informal_low(u'춥') == u'추워'
+assert declarative_present_informal_low(u'낫') == u'나아'
+assert declarative_present_informal_low(u'알') == u'알아'
+assert declarative_present_informal_low(u'기다리') == u'기다려'
+assert declarative_present_informal_low(u'마르') == u'말라'
+assert declarative_present_informal_low(u'부르다') == u'불러'
+assert declarative_present_informal_low(u'되') == u'돼'
+assert declarative_present_informal_low(u'쓰') == u'써'
+assert declarative_present_informal_low(u'서') == u'서'
+assert declarative_present_informal_low(u'세') == u'세'
+assert declarative_present_informal_low(u'기다리다') == u'기다려'
+assert declarative_present_informal_low(u'굽다') == u'구워'
+assert declarative_present_informal_low(u'걷다') == u'걸어'
+assert declarative_present_informal_low(u'짓다') == u'지어'
+assert declarative_present_informal_low(u'웃다') == u'웃어'
+assert declarative_present_informal_low(u'걸다') == u'걸어'
+assert declarative_present_informal_low(u'깨닫다') == u'깨달아'
+assert declarative_present_informal_low(u'남다') == u'남아'
+assert declarative_present_informal_low(u'오르다') == u'올라'
 
-assert declarative_present_informal_high('가다') == '가요'
+assert declarative_present_informal_high(u'가다') == u'가요'
 
-assert declarative_present_formal_low('가다') == '간다'
-assert declarative_present_formal_low('믿다') == '믿는다'
-assert declarative_present_formal_low('걷다') == '걷는다'
-assert declarative_present_formal_low('짓다') == '짓는다'
-assert declarative_present_formal_low('부르다') == '부른다'
-assert declarative_present_formal_low('살다') == '산다'
-assert declarative_present_formal_low('오르다') == '오른다'
+assert declarative_present_formal_low(u'가다') == u'간다'
+assert declarative_present_formal_low(u'믿다') == u'믿는다'
+assert declarative_present_formal_low(u'걷다') == u'걷는다'
+assert declarative_present_formal_low(u'짓다') == u'짓는다'
+assert declarative_present_formal_low(u'부르다') == u'부른다'
+assert declarative_present_formal_low(u'살다') == u'산다'
+assert declarative_present_formal_low(u'오르다') == u'오른다'
 
-assert declarative_present_formal_high('가다') == '갑니다'
-assert declarative_present_formal_high('믿다') == '믿습니다'
-assert declarative_present_formal_high('걸다') == '겁니다'
-assert declarative_present_formal_high('깨닫다') == '깨닫습니다'
-assert declarative_present_formal_high('알다') == '압니다'
+assert declarative_present_formal_high(u'가다') == u'갑니다'
+assert declarative_present_formal_high(u'믿다') == u'믿습니다'
+assert declarative_present_formal_high(u'걸다') == u'겁니다'
+assert declarative_present_formal_high(u'깨닫다') == u'깨닫습니다'
+assert declarative_present_formal_high(u'알다') == u'압니다'
 
-assert past_base('하') == '했'
-assert past_base('가') == '갔'
-assert past_base('기다리') == '기다렸'
-assert past_base('기다리다') == '기다렸'
-assert past_base('마르다') == '말랐'
-assert past_base('드르다') == '들렀'
+assert past_base(u'하') == u'했'
+assert past_base(u'가') == u'갔'
+assert past_base(u'기다리') == u'기다렸'
+assert past_base(u'기다리다') == u'기다렸'
+assert past_base(u'마르다') == u'말랐'
+assert past_base(u'드르다') == u'들렀'
 
-assert declarative_past_informal_low('하') == '했어'
-assert declarative_past_informal_low('가') == '갔어'
-assert declarative_past_informal_low('먹') == '먹었어'
+assert declarative_past_informal_low(u'하') == u'했어'
+assert declarative_past_informal_low(u'가') == u'갔어'
+assert declarative_past_informal_low(u'먹') == u'먹었어'
 
-assert declarative_past_informal_high('하다') == '했어요'
-assert declarative_past_informal_high('가다') == '갔어요'
+assert declarative_past_informal_high(u'하다') == u'했어요'
+assert declarative_past_informal_high(u'가다') == u'갔어요'
 
-assert declarative_past_formal_low('가다') == '갔다'
+assert declarative_past_formal_low(u'가다') == u'갔다'
 
-assert declarative_past_formal_high('가다') == '갔습니다'
+assert declarative_past_formal_high(u'가다') == u'갔습니다'
 
-assert declarative_future_informal_low('가다') == '갈 거야'
-assert declarative_future_informal_low('믿다') == '믿을 거야'
+assert declarative_future_informal_low(u'가다') == u'갈 거야'
+assert declarative_future_informal_low(u'믿다') == u'믿을 거야'
 
-assert declarative_future_informal_high('가다') == '갈 거예요'
-assert declarative_future_informal_high('믿다') == '믿을 거예요'
-assert declarative_future_informal_high('걷다') == '걸을 거예요'
+assert declarative_future_informal_high(u'가다') == u'갈 거예요'
+assert declarative_future_informal_high(u'믿다') == u'믿을 거예요'
+assert declarative_future_informal_high(u'걷다') == u'걸을 거예요'
 
-assert declarative_future_formal_low('가다') == '갈 거다'
-assert declarative_future_formal_low('앉다') == '앉을 거다'
+assert declarative_future_formal_low(u'가다') == u'갈 거다'
+assert declarative_future_formal_low(u'앉다') == u'앉을 거다'
 
-assert declarative_future_formal_high('가다') == '갈 겁니다'
-assert declarative_future_formal_high('앉다') == '앉을 겁니다'
+assert declarative_future_formal_high(u'가다') == u'갈 겁니다'
+assert declarative_future_formal_high(u'앉다') == u'앉을 겁니다'
 
-assert declarative_future_conditional_informal_low('가다') == '가겠어'
+assert declarative_future_conditional_informal_low(u'가다') == u'가겠어'
 
-assert declarative_future_conditional_informal_high('가다') == '가겠어요'
+assert declarative_future_conditional_informal_high(u'가다') == u'가겠어요'
 
-assert declarative_future_conditional_formal_low('가다') == '가겠다'
+assert declarative_future_conditional_formal_low(u'가다') == u'가겠다'
 
-assert declarative_future_conditional_formal_high('가다') == '가겠습니다'
+assert declarative_future_conditional_formal_high(u'가다') == u'가겠습니다'
 
-assert inquisitive_present_informal_low('가다') == '가?'
-assert inquisitive_present_informal_low('하다') == '해?'
+assert inquisitive_present_informal_low(u'가다') == u'가?'
+assert inquisitive_present_informal_low(u'하다') == u'해?'
 
-assert inquisitive_present_informal_high('가다') == '가요?'
+assert inquisitive_present_informal_high(u'가다') == u'가요?'
 
-assert inquisitive_present_formal_low('가다') == '가니?'
-assert inquisitive_present_formal_low('알다') == '아니?'
+assert inquisitive_present_formal_low(u'가다') == u'가니?'
+assert inquisitive_present_formal_low(u'알다') == u'아니?'
 
-assert inquisitive_present_formal_high('가다') == '갑니까?'
+assert inquisitive_present_formal_high(u'가다') == u'갑니까?'
 
-assert imperative_present_informal_low('가다') == '가'
+assert imperative_present_informal_low(u'가다') == u'가'
 
-assert imperative_present_informal_high('가다') == '가세요'
-assert imperative_present_informal_high('돕다') == '도우세요'
-assert imperative_present_informal_high('걷다') == '걸으세요'
-assert imperative_present_informal_high('눕다') == '누우세요'
-assert imperative_present_informal_high('살다') == '사세요'
+assert imperative_present_informal_high(u'가다') == u'가세요'
+assert imperative_present_informal_high(u'돕다') == u'도우세요'
+assert imperative_present_informal_high(u'걷다') == u'걸으세요'
+assert imperative_present_informal_high(u'눕다') == u'누우세요'
+assert imperative_present_informal_high(u'살다') == u'사세요'
 
-assert imperative_present_formal_low('가다') == '가라'
-assert imperative_present_formal_low('굽다') == '구워라'
-assert imperative_present_formal_low('살다') == '살아라'
-assert imperative_present_formal_low('서') == '서라'
+assert imperative_present_formal_low(u'가다') == u'가라'
+assert imperative_present_formal_low(u'굽다') == u'구워라'
+assert imperative_present_formal_low(u'살다') == u'살아라'
+assert imperative_present_formal_low(u'서') == u'서라'
 
-assert imperative_present_formal_high('가다') == '가십시오'
-assert imperative_present_formal_high('돕다') == '도우십시오'
-assert imperative_present_formal_high('알다') == '아십시오'
+assert imperative_present_formal_high(u'가다') == u'가십시오'
+assert imperative_present_formal_high(u'돕다') == u'도우십시오'
+assert imperative_present_formal_high(u'알다') == u'아십시오'
 
-assert connective_if('낫') == '나으면'
-assert connective_if('짓') == '지으면'
-assert connective_if('짖') == '짖으면'
-assert connective_if('가') == '가면'
-assert connective_if('알') == '알면'
-assert connective_if('살') == '살면'
+assert connective_if(u'낫') == u'나으면'
+assert connective_if(u'짓') == u'지으면'
+assert connective_if(u'짖') == u'짖으면'
+assert connective_if(u'가') == u'가면'
+assert connective_if(u'알') == u'알면'
+assert connective_if(u'살') == u'살면'
 
-print(pformat(conjugation.perform('알다')))
+print(pformat(conjugation.perform(u'놓다')))
 #print(pformat(list(conjugation.tenses.keys())))
