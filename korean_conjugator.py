@@ -2,16 +2,21 @@ from hangeul_utils import *
 from pprint import pformat
 
 def no_padchim_rule(character):
+    '''no_padchim_rule is a helper function for defining merges where a character will take the padchim of a merged
+       character if the first character doesn't already have a padchim, .e.g. 습 -> 가 + 습니다 -> 갑니다.'''
     def rule(x, y):
         if not padchim(x[-1]) and y[0] == character:
             return x[:-1] + join(lead(x[-1]), vowel(x[-1]), padchim(character)) + y[1:]
     return rule
 
 def vowel_contraction(vowel1, vowel2, new_vowel):
+    '''vowel contraction is a helper function for defining common contractions between characters without a padchim
+       and characters that start with 'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했'''
     def rule(x, y):
         return match(x[-1], '*', vowel1, None) and match(y[0], 'ᄋ', vowel2) and x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
     return rule
 
+# merge rules is a list of rules that are applied in order when merging a verb stem with a tense ending
 merge_rules = []
 
 # no padchim + 을
@@ -25,6 +30,7 @@ merge_rules.append(no_padchim_rule('읍'))
 merge_rules.append(no_padchim_rule('는')) 
 
 # ㄹ irregular
+# a true ㄹ pachim (not one that was converted from ㄷ -> ㄹ) is dropped in many merges 
 merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '는' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), 'ᆫ') + y[1:])
 merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '습' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), 'ᆸ') + y[1:])
 merge_rules.append(lambda x, y: padchim(x[-1]) == 'ᆯ' and y[0] == '니' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
@@ -72,8 +78,11 @@ class conjugation:
         self.tense_order = []
 
     def perform(self, infinitive):
+        '''perform returns the result of the application of all of the conjugation rules on one infinitive'''
+        results = []
         for tense in self.tense_order:
-            print('%s: %s' % (tense, self.tenses[tense](infinitive)))
+            results.append((tense, self.tenses[tense](infinitive)))
+        return results
 
     def __call__(self, f):
         self.tense_order.append(f.__name__)
@@ -107,7 +116,7 @@ def base2(infinitive):
 @conjugation
 def declarative_present_informal_low(infinitive):
     infinitive = base2(infinitive)
-    # ㄹ irregular
+    # 르 irregular
     if match(infinitive[-1], 'ᄅ', 'ㅡ'):
         new_ending = join(lead(infinitive[-2]), vowel(infinitive[-2]), 'ᆯ')
         if vowel(infinitive[-2]) in ['ㅗ', 'ㅏ']:
@@ -349,5 +358,5 @@ assert connective_if('가') == '가면'
 assert connective_if('알') == '알면'
 assert connective_if('살') == '살면'
 
-conjugation.perform('알다')
+print(pformat(conjugation.perform('알다')))
 #print(pformat(list(conjugation.tenses.keys())))
