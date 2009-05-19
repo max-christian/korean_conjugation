@@ -277,6 +277,10 @@ def propositive_present_formal_high(infinitive):
 def connective_if(infinitive):
     return merge(base2(infinitive), u'면')
 
+@conjugation
+def connective_and(infinitive):
+    return merge(base(infinitive), u'고')
+
 assert merge(u'오', u'아요') == u'와요'
 assert merge(u'오', u'아') == u'와'
 assert merge(u'갔', u'면') == u'갔으면'
@@ -419,6 +423,8 @@ assert connective_if(u'짖') == u'짖으면'
 assert connective_if(u'가') == u'가면'
 assert connective_if(u'알') == u'알면'
 assert connective_if(u'살') == u'살면'
+
+assert connective_and(u'가다') == u'가고'
 
 #for x, y in conjugation.perform(u'놓다'):
 #    print x, y
