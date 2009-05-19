@@ -35,6 +35,7 @@ merge_rules.append(no_padchim_rule(u'는'))
 # a true ㄹ pachim (not one that was converted from ㄷ -> ㄹ) is dropped in many merges 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'는' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆫ') + y[1:])
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'습' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆸ') + y[1:])
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'읍' and x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆸ') + y[1:])
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'니' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'세' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'십' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
@@ -386,6 +387,7 @@ assert propositive_present_informal_high(u'가') == u'가요'
 assert propositive_present_formal_low(u'가') == u'가자'
 
 assert propositive_present_formal_high(u'가') == u'갑시다'
+assert propositive_present_formal_high(u'살') == u'삽시다'
 
 assert connective_if(u'낫') == u'나으면'
 assert connective_if(u'짓') == u'지으면'
