@@ -26,6 +26,7 @@ merge_rules.append(no_padchim_rule(u'을'))
 
 # no padchim + 습, 읍
 merge_rules.append(no_padchim_rule(u'습'))
+merge_rules.append(no_padchim_rule(u'읍'))
 
 # no padchim + 는
 merge_rules.append(no_padchim_rule(u'는')) 
@@ -236,6 +237,22 @@ def imperative_present_formal_high(infinitive):
     return merge(base2(infinitive), u'십시오')
 
 @conjugation
+def propositive_present_informal_low(infinitive):
+    return declarative_present_informal_low(infinitive)
+
+@conjugation
+def propositive_present_informal_high(infinitive):
+    return declarative_present_informal_high(infinitive)
+
+@conjugation
+def propositive_present_formal_low(infinitive):
+    return merge(base(infinitive), u'자')
+
+@conjugation
+def propositive_present_formal_high(infinitive):
+    return merge(base(infinitive), u'읍시다')
+
+@conjugation
 def connective_if(infinitive):
     return merge(base2(infinitive), u'면')
 
@@ -351,6 +368,14 @@ assert imperative_present_formal_low(u'서') == u'서라'
 assert imperative_present_formal_high(u'가다') == u'가십시오'
 assert imperative_present_formal_high(u'돕다') == u'도우십시오'
 assert imperative_present_formal_high(u'알다') == u'아십시오'
+
+assert propositive_present_informal_low(u'가') == u'가'
+
+assert propositive_present_informal_high(u'가') == u'가요'
+
+assert propositive_present_formal_low(u'가') == u'가자'
+
+assert propositive_present_formal_high(u'가') == u'갑시다'
 
 assert connective_if(u'낫') == u'나으면'
 assert connective_if(u'짓') == u'지으면'
