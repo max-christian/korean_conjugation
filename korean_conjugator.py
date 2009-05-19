@@ -29,7 +29,10 @@ merge_rules.append(no_padchim_rule(u'습'))
 merge_rules.append(no_padchim_rule(u'읍'))
 
 # no padchim + 는
-merge_rules.append(no_padchim_rule(u'는')) 
+merge_rules.append(no_padchim_rule(u'는'))
+
+# no padchim + 음
+merge_rules.append(no_padchim_rule(u'음'))
 
 # ㄹ irregular
 # a true ㄹ pachim (not one that was converted from ㄷ -> ㄹ) is dropped in many merges 
@@ -41,6 +44,7 @@ merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'세' and 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'십' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'을' and x + y[1:])
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and x + y)
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'음' and join(lead(x[-1]), vowel(x[-1]), u'ᆱ'))
 
 # vowel contractions
 merge_rules.append(vowel_contraction(u'ㅐ', u'ㅓ', u'ㅐ'))
@@ -281,6 +285,10 @@ def connective_if(infinitive):
 def connective_and(infinitive):
     return merge(base(infinitive), u'고')
 
+@conjugation
+def connective_gerund(infinitive):
+    return merge(base2(infinitive), u'음')
+
 assert merge(u'오', u'아요') == u'와요'
 assert merge(u'오', u'아') == u'와'
 assert merge(u'갔', u'면') == u'갔으면'
@@ -427,6 +435,11 @@ assert connective_if(u'알') == u'알면'
 assert connective_if(u'살') == u'살면'
 
 assert connective_and(u'가다') == u'가고'
+
+assert connective_gerund(u'살다') == u'삶'
+assert connective_gerund(u'걷다') == u'걸음'
+assert connective_gerund(u'가져오다') == u'가져옴'
+assert connective_gerund(u'걷다') == u'걸음'
 
 #for x, y in conjugation.perform(u'놓다'):
 #    print x, y
