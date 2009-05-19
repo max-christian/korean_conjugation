@@ -211,7 +211,7 @@ def declarative_future_conditional_formal_high(infinitive):
 
 @conjugation
 def inquisitive_present_informal_low(infinitive):
-    return merge(declarative_present_informal_low(infinitive), u'?')
+    return declarative_present_informal_low(infinitive) + u'?'
 
 @conjugation
 def inquisitive_present_informal_high(infinitive):
@@ -224,6 +224,22 @@ def inquisitive_present_formal_low(infinitive):
 @conjugation
 def inquisitive_present_formal_high(infinitive):
     return merge(base(infinitive), u'습니까?')
+
+@conjugation
+def inquisitive_past_informal_low(infinitive):
+    return declarative_past_informal_low(infinitive) + u'?'
+
+@conjugation
+def inquisitive_past_informal_high(infinitive):
+    return declarative_past_informal_high(infinitive) + u'?'
+
+@conjugation
+def inquisitive_past_formal_low(infinitive):
+    return merge(past_base(infinitive), u'니?')
+
+@conjugation
+def inquisitive_past_formal_high(infinitive):
+    return merge(past_base(infinitive), u'습니까?')
 
 @conjugation
 def imperative_present_informal_low(infinitive):
@@ -363,6 +379,14 @@ assert inquisitive_present_formal_low(u'알다') == u'아니?'
 assert inquisitive_present_formal_high(u'가다') == u'갑니까?'
 
 assert imperative_present_informal_low(u'가다') == u'가'
+
+assert inquisitive_past_informal_low(u'가다') == u'갔어?'
+
+assert inquisitive_past_informal_high(u'가다') == u'갔어요?'
+
+assert inquisitive_past_formal_low(u'가다') == u'갔니?'
+
+assert inquisitive_past_formal_high(u'가다') == u'갔습니까?'
 
 assert imperative_present_informal_high(u'가다') == u'가세요'
 assert imperative_present_informal_high(u'돕다') == u'도우세요'
