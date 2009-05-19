@@ -286,7 +286,7 @@ def connective_and(infinitive):
     return merge(base(infinitive), u'고')
 
 @conjugation
-def connective_gerund(infinitive):
+def nominal_ing(infinitive):
     return merge(base2(infinitive), u'음')
 
 assert merge(u'오', u'아요') == u'와요'
@@ -436,10 +436,10 @@ assert connective_if(u'살') == u'살면'
 
 assert connective_and(u'가다') == u'가고'
 
-assert connective_gerund(u'살다') == u'삶'
-assert connective_gerund(u'걷다') == u'걸음'
-assert connective_gerund(u'가져오다') == u'가져옴'
-assert connective_gerund(u'걷다') == u'걸음'
+assert nominal_ing(u'살다') == u'삶'
+assert nominal_ing(u'걷다') == u'걸음'
+assert nominal_ing(u'가져오다') == u'가져옴'
+assert nominal_ing(u'걷다') == u'걸음'
 
 #for x, y in conjugation.perform(u'놓다'):
 #    print x, y
