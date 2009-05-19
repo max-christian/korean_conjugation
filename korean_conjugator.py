@@ -351,6 +351,7 @@ assert imperative_present_informal_high(u'돕다') == u'도우세요'
 assert imperative_present_informal_high(u'걷다') == u'걸으세요'
 assert imperative_present_informal_high(u'눕다') == u'누우세요'
 assert imperative_present_informal_high(u'살다') == u'사세요'
+assert imperative_present_informal_high(u'걸다') == u'거세요'
 
 assert imperative_present_formal_low(u'가다') == u'가라'
 assert imperative_present_formal_low(u'굽다') == u'구워라'
