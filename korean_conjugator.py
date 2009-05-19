@@ -37,10 +37,8 @@ merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'습' and 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'니' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'세' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'십' and x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
+merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'을' and x + y[1:])
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and x + y)
-
-# 면 connective
-merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'면' and x + u'으면' + y[1:])
 
 # vowel contractions
 merge_rules.append(vowel_contraction(u'ㅐ', u'ㅓ', u'ㅐ'))
@@ -56,6 +54,11 @@ merge_rules.append(vowel_contraction(u'ㅓ', u'ㅓ', u'ㅓ'))
 merge_rules.append(vowel_contraction(u'ㅔ', u'ㅓ', u'ㅔ'))
 merge_rules.append(vowel_contraction(u'ㅕ', u'ㅓ', u'ㅕ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
+
+# 면 connective
+merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'면' and x + u'으면' + y[1:])
+
+# 세 command
 merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'세' and x + u'으' + y)
 
 # default rule - just append the contents
@@ -306,16 +309,20 @@ assert declarative_past_formal_high(u'가다') == u'갔습니다'
 
 assert declarative_future_informal_low(u'가다') == u'갈 거야'
 assert declarative_future_informal_low(u'믿다') == u'믿을 거야'
+assert declarative_future_informal_low(u'알다') == u'알 거야'
 
 assert declarative_future_informal_high(u'가다') == u'갈 거예요'
 assert declarative_future_informal_high(u'믿다') == u'믿을 거예요'
 assert declarative_future_informal_high(u'걷다') == u'걸을 거예요'
+assert declarative_future_informal_high(u'알다') == u'알 거예요'
 
 assert declarative_future_formal_low(u'가다') == u'갈 거다'
 assert declarative_future_formal_low(u'앉다') == u'앉을 거다'
+assert declarative_future_formal_low(u'알다') == u'알 거다'
 
 assert declarative_future_formal_high(u'가다') == u'갈 겁니다'
 assert declarative_future_formal_high(u'앉다') == u'앉을 겁니다'
+assert declarative_future_formal_high(u'알다') == u'알 겁니다'
 
 assert declarative_future_conditional_informal_low(u'가다') == u'가겠어'
 
@@ -359,6 +366,6 @@ assert connective_if(u'가') == u'가면'
 assert connective_if(u'알') == u'알면'
 assert connective_if(u'살') == u'살면'
 
-for x, y in conjugation.perform(u'놓다'):
-    print x, y
+#for x, y in conjugation.perform(u'놓다'):
+#    print x, y
 #print(pformat(list(conjugation.tenses.keys())))
