@@ -46,6 +46,7 @@ merge_rules.append(vowel_contraction(u'ㅡ', u'ㅓ', u'ㅓ'))
 merge_rules.append(vowel_contraction(u'ㅜ', u'ㅓ', u'ㅝ'))
 merge_rules.append(vowel_contraction(u'ㅗ', u'ㅏ', u'ㅘ'))
 merge_rules.append(vowel_contraction(u'ㅚ', u'ㅓ', u'ㅙ'))
+merge_rules.append(vowel_contraction(u'ㅘ', u'ㅓ', u'ㅘ'))
 merge_rules.append(vowel_contraction(u'ㅝ', u'ㅓ', u'ㅝ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅏ', u'ㅏ'))
 merge_rules.append(vowel_contraction(u'ㅡ', u'ㅏ', u'ㅏ'))
@@ -299,6 +300,7 @@ assert past_base(u'드르다') == u'들렀'
 assert declarative_past_informal_low(u'하') == u'했어'
 assert declarative_past_informal_low(u'가') == u'갔어'
 assert declarative_past_informal_low(u'먹') == u'먹었어'
+assert declarative_past_informal_low(u'오') == u'왔어'
 
 assert declarative_past_informal_high(u'하다') == u'했어요'
 assert declarative_past_informal_high(u'가다') == u'갔어요'
