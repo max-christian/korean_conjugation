@@ -271,7 +271,7 @@ def propositive_present_formal_low(infinitive):
 
 @conjugation
 def propositive_present_formal_high(infinitive):
-    return merge(base(infinitive), u'읍시다')
+    return merge(base2(infinitive), u'읍시다')
 
 @conjugation
 def connective_if(infinitive):
@@ -407,6 +407,7 @@ assert imperative_present_formal_low(u'서') == u'서라'
 assert imperative_present_formal_high(u'가다') == u'가십시오'
 assert imperative_present_formal_high(u'돕다') == u'도우십시오'
 assert imperative_present_formal_high(u'알다') == u'아십시오'
+assert imperative_present_formal_high(u'눕다') == u'누우십시오'
 
 assert propositive_present_informal_low(u'가') == u'가'
 
@@ -416,6 +417,7 @@ assert propositive_present_formal_low(u'가') == u'가자'
 
 assert propositive_present_formal_high(u'가') == u'갑시다'
 assert propositive_present_formal_high(u'살') == u'삽시다'
+assert propositive_present_formal_high(u'눕다') == u'누웁시다'
 
 assert connective_if(u'낫') == u'나으면'
 assert connective_if(u'짓') == u'지으면'
