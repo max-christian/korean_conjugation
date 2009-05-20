@@ -18,7 +18,6 @@ def generate_stems(verb):
 
 def stem(verb):
     # remove all conjugators that return what was passed in
-    results = []
     ignore_indicies = [i for (i, conj) in \
                        enumerate(conjugation.perform('test')) \
                        if conj[1] == 'test']
@@ -28,4 +27,3 @@ def stem(verb):
                         enumerate(conjugation.perform(possible_stem)) \
                         if (i not in ignore_indicies) or not original]:
                 return possible_stem + u'다'
-    return list(set(results))
