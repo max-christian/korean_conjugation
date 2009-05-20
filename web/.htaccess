@@ -1,0 +1,12 @@
+Options ExecCGI FollowSymLinks
+DirectoryIndex index.py
+
+AddHandler cgi-script .py
+AddHandler wsgi-script .py
+
+RewriteBase /
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.py?infinitive=$1 [L,QSA]
+
