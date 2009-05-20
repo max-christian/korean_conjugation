@@ -2,6 +2,9 @@
 
 from korean_conjugator import *
 
+def test_base3():
+    assert base3(u'돕다') == u'도우'
+
 def test_merge():
     assert merge(u'오', u'아요') == u'와요'
     assert merge(u'오', u'아') == u'와'
@@ -34,6 +37,7 @@ def test_declarative_present():
     assert declarative_present_informal_low(u'깨닫다') == u'깨달아'
     assert declarative_present_informal_low(u'남다') == u'남아'
     assert declarative_present_informal_low(u'오르다') == u'올라'
+    assert declarative_present_informal_low(u'돕다') == u'도와'
 
     assert declarative_present_informal_high(u'가다') == u'가요'
 
@@ -134,6 +138,7 @@ def test_imperative_present():
     assert imperative_present_formal_low(u'서') == u'서라'
 
     assert imperative_present_formal_high(u'가다') == u'가십시오'
+    assert imperative_present_formal_high(u'걷다') == u'걸으십시오'
     assert imperative_present_formal_high(u'돕다') == u'도우십시오'
     assert imperative_present_formal_high(u'알다') == u'아십시오'
     assert imperative_present_formal_high(u'눕다') == u'누우십시오'

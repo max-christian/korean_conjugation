@@ -1,1 +1,1 @@
-PYTHONPATH=src nosetests
+PYTHONPATH=src nosetests -s

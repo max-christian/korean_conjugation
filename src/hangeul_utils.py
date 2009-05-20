@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-#from functools import reduce, partial
+# (C) 2009 Dan Bravender
 
 class Geulja(unicode):
-    u'''Geulja is used to track modifications that have been made to characters. Currently, it keeps track
-       of characters original padchims (for ㄷ -> ㄹ irregulars) and if the character has no padchim but
-       should be treated as if it does (for ㅅ irregulars). When substrings are extracted the Geulja class 
-       keeps these markers for the last character only.'''
+    u'''Geulja is used to track modifications that have been made to
+        characters. Currently, it keeps track of characters' original
+        padchims (for ㄷ -> ㄹ irregulars) and if the character has
+        no padchim but should be treated as if it does (for ㅅ 
+        irregulars). When substrings are extracted the Geulja class 
+        keeps these markers for the last character only.
+     '''
     hidden_padchim = False
     original_padchim = None
     
@@ -19,6 +22,9 @@ class Geulja(unicode):
         return g
 
 def join(lead, vowel, padchim=None):
+    '''join returns the unicode character that is composed of the
+       lead, vowel and padchim that are passed in.
+    '''
     lead_offset = ord(lead) - ord(u'ᄀ')
     vowel_offset = ord(vowel) - ord(u'ㅏ')
     if padchim:
@@ -27,16 +33,10 @@ def join(lead, vowel, padchim=None):
         padchim_offset = -1
     return unichr(padchim_offset + (vowel_offset) * 28 + (lead_offset) * 588 + 44032 + 1)
 
-assert join(u'ᄀ', u'ㅏ') == u'가'
-assert join(u'ᄆ', u'ㅕ', u'ᆫ') == u'면'
-assert join(u'ᄈ', u'ㅙ', u'ᆶ') == u'뾇'
-
 def lead(character):
+    '''lead returns the first consonant in a geulja
+    '''
     return unichr(int((ord(character) - 44032) / 588) + 4352)
-
-assert lead(u'가') == u'ᄀ'
-assert lead(u'만') == u'ᄆ'
-assert lead(u'짉') == u'ᄌ'
 
 def vowel(character):
     padchim_character = padchim(character)
@@ -48,6 +48,8 @@ def vowel(character):
     return unichr(int(((ord(character) - 44032 - padchim_offset) % 588) / 28) + ord(u'ㅏ'))
 
 def padchim(character):
+    '''padchim returns the unicode padchim (the bottom) of a geulja.
+    '''
     if getattr(character, u'hidden_padchim', False):
         return True
     if getattr(character, u'original_padchim', False):
@@ -58,25 +60,9 @@ def padchim(character):
     else:
         return p
 
-assert vowel(u'갓') == u'ㅏ'
-assert vowel(u'빩') == u'ㅏ'
-assert vowel(u'법') == u'ㅓ'
-assert vowel(u'가') == u'ㅏ'
-
 def match(character, l='*', v='*', p='*'):
+    '''match is a helper function that simplifies testing if
+       geulja match patterns. * is used to represent any vowel or
+       consonant.
+    '''
     return (lead(character) == l or l == u'*') and (vowel(character) == v or v == u'*') and (padchim(character) == p or p == u'*')
-
-assert match(u'아', u'*', u'ㅏ') == True
-assert match(u'왅', u'*', u'ㅏ') == False
-assert match(u'아', u'ᄋ', u'ㅏ') == True
-assert match(u'아', u'ᄋ', u'ㅏ', None) == True
-assert match(u'읽', u'*', u'*', u'ᆰ') == True
-assert match(u'읽', u'*', u'*', None) == False
-
-infinitive = Geulja(u'나')
-infinitive.hidden_padchim = True
-assert match(infinitive, u'*', u'*', None) == False
-
-infinitive = Geulja(u'나')
-infinitive.hidden_padchim = False
-assert match(infinitive, u'*', u'*', None) == True

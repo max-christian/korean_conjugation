@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# (C) 2009 Dan Bravender
+
 from hangeul_utils import *
 from pprint import pformat
 
@@ -82,10 +84,14 @@ merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
 
 # 면 connective
 merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'면' and \
-                   x + u'으면' + y[1:])
+                   x + u'으' + y)
 
 # 세 command
 merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'세' and \
+                   x + u'으' + y)
+
+# 십 command
+merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'십' and \
                    x + u'으' + y)
 
 # default rule - just append the contents
@@ -106,8 +112,8 @@ def apply_rules(x, y, verbose=False, rules=[]):
 merge = lambda x, y: apply_rules(x, y, rules=merge_rules, verbose=False)
 
 class conjugation:
-    u'''conjugation is a singleton decorator that simply builds a list of all 
-        the conjugation rules
+    u'''conjugation is a singleton decorator that simply builds a list of 
+        all the conjugation rules
      '''
     def __init__(self):
         self.tenses = {}
@@ -140,9 +146,10 @@ def base(infinitive):
 def base2(infinitive):
     infinitive = base(infinitive)
     # ㅂ irregular
-    if match(infinitive[-1], u'*', u'*', u'ᆸ'):
+    if match(infinitive[-1], u'*', u'*', u'ᆸ') and vowel(infinitive[-1]) in [u'ㅗ', u'ㅜ']:
         return merge(infinitive[:-1] + join(lead(infinitive[-1]), 
-                     vowel(infinitive[-1])), u'우')
+                     vowel(infinitive[-1])),
+                     join(u'ᄋ', vowel(infinitive[-1])))
     # ㄷ irregular
     elif match(infinitive[-1], u'*', u'*', u'ᆮ') and \
          infinitive not in [u'믿', u'받', u'얻', u'닫']:
@@ -156,6 +163,13 @@ def base2(infinitive):
                                                    vowel(infinitive[-1])))
         infinitive.hidden_padchim = True
     return infinitive
+
+def base3(infinitive):
+    infinitive = base(infinitive)
+    if match(infinitive[-1], u'*', u'ㅗ', u'ᆸ'):
+        return join(lead(infinitive[-1]), vowel(infinitive[-1])) + u'우'
+    else:
+        return base2(infinitive)
 
 @conjugation
 def declarative_present_informal_low(infinitive):
@@ -212,7 +226,7 @@ def declarative_past_formal_high(infinitive):
 
 @conjugation
 def future_base(infinitive):
-    return merge(base2(infinitive), u'을')
+    return merge(base3(infinitive), u'을')
 
 @conjugation
 def declarative_future_informal_low(infinitive):
@@ -248,11 +262,11 @@ def declarative_future_conditional_formal_high(infinitive):
 
 @conjugation
 def inquisitive_present_informal_low(infinitive):
-    return declarative_present_informal_low(infinitive) + u'?'
+    return merge(declarative_present_informal_low(infinitive), u'?')
 
 @conjugation
 def inquisitive_present_informal_high(infinitive):
-    return declarative_present_informal_high(infinitive) + u'?'
+    return merge(declarative_present_informal_high(infinitive), u'?')
 
 @conjugation
 def inquisitive_present_formal_low(infinitive):
@@ -268,7 +282,7 @@ def inquisitive_past_informal_low(infinitive):
 
 @conjugation
 def inquisitive_past_informal_high(infinitive):
-    return declarative_past_informal_high(infinitive) + u'?'
+    return merge(declarative_past_informal_high(infinitive), u'?')
 
 @conjugation
 def inquisitive_past_formal_low(infinitive):
@@ -284,7 +298,7 @@ def imperative_present_informal_low(infinitive):
 
 @conjugation
 def imperative_present_informal_high(infinitive):
-    return merge(base2(infinitive), u'세요')
+    return merge(base3(infinitive), u'세요')
 
 @conjugation
 def imperative_present_formal_low(infinitive):
@@ -292,7 +306,7 @@ def imperative_present_formal_low(infinitive):
 
 @conjugation
 def imperative_present_formal_high(infinitive):
-    return merge(base2(infinitive), u'십시오')
+    return merge(base3(infinitive), u'십시오')
 
 @conjugation
 def propositive_present_informal_low(infinitive):
@@ -308,7 +322,7 @@ def propositive_present_formal_low(infinitive):
 
 @conjugation
 def propositive_present_formal_high(infinitive):
-    return merge(base2(infinitive), u'읍시다')
+    return merge(base3(infinitive), u'읍시다')
 
 @conjugation
 def connective_if(infinitive):
@@ -321,158 +335,6 @@ def connective_and(infinitive):
 @conjugation
 def nominal_ing(infinitive):
     return merge(base2(infinitive), u'음')
-
-assert merge(u'오', u'아요') == u'와요'
-assert merge(u'오', u'아') == u'와'
-assert merge(u'갔', u'면') == u'갔으면'
-assert merge(u'일어나', u'면') == u'일어나면'
-assert merge(u'맡', u'세요') == u'맡으세요'
-
-assert declarative_present_informal_low(u'하') == u'해'
-assert declarative_present_informal_low(u'가') == u'가'
-assert declarative_present_informal_low(u'오') == u'와'
-assert declarative_present_informal_low(u'피우') == u'피워'
-assert declarative_present_informal_low(u'듣') == u'들어'
-assert declarative_present_informal_low(u'춥') == u'추워'
-assert declarative_present_informal_low(u'낫') == u'나아'
-assert declarative_present_informal_low(u'알') == u'알아'
-assert declarative_present_informal_low(u'기다리') == u'기다려'
-assert declarative_present_informal_low(u'마르') == u'말라'
-assert declarative_present_informal_low(u'부르다') == u'불러'
-assert declarative_present_informal_low(u'되') == u'돼'
-assert declarative_present_informal_low(u'쓰') == u'써'
-assert declarative_present_informal_low(u'서') == u'서'
-assert declarative_present_informal_low(u'세') == u'세'
-assert declarative_present_informal_low(u'기다리다') == u'기다려'
-assert declarative_present_informal_low(u'굽다') == u'구워'
-assert declarative_present_informal_low(u'걷다') == u'걸어'
-assert declarative_present_informal_low(u'짓다') == u'지어'
-assert declarative_present_informal_low(u'웃다') == u'웃어'
-assert declarative_present_informal_low(u'걸다') == u'걸어'
-assert declarative_present_informal_low(u'깨닫다') == u'깨달아'
-assert declarative_present_informal_low(u'남다') == u'남아'
-assert declarative_present_informal_low(u'오르다') == u'올라'
-
-assert declarative_present_informal_high(u'가다') == u'가요'
-
-assert declarative_present_formal_low(u'가다') == u'간다'
-assert declarative_present_formal_low(u'믿다') == u'믿는다'
-assert declarative_present_formal_low(u'걷다') == u'걷는다'
-assert declarative_present_formal_low(u'짓다') == u'짓는다'
-assert declarative_present_formal_low(u'부르다') == u'부른다'
-assert declarative_present_formal_low(u'살다') == u'산다'
-assert declarative_present_formal_low(u'오르다') == u'오른다'
-
-assert declarative_present_formal_high(u'가다') == u'갑니다'
-assert declarative_present_formal_high(u'믿다') == u'믿습니다'
-assert declarative_present_formal_high(u'걸다') == u'겁니다'
-assert declarative_present_formal_high(u'깨닫다') == u'깨닫습니다'
-assert declarative_present_formal_high(u'알다') == u'압니다'
-
-assert past_base(u'하') == u'했'
-assert past_base(u'가') == u'갔'
-assert past_base(u'기다리') == u'기다렸'
-assert past_base(u'기다리다') == u'기다렸'
-assert past_base(u'마르다') == u'말랐'
-assert past_base(u'드르다') == u'들렀'
-
-assert declarative_past_informal_low(u'하') == u'했어'
-assert declarative_past_informal_low(u'가') == u'갔어'
-assert declarative_past_informal_low(u'먹') == u'먹었어'
-assert declarative_past_informal_low(u'오') == u'왔어'
-
-assert declarative_past_informal_high(u'하다') == u'했어요'
-assert declarative_past_informal_high(u'가다') == u'갔어요'
-
-assert declarative_past_formal_low(u'가다') == u'갔다'
-
-assert declarative_past_formal_high(u'가다') == u'갔습니다'
-
-assert declarative_future_informal_low(u'가다') == u'갈 거야'
-assert declarative_future_informal_low(u'믿다') == u'믿을 거야'
-assert declarative_future_informal_low(u'알다') == u'알 거야'
-
-assert declarative_future_informal_high(u'가다') == u'갈 거예요'
-assert declarative_future_informal_high(u'믿다') == u'믿을 거예요'
-assert declarative_future_informal_high(u'걷다') == u'걸을 거예요'
-assert declarative_future_informal_high(u'알다') == u'알 거예요'
-
-assert declarative_future_formal_low(u'가다') == u'갈 거다'
-assert declarative_future_formal_low(u'앉다') == u'앉을 거다'
-assert declarative_future_formal_low(u'알다') == u'알 거다'
-
-assert declarative_future_formal_high(u'가다') == u'갈 겁니다'
-assert declarative_future_formal_high(u'앉다') == u'앉을 겁니다'
-assert declarative_future_formal_high(u'알다') == u'알 겁니다'
-
-assert declarative_future_conditional_informal_low(u'가다') == u'가겠어'
-
-assert declarative_future_conditional_informal_high(u'가다') == u'가겠어요'
-
-assert declarative_future_conditional_formal_low(u'가다') == u'가겠다'
-
-assert declarative_future_conditional_formal_high(u'가다') == u'가겠습니다'
-
-assert inquisitive_present_informal_low(u'가다') == u'가?'
-assert inquisitive_present_informal_low(u'하다') == u'해?'
-
-assert inquisitive_present_informal_high(u'가다') == u'가요?'
-
-assert inquisitive_present_formal_low(u'가다') == u'가니?'
-assert inquisitive_present_formal_low(u'알다') == u'아니?'
-
-assert inquisitive_present_formal_high(u'가다') == u'갑니까?'
-
-assert imperative_present_informal_low(u'가다') == u'가'
-
-assert inquisitive_past_informal_low(u'가다') == u'갔어?'
-
-assert inquisitive_past_informal_high(u'가다') == u'갔어요?'
-
-assert inquisitive_past_formal_low(u'가다') == u'갔니?'
-
-assert inquisitive_past_formal_high(u'가다') == u'갔습니까?'
-
-assert imperative_present_informal_high(u'가다') == u'가세요'
-assert imperative_present_informal_high(u'돕다') == u'도우세요'
-assert imperative_present_informal_high(u'걷다') == u'걸으세요'
-assert imperative_present_informal_high(u'눕다') == u'누우세요'
-assert imperative_present_informal_high(u'살다') == u'사세요'
-assert imperative_present_informal_high(u'걸다') == u'거세요'
-
-assert imperative_present_formal_low(u'가다') == u'가라'
-assert imperative_present_formal_low(u'굽다') == u'구워라'
-assert imperative_present_formal_low(u'살다') == u'살아라'
-assert imperative_present_formal_low(u'서') == u'서라'
-
-assert imperative_present_formal_high(u'가다') == u'가십시오'
-assert imperative_present_formal_high(u'돕다') == u'도우십시오'
-assert imperative_present_formal_high(u'알다') == u'아십시오'
-assert imperative_present_formal_high(u'눕다') == u'누우십시오'
-
-assert propositive_present_informal_low(u'가') == u'가'
-
-assert propositive_present_informal_high(u'가') == u'가요'
-
-assert propositive_present_formal_low(u'가') == u'가자'
-
-assert propositive_present_formal_high(u'가') == u'갑시다'
-assert propositive_present_formal_high(u'살') == u'삽시다'
-assert propositive_present_formal_high(u'눕다') == u'누웁시다'
-
-assert connective_if(u'낫') == u'나으면'
-assert connective_if(u'짓') == u'지으면'
-assert connective_if(u'짖') == u'짖으면'
-assert connective_if(u'가') == u'가면'
-assert connective_if(u'알') == u'알면'
-assert connective_if(u'살') == u'살면'
-
-assert connective_and(u'가다') == u'가고'
-
-assert nominal_ing(u'살다') == u'삶'
-assert nominal_ing(u'걷다') == u'걸음'
-assert nominal_ing(u'가져오다') == u'가져옴'
-assert nominal_ing(u'걷다') == u'걸음'
 
 #for x, y in conjugation.perform(u'놓다'):
 #    print x, y
