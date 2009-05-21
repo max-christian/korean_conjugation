@@ -138,7 +138,7 @@ def base(infinitive):
 def base2(infinitive):
     infinitive = base(infinitive)
     # ㅂ irregular
-    if match(infinitive[-1], u'*', u'*', u'ᆸ'):
+    if match(infinitive[-1], u'*', u'*', u'ᆸ') and infinitive not in [u'잡']:
         if vowel(infinitive[-1]) == u'ㅗ':
             new_vowel = u'ㅗ'
         else:
