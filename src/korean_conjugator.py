@@ -146,31 +146,36 @@ def base(infinitive):
 @conjugation
 def base2(infinitive):
     infinitive = base(infinitive)
+    new_infinitive = infinitive
     # ㅂ irregular
     if match(infinitive[-1], u'*', u'*', u'ᆸ') and infinitive not in [u'잡']:
         if vowel(infinitive[-1]) == u'ㅗ':
             new_vowel = u'ㅗ'
         else:
             new_vowel = u'ㅜ'
-        conjugation.reasons.append(u'ㅂ irregular')
-        return merge(infinitive[:-1] + join(lead(infinitive[-1]), 
-                     vowel(infinitive[-1])),
-                     join(u'ᄋ', new_vowel))
+        new_infinitive = merge(infinitive[:-1] + 
+                               join(lead(infinitive[-1]), 
+                                    vowel(infinitive[-1])),
+                               join(u'ᄋ', new_vowel))
+        conjugation.reasons.append(u'ㅂ irregular (%s -> %s)' % (infinitive, 
+                                                                new_infinitive))
     # ㄷ irregular
     elif match(infinitive[-1], u'*', u'*', u'ᆮ') and \
          infinitive not in [u'믿', u'받', u'얻', u'닫']:
-        conjugation.reasons.append(u'ㄷ irregular')
-        infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
-                                                   vowel(infinitive[-1]), 
-                                                   u'ᆯ'))
-        infinitive.original_padchim = u'ᆮ'
+        new_infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
+                                                       vowel(infinitive[-1]), 
+                                                       u'ᆯ'))
+        new_infinitive.original_padchim = u'ᆮ'
+        conjugation.reasons.append(u'ㄷ irregular (%s -> %s)' % (infinitive,
+                                                                new_infinitive))
     elif match(infinitive[-1], u'*', u'*', u'ᆺ') and \
          infinitive not in [u'벗', u'웃', u'씻', u'빗']:
-        conjugation.reasons.append(u'ㅅ irregular')
-        infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
-                                                   vowel(infinitive[-1])))
-        infinitive.hidden_padchim = True
-    return infinitive
+        new_infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
+                                                       vowel(infinitive[-1])))
+        new_infinitive.hidden_padchim = True
+        conjugation.reasons.append(u'ㅅ irregular (%s -> %s [hidden padchim])' % 
+                                   (infinitive, new_infinitive))
+    return new_infinitive
 
 @conjugation
 def base3(infinitive):
