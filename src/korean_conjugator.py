@@ -146,10 +146,14 @@ def base(infinitive):
 def base2(infinitive):
     infinitive = base(infinitive)
     # ㅂ irregular
-    if match(infinitive[-1], u'*', u'*', u'ᆸ') and vowel(infinitive[-1]) in [u'ㅗ', u'ㅜ']:
+    if match(infinitive[-1], u'*', u'*', u'ᆸ'):
+        if vowel(infinitive[-1]) == u'ㅗ':
+            new_vowel = u'ㅗ'
+        else:
+            new_vowel = u'ㅜ'
         return merge(infinitive[:-1] + join(lead(infinitive[-1]), 
                      vowel(infinitive[-1])),
-                     join(u'ᄋ', vowel(infinitive[-1])))
+                     join(u'ᄋ', new_vowel))
     # ㄷ irregular
     elif match(infinitive[-1], u'*', u'*', u'ᆮ') and \
          infinitive not in [u'믿', u'받', u'얻', u'닫']:
@@ -177,7 +181,9 @@ def declarative_present_informal_low(infinitive):
     # 르 irregular
     if match(infinitive[-1], u'ᄅ', u'ㅡ'):
         new_ending = join(lead(infinitive[-2]), vowel(infinitive[-2]), u'ᆯ')
-        if vowel(infinitive[-2]) in [u'ㅗ', u'ㅏ']:
+        if infinitive == u'푸르':
+            return infinitive + u'러'
+        elif vowel(infinitive[-2]) in [u'ㅗ', u'ㅏ']:
             return infinitive[:-2] + merge(new_ending, u'라')
         else:
             return infinitive[:-2] + merge(new_ending, u'러')

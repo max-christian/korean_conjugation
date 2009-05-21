@@ -38,7 +38,9 @@ def test_declarative_present():
     assert declarative_present_informal_low(u'남다') == u'남아'
     assert declarative_present_informal_low(u'오르다') == u'올라'
     assert declarative_present_informal_low(u'돕다') == u'도와'
-
+    assert declarative_present_informal_low(u'덥다') == u'더워'
+    assert declarative_present_informal_low(u'푸르다') == u'푸르러'
+    
     assert declarative_present_informal_high(u'가다') == u'가요'
 
     assert declarative_present_formal_low(u'가다') == u'간다'
@@ -54,6 +56,7 @@ def test_declarative_present():
     assert declarative_present_formal_high(u'걸다') == u'겁니다'
     assert declarative_present_formal_high(u'깨닫다') == u'깨닫습니다'
     assert declarative_present_formal_high(u'알다') == u'압니다'
+    assert declarative_present_formal_high(u'푸르다') == u'푸릅니다'
 
 def test_past_base():
     assert past_base(u'하') == u'했'
@@ -161,7 +164,8 @@ def test_connectives():
     assert connective_if(u'가') == u'가면'
     assert connective_if(u'알') == u'알면'
     assert connective_if(u'살') == u'살면'
-
+    assert connective_if(u'푸르다') == u'푸르면'
+    
     assert connective_and(u'가다') == u'가고'
 
     assert nominal_ing(u'살다') == u'삶'
