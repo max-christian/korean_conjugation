@@ -20,7 +20,7 @@ def test_stem():
     assert stem(u'추워요') == u'춥다'
     assert stem(u'지어') == u'짓다'
     assert stem(u'도와') == u'돕다'
+    assert stem(u'더워') == u'덥다'
     assert stem(u'갑니까?') == u'갈다'
     assert stem(u'삶') == u'살다'
-    #print stem(u'걸음')
-    #assert stem(u'걸음') == u'걷다'
+    assert stem(u'걸음') == u'걷다'
