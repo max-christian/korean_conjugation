@@ -143,21 +143,21 @@ def base2(infinitive):
             new_vowel = u'ㅗ'
         else:
             new_vowel = u'ㅜ'
-        conjugation.reasons.append('ㅂ irregular')
+        conjugation.reasons.append(u'ㅂ irregular')
         return merge(infinitive[:-1] + join(lead(infinitive[-1]), 
                      vowel(infinitive[-1])),
                      join(u'ᄋ', new_vowel))
     # ㄷ irregular
     elif match(infinitive[-1], u'*', u'*', u'ᆮ') and \
          infinitive not in [u'믿', u'받', u'얻', u'닫']:
-        conjugation.reasons.append('ㄷ irregular')
+        conjugation.reasons.append(u'ㄷ irregular')
         infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                    vowel(infinitive[-1]), 
                                                    u'ᆯ'))
         infinitive.original_padchim = u'ᆮ'
     elif match(infinitive[-1], u'*', u'*', u'ᆺ') and \
          infinitive not in [u'벗', u'웃', u'씻', u'빗']:
-        conjugation.reasons.append('ㅅ irregular')
+        conjugation.reasons.append(u'ㅅ irregular')
         infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                    vowel(infinitive[-1])))
         infinitive.hidden_padchim = True
