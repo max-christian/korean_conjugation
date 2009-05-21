@@ -14,7 +14,7 @@ def no_padchim_rule(characters):
             return (u'borrow padchim', x[:-1] + join(lead(x[-1]), 
                                                     vowel(x[-1]), 
                                                     padchim(y[0])) +
-                                      y[1:])
+                                       y[1:])
     return rule
 
 def vowel_contraction(vowel1, vowel2, new_vowel):
@@ -25,8 +25,13 @@ def vowel_contraction(vowel1, vowel2, new_vowel):
     def rule(x, y):
         if match(x[-1], u'*', vowel1, None) and \
            match(y[0], u'ᄋ', vowel2):
-            return (u'vowel contraction [%s + %s -> %s]' % (vowel1, vowel2, new_vowel),
-               x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:])
+            return (u'vowel contraction [%s + %s -> %s]' % 
+                               (vowel1, vowel2, new_vowel),
+                    x[:-1] + 
+                    join(lead(x[-1]), 
+                         new_vowel, 
+                         padchim(y[0])) + 
+                    y[1:])
     return rule
 
 def drop_l(characters):
@@ -40,8 +45,9 @@ def drop_l_borrow_padchim(characters):
         if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
             return (u'drop ㄹ borrow padchim', x[:-1] + 
                                               join(lead(x[-1]), 
-                                              vowel(x[-1]), 
-                                              padchim(y[0])) + y[1:])
+                                                   vowel(x[-1]), 
+                                                   padchim(y[0])) + 
+                                              y[1:])
     return rule
 
 def insert_eh(characters):
@@ -61,7 +67,7 @@ merge_rules.append(drop_l_borrow_padchim([u'는', u'습', u'읍', u'을']))
 merge_rules.append(drop_l([u'니', u'세', u'십']))
 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and \
-                   (None, x + y))
+                   ('join', x + y))
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'음' and \
                    [u'ㄹ + ㅁ -> ᆱ', join(lead(x[-1]), vowel(x[-1]), u'ᆱ')])
 
@@ -85,7 +91,7 @@ merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
 merge_rules.append(insert_eh([u'면', u'세', u'십']))
 
 # default rule - just append the contents
-merge_rules.append(lambda x, y: (None, x + y))
+merge_rules.append(lambda x, y: ('join', x + y))
 
 def apply_rules(x, y, verbose=False, rules=[]):
     u'''apply_rules concatenates every element in a list using the rules to 
@@ -94,8 +100,11 @@ def apply_rules(x, y, verbose=False, rules=[]):
     for i, rule in enumerate(rules):
         output = rule(x, y)
         if output:
-            if output[0]:
-                conjugation.reasons.append(u'%s (%s + %s -> %s)' % (output[0], x, y, output[1]))
+            conjugation.reasons.append(u'%s (%s + %s -> %s)' % 
+                                       (output[0] and output[0] or '', 
+                                        x, 
+                                        y, 
+                                        output[1]))
             return output[1]
 
 merge = lambda x, y: apply_rules(x, y, rules=merge_rules, verbose=False)
