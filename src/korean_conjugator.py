@@ -3,7 +3,6 @@
 # (C) 2009 Dan Bravender
 
 from hangeul_utils import *
-from pprint import pformat
 
 def no_padchim_rule(characters):
     u'''no_padchim_rule is a helper function for defining merges where a 
@@ -12,9 +11,10 @@ def no_padchim_rule(characters):
      '''
     def rule(x, y):
         if not padchim(x[-1]) and y[0] in characters:
-            return x[:-1] + join(lead(x[-1]), 
-                                 vowel(x[-1]), 
-                                 padchim(y[0])) + y[1:]
+            return ('borrow padchim', x[:-1] + join(lead(x[-1]), 
+                                                    vowel(x[-1]), 
+                                                    padchim(y[0])) +
+                                      y[1:])
     return rule
 
 def vowel_contraction(vowel1, vowel2, new_vowel):
@@ -23,27 +23,31 @@ def vowel_contraction(vowel1, vowel2, new_vowel):
         u'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했.
      '''
     def rule(x, y):
-        return match(x[-1], u'*', vowel1, None) and \
-               match(y[0], u'ᄋ', vowel2) and \
-               x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
+        if match(x[-1], u'*', vowel1, None) and \
+           match(y[0], u'ᄋ', vowel2):
+            return (u'vowel contraction [%s + %s -> %s]' % (vowel1, vowel2, new_vowel),
+               x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:])
     return rule
 
 def drop_l(characters):
     def rule(x, y):
         if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
-            return x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y
+            return (u'drop ㄹ', x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
     return rule
 
 def drop_l_borrow_padchim(characters):
     def rule(x, y):
         if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
-            return x[:-1] + join(lead(x[-1]), vowel(x[-1]), padchim(y[0])) + y[1:]
+            return ('drop ㄹ borrow padchim', x[:-1] + 
+                                              join(lead(x[-1]), 
+                                              vowel(x[-1]), 
+                                              padchim(y[0])) + y[1:])
     return rule
 
 def insert_eh(characters):
     def rule(x, y):
         if padchim(x[-1]) and y[0] in characters:
-            return x + u'으' + y
+            return (u'padchim + consonant -> insert 으', x + u'으' + y)
     return rule
 
 # merge rules is a list of rules that are applied in order when merging a verb 
@@ -57,9 +61,9 @@ merge_rules.append(drop_l_borrow_padchim([u'는', u'습', u'읍', u'을']))
 merge_rules.append(drop_l([u'니', u'세', u'십']))
 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and \
-                   x + y)
+                   ('add', x + y))
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'음' and \
-                   join(lead(x[-1]), vowel(x[-1]), u'ᆱ'))
+                   [u'ㄹ + ㅁ -> ᆱ', join(lead(x[-1]), vowel(x[-1]), u'ᆱ')])
 
 # vowel contractions
 merge_rules.append(vowel_contraction(u'ㅐ', u'ㅓ', u'ㅐ'))
@@ -81,7 +85,7 @@ merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
 merge_rules.append(insert_eh([u'면', u'세', u'십']))
 
 # default rule - just append the contents
-merge_rules.append(lambda x, y: x + y)
+merge_rules.append(lambda x, y: ('add', x + y))
 
 def apply_rules(x, y, verbose=False, rules=[]):
     u'''apply_rules concatenates every element in a list using the rules to 
@@ -90,10 +94,7 @@ def apply_rules(x, y, verbose=False, rules=[]):
     for i, rule in enumerate(rules):
         output = rule(x, y)
         if output:
-            if verbose:
-                print("rule %03d: %s + %s => %s" % 
-                      (i, pformat(x), pformat(y), pformat(output)))
-            return output
+            return output[1]
 
 merge = lambda x, y: apply_rules(x, y, rules=merge_rules, verbose=False)
 
@@ -154,6 +155,7 @@ def base2(infinitive):
         infinitive.hidden_padchim = True
     return infinitive
 
+@conjugation
 def base3(infinitive):
     infinitive = base(infinitive)
     if match(infinitive[-1], u'*', u'ㅗ', u'ᆸ'):
@@ -168,17 +170,17 @@ def declarative_present_informal_low(infinitive):
     if match(infinitive[-1], u'ᄅ', u'ㅡ'):
         new_ending = join(lead(infinitive[-2]), vowel(infinitive[-2]), u'ᆯ')
         if infinitive == u'푸르':
-            return infinitive + u'러'
+            return merge(infinitive, u'러')
         elif vowel(infinitive[-2]) in [u'ㅗ', u'ㅏ']:
-            return infinitive[:-2] + merge(new_ending, u'라')
+            return merge(infinitive[:-2] + new_ending, u'라')
         else:
-            return infinitive[:-2] + merge(new_ending, u'러')
+            return merge(infinitive[:-2] + new_ending, u'러')
     elif infinitive[-1] == u'하':
-        return infinitive[:-1] + merge(infinitive[-1], u'여')
+        return merge(infinitive, u'여')
     elif vowel(infinitive[-1]) in [u'ㅗ', u'ㅏ']:
-        return infinitive[:-1] + merge(infinitive[-1], u'아')
+        return merge(infinitive, u'아')
     else:
-        return infinitive[:-1] + merge(infinitive[-1], u'어')
+        return merge(infinitive, u'어')
 
 @conjugation
 def declarative_present_informal_high(infinitive):
@@ -196,9 +198,9 @@ def declarative_present_formal_high(infinitive):
 def past_base(infinitive):
     ps = declarative_present_informal_low(infinitive)
     if vowel(ps[-1]) in [u'ㅗ', u'ㅏ']:
-        return ps[:-1] + merge(ps[-1], u'았')
+        return merge(ps, u'았')
     else:
-        return ps[:-1] + merge(ps[-1], u'었')
+        return merge(ps, u'었')
 
 @conjugation
 def declarative_past_informal_low(infinitive):
@@ -327,7 +329,3 @@ def connective_and(infinitive):
 @conjugation
 def nominal_ing(infinitive):
     return merge(base2(infinitive), u'음')
-
-#for x, y in conjugation.perform(u'놓다'):
-#    print x, y
-#print(pformat(list(conjugation.tenses.keys())))
