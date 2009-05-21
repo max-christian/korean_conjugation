@@ -11,7 +11,7 @@ def no_padchim_rule(characters):
      '''
     def rule(x, y):
         if not padchim(x[-1]) and y[0] in characters:
-            return ('borrow padchim', x[:-1] + join(lead(x[-1]), 
+            return (u'borrow padchim', x[:-1] + join(lead(x[-1]), 
                                                     vowel(x[-1]), 
                                                     padchim(y[0])) +
                                       y[1:])
@@ -38,7 +38,7 @@ def drop_l(characters):
 def drop_l_borrow_padchim(characters):
     def rule(x, y):
         if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
-            return ('drop ㄹ borrow padchim', x[:-1] + 
+            return (u'drop ㄹ borrow padchim', x[:-1] + 
                                               join(lead(x[-1]), 
                                               vowel(x[-1]), 
                                               padchim(y[0])) + y[1:])
@@ -95,7 +95,7 @@ def apply_rules(x, y, verbose=False, rules=[]):
         output = rule(x, y)
         if output:
             if output[0]:
-                conjugation.reasons.append(output[0])
+                conjugation.reasons.append(u'%s (%s + %s -> %s)' % (output[0], x, y, output[1]))
             return output[1]
 
 merge = lambda x, y: apply_rules(x, y, rules=merge_rules, verbose=False)
