@@ -5,16 +5,16 @@
 from hangeul_utils import *
 from pprint import pformat
 
-def no_padchim_rule(character):
+def no_padchim_rule(characters):
     u'''no_padchim_rule is a helper function for defining merges where a 
         character will take the padchim of a merged character if the first 
         character doesn't already have a padchim, .e.g. 습 -> 가 + 습니다 -> 갑니다.
      '''
     def rule(x, y):
-        if not padchim(x[-1]) and y[0] == character:
+        if not padchim(x[-1]) and y[0] in characters:
             return x[:-1] + join(lead(x[-1]), 
                                  vowel(x[-1]), 
-                                 padchim(character)) + y[1:]
+                                 padchim(y[0])) + y[1:]
     return rule
 
 def vowel_contraction(vowel1, vowel2, new_vowel):
@@ -28,39 +28,34 @@ def vowel_contraction(vowel1, vowel2, new_vowel):
                x[:-1] + join(lead(x[-1]), new_vowel, padchim(y[0])) + y[1:]
     return rule
 
+def drop_l(characters):
+    def rule(x, y):
+        if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
+            return x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y
+    return rule
+
+def drop_l_borrow_padchim(characters):
+    def rule(x, y):
+        if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
+            return x[:-1] + join(lead(x[-1]), vowel(x[-1]), padchim(y[0])) + y[1:]
+    return rule
+
+def insert_eh(characters):
+    def rule(x, y):
+        if padchim(x[-1]) and y[0] in characters:
+            return x + u'으' + y
+    return rule
+
 # merge rules is a list of rules that are applied in order when merging a verb 
 #             stem with a tense ending
 merge_rules = []
 
-# no padchim + 을
-merge_rules.append(no_padchim_rule(u'을'))
-
-# no padchim + 습, 읍
-merge_rules.append(no_padchim_rule(u'습'))
-merge_rules.append(no_padchim_rule(u'읍'))
-
-# no padchim + 는
-merge_rules.append(no_padchim_rule(u'는'))
-
-# no padchim + 음
-merge_rules.append(no_padchim_rule(u'음'))
+merge_rules.append(no_padchim_rule([u'을', u'습', u'읍', u'는', u'음']))
 
 # ㄹ irregular
-# a true ㄹ pachim (not one that was converted from ㄷ -> ㄹ) is often 
-merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'는' and \
-                   x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆫ') + y[1:])
-merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'습' and \
-                   x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆸ') + y[1:])
-merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'읍' and \
-                   x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆸ') + y[1:])
-merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'니' and \
-                   x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
-merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'세' and \
-                   x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
-merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'십' and \
-                   x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
-merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'을' and \
-                   x + y[1:])
+merge_rules.append(drop_l_borrow_padchim([u'는', u'습', u'읍', u'을']))
+merge_rules.append(drop_l([u'니', u'세', u'십']))
+
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and \
                    x + y)
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'음' and \
@@ -82,17 +77,8 @@ merge_rules.append(vowel_contraction(u'ㅔ', u'ㅓ', u'ㅔ'))
 merge_rules.append(vowel_contraction(u'ㅕ', u'ㅓ', u'ㅕ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
 
-# 면 connective
-merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'면' and \
-                   x + u'으' + y)
-
-# 세 command
-merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'세' and \
-                   x + u'으' + y)
-
-# 십 command
-merge_rules.append(lambda x, y: padchim(x[-1]) and y[0] == u'십' and \
-                   x + u'으' + y)
+# 으 insertion
+merge_rules.append(insert_eh([u'면', u'세', u'십']))
 
 # default rule - just append the contents
 merge_rules.append(lambda x, y: x + y)
