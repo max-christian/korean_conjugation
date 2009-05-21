@@ -61,7 +61,7 @@ merge_rules.append(drop_l_borrow_padchim([u'는', u'습', u'읍', u'을']))
 merge_rules.append(drop_l([u'니', u'세', u'십']))
 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and \
-                   ('add', x + y))
+                   (None, x + y))
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'음' and \
                    [u'ㄹ + ㅁ -> ᆱ', join(lead(x[-1]), vowel(x[-1]), u'ᆱ')])
 
@@ -85,7 +85,7 @@ merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
 merge_rules.append(insert_eh([u'면', u'세', u'십']))
 
 # default rule - just append the contents
-merge_rules.append(lambda x, y: ('add', x + y))
+merge_rules.append(lambda x, y: (None, x + y))
 
 def apply_rules(x, y, verbose=False, rules=[]):
     u'''apply_rules concatenates every element in a list using the rules to 
@@ -94,6 +94,8 @@ def apply_rules(x, y, verbose=False, rules=[]):
     for i, rule in enumerate(rules):
         output = rule(x, y)
         if output:
+            if output[0]:
+                conjugation.reasons.append(output[0])
             return output[1]
 
 merge = lambda x, y: apply_rules(x, y, rules=merge_rules, verbose=False)
@@ -105,6 +107,7 @@ class conjugation:
     def __init__(self):
         self.tenses = {}
         self.tense_order = []
+        self.reasons = []
 
     def perform(self, infinitive):
         u'''perform returns the result of the application of all of the
@@ -112,7 +115,9 @@ class conjugation:
          '''
         results = []
         for tense in self.tense_order:
-            results.append((tense, self.tenses[tense](infinitive)))
+            self.reasons = []
+            c = self.tenses[tense](infinitive)
+            results.append((tense, c, self.reasons))
         return results
 
     def __call__(self, f):
@@ -138,18 +143,21 @@ def base2(infinitive):
             new_vowel = u'ㅗ'
         else:
             new_vowel = u'ㅜ'
+        conjugation.reasons.append('ㅂ irregular')
         return merge(infinitive[:-1] + join(lead(infinitive[-1]), 
                      vowel(infinitive[-1])),
                      join(u'ᄋ', new_vowel))
     # ㄷ irregular
     elif match(infinitive[-1], u'*', u'*', u'ᆮ') and \
          infinitive not in [u'믿', u'받', u'얻', u'닫']:
+        conjugation.reasons.append('ㄷ irregular')
         infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                    vowel(infinitive[-1]), 
                                                    u'ᆯ'))
         infinitive.original_padchim = u'ᆮ'
     elif match(infinitive[-1], u'*', u'*', u'ᆺ') and \
          infinitive not in [u'벗', u'웃', u'씻', u'빗']:
+        conjugation.reasons.append('ㅅ irregular')
         infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                    vowel(infinitive[-1])))
         infinitive.hidden_padchim = True
@@ -168,13 +176,20 @@ def declarative_present_informal_low(infinitive):
     infinitive = base2(infinitive)
     # 르 irregular
     if match(infinitive[-1], u'ᄅ', u'ㅡ'):
-        new_ending = join(lead(infinitive[-2]), vowel(infinitive[-2]), u'ᆯ')
+        new_base = infinitive[:-2] + join(lead(infinitive[-2]), vowel(infinitive[-2]), u'ᆯ')
         if infinitive == u'푸르':
-            return merge(infinitive, u'러')
+            conjugation.reasons.append(u'irregular 푸르 -> 푸르러')
+            return infinitive + u'러'
         elif vowel(infinitive[-2]) in [u'ㅗ', u'ㅏ']:
-            return merge(infinitive[:-2] + new_ending, u'라')
+            new_base += u'라'
+            conjugation.reasons.append(u'르 irregular stem change [%s -> %s]' %
+                                       (infinitive, new_base))
+            return new_base
         else:
-            return merge(infinitive[:-2] + new_ending, u'러')
+            new_base += u'러'
+            conjugation.reasons.append(u'르 irregular stem change [%s -> %s]' %
+                                       (infinitive, new_base))
+            return new_base
     elif infinitive[-1] == u'하':
         return merge(infinitive, u'여')
     elif vowel(infinitive[-1]) in [u'ㅗ', u'ㅏ']:

@@ -7,6 +7,7 @@ def test_base3():
 
 def test_merge():
     assert merge(u'오', u'아요') == u'와요'
+    assert conjugation.reasons == [u'vowel contraction [ㅗ + ㅏ -> ㅘ]']
     assert merge(u'오', u'아') == u'와'
     assert merge(u'갔', u'면') == u'갔으면'
     assert merge(u'일어나', u'면') == u'일어나면'

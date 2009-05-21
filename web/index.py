@@ -4,7 +4,6 @@ import os
 import traceback
 sys.stdout = sys.stderr
 sys.path.append(os.path.realpath(__file__ + '/../../src'))
-print sys.path
 
 import atexit
 import threading
@@ -24,8 +23,8 @@ class Root(object):
         try:
             infinitive = infinitive.decode('utf-8')
             results = []
-            for x, y in korean_conjugator.conjugation.perform(infinitive):
-                results.append(x.replace('_', ' ') + ': ' + y)
+            for x, y, z in korean_conjugator.conjugation.perform(infinitive):
+                results.append(x.replace('_', ' ') + ': ' + y + '[' + ' '.join(z) + ']')
             return '<form method="get" action="."><input name="infinitive"></form>' + ('<br>'.join(results)).encode('utf-8')
         except Exception, e:
             return traceback.format_exception(*sys.exc_info())
