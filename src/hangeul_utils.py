@@ -21,6 +21,16 @@ class Geulja(unicode):
             g.original_padchim = self.original_padchim
         return g
 
+def find_vowel_to_append(string):
+    for character in reversed(string):
+        if vowel(character) == u'ㅡ':
+            continue
+        elif vowel(character) in [u'ㅗ', u'ㅏ']:
+            return u'아'
+        else:
+            return u'어'
+    return u'어'
+
 def join(lead, vowel, padchim=None):
     '''join returns the unicode character that is composed of the
        lead, vowel and padchim that are passed in.

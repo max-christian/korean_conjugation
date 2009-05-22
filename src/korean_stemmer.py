@@ -12,7 +12,7 @@ def iterate_chop_last(string):
 def generate_stems(verb):
     yield (False, verb[:-1] + join(lead(verb[-1]), u'ㅣ'))
     yield (True, verb)
-    for p in [u'ᆮ', u'ᆸ',u'ᆯ', u'ᆺ']:
+    for p in [u'ᆮ', u'ᆸ',u'ᆯ', u'ᆺ', u'ᄂ']:
         yield (False, verb[:-1] + join(lead(verb[-1]), vowel(verb[-1]), p))
     yield (False, verb[:-1] + join(lead(verb[-1]), vowel(verb[-1])))
 

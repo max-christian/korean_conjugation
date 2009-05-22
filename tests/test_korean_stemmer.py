@@ -15,6 +15,7 @@ def test_stem():
     assert stem(u'가세요') == u'가다'
     assert stem(u'기다려') == u'기다리다'
     assert stem(u'기다렸어') == u'기다리다'
+    assert stem(u'저었어') == u'젓다'
     assert stem(u'가셨습니까?') == u'가시다'
     assert stem(u'안녕하세요') == u'안녕하다'
     assert stem(u'추워요') == u'춥다'

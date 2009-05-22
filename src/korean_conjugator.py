@@ -148,7 +148,9 @@ def base2(infinitive):
     infinitive = base(infinitive)
     new_infinitive = infinitive
     # ㅂ irregular
-    if match(infinitive[-1], u'*', u'*', u'ᆸ') and infinitive not in [u'잡']:
+    if match(infinitive[-1], u'*', u'*', u'ᆸ') and \
+       infinitive not in [u'잡', u'입', u'씹', u'넓', 
+                          u'좁', u'집', u'붙잡', u'뽑']:
         if vowel(infinitive[-1]) == u'ㅗ':
             new_vowel = u'ㅗ'
         else:
@@ -194,7 +196,7 @@ def declarative_present_informal_low(infinitive):
         if infinitive == u'푸르':
             conjugation.reasons.append(u'irregular 푸르 -> 푸르러')
             return infinitive + u'러'
-        elif vowel(infinitive[-2]) in [u'ㅗ', u'ㅏ']:
+        elif find_vowel_to_append(infinitive[:-1]) == u'아':
             new_base += u'라'
             conjugation.reasons.append(u'르 irregular stem change [%s -> %s]' %
                                        (infinitive, new_base))
@@ -206,10 +208,7 @@ def declarative_present_informal_low(infinitive):
             return new_base
     elif infinitive[-1] == u'하':
         return merge(infinitive, u'여')
-    elif vowel(infinitive[-1]) in [u'ㅗ', u'ㅏ']:
-        return merge(infinitive, u'아')
-    else:
-        return merge(infinitive, u'어')
+    return merge(infinitive, find_vowel_to_append(infinitive))
 
 @conjugation
 def declarative_present_informal_high(infinitive):
