@@ -89,6 +89,8 @@ merge_rules.append(vowel_contraction(u'ㅣ', u'ㅓ', u'ㅕ'))
 merge_rules.append(vowel_contraction(u'ㅓ', u'ㅓ', u'ㅓ'))
 merge_rules.append(vowel_contraction(u'ㅓ', u'ㅣ', u'ㅐ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅣ', u'ㅐ'))
+merge_rules.append(vowel_contraction(u'ㅑ', u'ㅣ', u'ㅒ'))
+merge_rules.append(vowel_contraction(u'ㅒ', u'ㅓ', u'ㅒ'))
 merge_rules.append(vowel_contraction(u'ㅔ', u'ㅓ', u'ㅔ'))
 merge_rules.append(vowel_contraction(u'ㅕ', u'ㅓ', u'ㅕ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
@@ -134,7 +136,7 @@ class conjugation:
             c = self.tenses[tense](infinitive)
             results.append((tense, c, self.reasons))
         return results
-
+    
     def __call__(self, f):
         self.tense_order.append(f.__name__)
         self.tenses.update({f.__name__: f})
@@ -149,11 +151,13 @@ def base(infinitive):
     else:
         return infinitive
 
+h_exceptions = [u'낳', u'넣', u'좋']
+
 @conjugation
 def base2(infinitive):
     infinitive = base(infinitive)
     new_infinitive = infinitive
-    if match(infinitive[-1], u'*', u'*', u'ᇂ'):
+    if match(infinitive[-1], u'*', u'*', u'ᇂ') and infinitive not in h_exceptions:
         new_infinitive = merge(infinitive[:-1] + 
                                join(lead(infinitive[-1]),
                                     vowel(infinitive[-1])),
@@ -195,8 +199,15 @@ def base2(infinitive):
 @conjugation
 def base3(infinitive):
     infinitive = base(infinitive)
-    if match(infinitive[-1], u'*', u'ㅗ', u'ᆸ'):
-        return join(lead(infinitive[-1]), vowel(infinitive[-1])) + u'우'
+    if infinitive in h_exceptions:
+        infinitive = Geulja(infinitive)
+        # Force the skipping of the drop ㅎ borrow padchim rule (this is starting to get nasty)
+        infinitive.original_padchim = u'ㄱ'
+        return infinitive
+    if match(infinitive[-1], u'*', u'*', u'ᇂ'):
+        return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
+    elif match(infinitive[-1], u'*', u'ㅗ', u'ᆸ'):
+        return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1])) + u'우'
     else:
         return base2(infinitive)
 
