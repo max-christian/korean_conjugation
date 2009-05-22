@@ -34,9 +34,13 @@ def vowel_contraction(vowel1, vowel2, new_vowel):
                     y[1:])
     return rule
 
+h_regulars = [u'낳', u'넣', u'좋']
+
 def drop_l_or_h(characters):
     def rule(x, y):
-        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and y[0] in characters:
+        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and \
+           x not in h_regulars and \
+           y[0] in characters:
             return (u'drop %s' % padchim(x[-1]),
                                 x[:-1] + 
                                 join(lead(x[-1]), vowel(x[-1])) + 
@@ -45,7 +49,9 @@ def drop_l_or_h(characters):
 
 def drop_l_or_h_and_borrow_padchim(characters):
     def rule(x, y):
-        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and y[0] in characters:
+        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and \
+           x not in h_regulars and \
+           y[0] in characters:
             return (u'drop %s borrow padchim' % padchim(x[-1]),
                                               x[:-1] + 
                                               join(lead(x[-1]), 
@@ -151,13 +157,11 @@ def base(infinitive):
     else:
         return infinitive
 
-h_exceptions = [u'낳', u'넣', u'좋']
-
 @conjugation
 def base2(infinitive):
     infinitive = base(infinitive)
     new_infinitive = infinitive
-    if match(infinitive[-1], u'*', u'*', u'ᇂ') and infinitive not in h_exceptions:
+    if match(infinitive[-1], u'*', u'*', u'ᇂ') and infinitive not in h_regulars:
         new_infinitive = merge(infinitive[:-1] + 
                                join(lead(infinitive[-1]),
                                     vowel(infinitive[-1])),
@@ -199,12 +203,7 @@ def base2(infinitive):
 @conjugation
 def base3(infinitive):
     infinitive = base(infinitive)
-    if infinitive in h_exceptions:
-        infinitive = Geulja(infinitive)
-        # Force the skipping of the drop ㅎ borrow padchim rule (this is starting to get nasty)
-        infinitive.original_padchim = u'ㄱ'
-        return infinitive
-    if match(infinitive[-1], u'*', u'*', u'ᇂ'):
+    if match(infinitive[-1], u'*', u'*', u'ᇂ') and infinitive not in h_regulars:
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
     elif match(infinitive[-1], u'*', u'ㅗ', u'ᆸ'):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1])) + u'우'
