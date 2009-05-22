@@ -13,10 +13,13 @@ def test_merge():
     assert merge(u'일어나', u'면') == u'일어나면'
     assert merge(u'맡', u'세요') == u'맡으세요'
 
-def test_declarative_present():
+def test_declarative_present(): 
+    assert declarative_present_informal_low(u'많다') == u'많아'
+    assert declarative_present_informal_low(u'좋다') == u'좋아'
     assert declarative_present_informal_low(u'만들다') == u'만들어'
     assert declarative_present_informal_low(u'어떻다') == u'어때'
     assert declarative_present_informal_low(u'까맣다') == u'까매'
+    assert declarative_present_informal_low(u'하얗다') == u'하얘'
     assert declarative_present_informal_low(u'잡') == u'잡아'
     assert declarative_present_informal_low(u'뽑') == u'뽑아'
     assert declarative_present_informal_low(u'입') == u'입어'
@@ -89,11 +92,17 @@ def test_declarative_past():
 
     assert declarative_past_formal_high(u'가다') == u'갔습니다'
 
+def test_future_base():
+    assert future_base(u'가다') == u'갈'
+    assert future_base(u'가늘다') == u'가늘'
+    assert future_base(u'좋다') == u'좋을'
+
 def test_declarative_future():
     assert declarative_future_informal_low(u'가다') == u'갈 거야'
     assert declarative_future_informal_low(u'믿다') == u'믿을 거야'
     assert declarative_future_informal_low(u'알다') == u'알 거야'
-
+    
+    assert declarative_future_informal_high(u'하얗다') == u'하얄 거예요'
     assert declarative_future_informal_high(u'가다') == u'갈 거예요'
     assert declarative_future_informal_high(u'믿다') == u'믿을 거예요'
     assert declarative_future_informal_high(u'걷다') == u'걸을 거예요'
