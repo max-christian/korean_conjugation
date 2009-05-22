@@ -34,16 +34,20 @@ def vowel_contraction(vowel1, vowel2, new_vowel):
                     y[1:])
     return rule
 
-def drop_l(characters):
+def drop_l_or_h(characters):
     def rule(x, y):
-        if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
-            return (u'drop ㄹ', x[:-1] + join(lead(x[-1]), vowel(x[-1])) + y)
+        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and y[0] in characters:
+            return (u'drop %s' % padchim(x[-1]),
+                                x[:-1] + 
+                                join(lead(x[-1]), vowel(x[-1])) + 
+                                y)
     return rule
 
-def drop_l_borrow_padchim(characters):
+def drop_l_or_h_and_borrow_padchim(characters):
     def rule(x, y):
-        if padchim(x[-1]) == u'ᆯ' and y[0] in characters:
-            return (u'drop ㄹ borrow padchim', x[:-1] + 
+        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and y[0] in characters:
+            return (u'drop %s borrow padchim' % padchim(x[-1]),
+                                              x[:-1] + 
                                               join(lead(x[-1]), 
                                                    vowel(x[-1]), 
                                                    padchim(y[0])) + 
@@ -63,8 +67,8 @@ merge_rules = []
 merge_rules.append(no_padchim_rule([u'을', u'습', u'읍', u'는', u'음']))
 
 # ㄹ irregular
-merge_rules.append(drop_l_borrow_padchim([u'는', u'습', u'읍', u'을']))
-merge_rules.append(drop_l([u'니', u'세', u'십']))
+merge_rules.append(drop_l_or_h_and_borrow_padchim([u'는', u'습', u'읍', u'을']))
+merge_rules.append(drop_l_or_h([u'니', u'세', u'십']))
 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and \
                    ('join', x + y))
@@ -83,6 +87,7 @@ merge_rules.append(vowel_contraction(u'ㅏ', u'ㅏ', u'ㅏ'))
 merge_rules.append(vowel_contraction(u'ㅡ', u'ㅏ', u'ㅏ'))
 merge_rules.append(vowel_contraction(u'ㅣ', u'ㅓ', u'ㅕ'))
 merge_rules.append(vowel_contraction(u'ㅓ', u'ㅓ', u'ㅓ'))
+merge_rules.append(vowel_contraction(u'ㅓ', u'ㅣ', u'ㅐ'))
 merge_rules.append(vowel_contraction(u'ㅔ', u'ㅓ', u'ㅔ'))
 merge_rules.append(vowel_contraction(u'ㅕ', u'ㅓ', u'ㅕ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
@@ -147,8 +152,15 @@ def base(infinitive):
 def base2(infinitive):
     infinitive = base(infinitive)
     new_infinitive = infinitive
+    if match(infinitive[-1], u'*', u'*', u'ᇂ'):
+        new_infinitive = merge(infinitive[:-1] + 
+                               join(lead(infinitive[-1]),
+                                    vowel(infinitive[-1])),
+                               u'이')
+        conjugation.reasons.append(u'ㅎ irregular (%s -> %s)' % (infinitive,
+                                                                new_infinitive))
     # ㅂ irregular
-    if match(infinitive[-1], u'*', u'*', u'ᆸ') and \
+    elif match(infinitive[-1], u'*', u'*', u'ᆸ') and \
        infinitive not in [u'잡', u'입', u'씹', u'넓', 
                           u'좁', u'집', u'붙잡', u'뽑']:
         if vowel(infinitive[-1]) == u'ㅗ':
