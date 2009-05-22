@@ -24,7 +24,7 @@ class Root(object):
             infinitive = infinitive.decode('utf-8')
             results = []
             for x, y, z in korean_conjugator.conjugation.perform(infinitive):
-                results.append(x.replace('_', ' ') + ': ' + y + '[' + ' '.join(z) + ']')
+                results.append(x.replace('_', ' ') + ': ' + y) # + '[' + ' '.join(z) + ']')
             return '<form method="get" action="."><input name="infinitive"></form>' + ('<br>'.join(results)).encode('utf-8')
         except Exception, e:
             return traceback.format_exception(*sys.exc_info())
