@@ -56,7 +56,6 @@ def test_declarative_present():
     assert declarative_present_informal_high(u'가다') == u'가요'
 
     assert declarative_present_formal_low(u'가다') == u'간다'
-    assert declarative_present_formal_low(u'어떻다') == u'어떤다'
     assert declarative_present_formal_low(u'믿다') == u'믿는다'
     assert declarative_present_formal_low(u'걷다') == u'걷는다'
     assert declarative_present_formal_low(u'짓다') == u'짓는다'
@@ -135,6 +134,7 @@ def test_inquisitive_present():
     assert inquisitive_present_formal_low(u'알다') == u'아니?'
 
     assert inquisitive_present_formal_high(u'가다') == u'갑니까?'
+    assert inquisitive_present_formal_high(u'까맣다') == u'까맣습니까?'
 
 def test_inquisitive_past():
     assert inquisitive_past_informal_low(u'가다') == u'갔어?'
