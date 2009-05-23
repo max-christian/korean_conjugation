@@ -36,9 +36,9 @@ def vowel_contraction(vowel1, vowel2, new_vowel):
 
 h_regulars = [u'낳', u'넣', u'좋']
 
-def drop_l_or_h(characters):
+def drop_l(characters):
     def rule(x, y):
-        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and \
+        if padchim(x[-1]) in [u'ᆯ'] and \
            x not in h_regulars and \
            y[0] in characters:
             return (u'drop %s' % padchim(x[-1]),
@@ -47,9 +47,9 @@ def drop_l_or_h(characters):
                                 y)
     return rule
 
-def drop_l_or_h_and_borrow_padchim(characters):
+def drop_l_and_borrow_padchim(characters):
     def rule(x, y):
-        if padchim(x[-1]) in [u'ᆯ', u'ᇂ'] and \
+        if padchim(x[-1]) in [u'ᆯ'] and \
            x not in h_regulars and \
            y[0] in characters:
             return (u'drop %s borrow padchim' % padchim(x[-1]),
@@ -73,8 +73,8 @@ merge_rules = []
 merge_rules.append(no_padchim_rule([u'을', u'습', u'읍', u'는', u'음']))
 
 # ㄹ irregular
-merge_rules.append(drop_l_or_h_and_borrow_padchim([u'는', u'습', u'읍', u'을']))
-merge_rules.append(drop_l_or_h([u'니', u'세', u'십']))
+merge_rules.append(drop_l_and_borrow_padchim([u'는', u'습', u'읍', u'을']))
+merge_rules.append(drop_l([u'니', u'세', u'십']))
 
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and \
                    ('join', x + y))
