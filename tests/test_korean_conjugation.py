@@ -192,4 +192,6 @@ def test_connectives():
     assert nominal_ing(u'걷다') == u'걸음'
     assert nominal_ing(u'가져오다') == u'가져옴'
     assert nominal_ing(u'걷다') == u'걸음'
+    assert nominal_ing(u'그렇다') == u'그럼'
+    assert nominal_ing(u'까맣다') == u'까맘'
 

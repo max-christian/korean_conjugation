@@ -79,7 +79,8 @@ merge_rules.append(drop_l([u'니', u'세', u'십']))
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'면' and \
                    ('join', x + y))
 merge_rules.append(lambda x, y: padchim(x[-1]) == u'ᆯ' and y[0] == u'음' and \
-                   [u'ㄹ + ㅁ -> ᆱ', join(lead(x[-1]), vowel(x[-1]), u'ᆱ')])
+                   [u'ㄹ + ㅁ -> ᆱ', x[:-1] + join(lead(x[-1]), vowel(x[-1]), u'ᆱ')])
+
 
 # vowel contractions
 merge_rules.append(vowel_contraction(u'ㅐ', u'ㅓ', u'ㅐ'))
@@ -379,4 +380,8 @@ def connective_and(infinitive):
 
 @conjugation
 def nominal_ing(infinitive):
-    return merge(base2(infinitive), u'음')
+    infinitive = base(infinitive)
+    if padchim(infinitive[-1]) == u'ᇂ':
+        return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]), u'ᆷ')
+    else:
+        return merge(base2(infinitive), u'음')
