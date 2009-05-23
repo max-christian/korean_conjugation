@@ -212,6 +212,14 @@ def base3(infinitive):
         return base2(infinitive)
 
 @conjugation
+def base4(infinitive):
+    infinitive = base(infinitive)
+    if padchim(infinitive[-1]) == u'ᇂ':
+        return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
+    else:
+        return base2(infinitive)
+
+@conjugation
 def declarative_present_informal_low(infinitive):
     infinitive = base2(infinitive)
     # 르 irregular
@@ -372,7 +380,7 @@ def propositive_present_formal_high(infinitive):
 
 @conjugation
 def connective_if(infinitive):
-    return merge(base2(infinitive), u'면')
+    return merge(base4(infinitive), u'면')
 
 @conjugation
 def connective_and(infinitive):
@@ -381,7 +389,4 @@ def connective_and(infinitive):
 @conjugation
 def nominal_ing(infinitive):
     infinitive = base(infinitive)
-    if padchim(infinitive[-1]) == u'ᇂ':
-        return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]), u'ᆷ')
-    else:
-        return merge(base2(infinitive), u'음')
+    return merge(base4(infinitive), u'음')
