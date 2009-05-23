@@ -21,7 +21,10 @@ class Root(object):
     def index(self, infinitive='하다'):
         cherrypy.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
         try:
-            infinitive = infinitive.decode('utf-8')
+            try:
+                infinitive = infinitive.decode('utf-8')
+            except:
+                pass
             results = []
             for x, y, z in korean_conjugator.conjugation.perform(infinitive):
                 results.append(x.replace('_', ' ') + ': ' + y) # + '[' + ' '.join(z) + ']')
