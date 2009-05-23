@@ -23,9 +23,11 @@ class Geulja(unicode):
 
 def find_vowel_to_append(string):
     for character in reversed(string):
+        if character in [u'뜨', u'쓰']:
+            return u'어'
         if vowel(character) == u'ㅡ' and not padchim(character):
             continue
-        elif vowel(character) in [u'ㅗ', u'ㅏ']:
+        elif vowel(character) in [u'ㅗ', u'ㅏ', u'ㅑ']:
             return u'아'
         else:
             return u'어'
