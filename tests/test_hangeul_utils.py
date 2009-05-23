@@ -7,6 +7,7 @@ def test_find_vowel_to_append():
     assert find_vowel_to_append(u'흐르') == u'어'
     assert find_vowel_to_append(u'태우') == u'어'
     assert find_vowel_to_append(u'만들') == u'어'
+    assert find_vowel_to_append(u'앗') == u'아'
 
 def test_join():
     assert join(u'ᄀ', u'ㅏ') == u'가'

@@ -2,7 +2,7 @@
 
 # (C) 2009 Dan Bravender
 
-from hangeul_utils import *
+from hangeul_utils import join, lead, vowel, padchim, find_vowel_to_append, match, Geulja
 
 def no_padchim_rule(characters):
     u'''no_padchim_rule is a helper function for defining merges where a 
@@ -34,12 +34,9 @@ def vowel_contraction(vowel1, vowel2, new_vowel):
                     y[1:])
     return rule
 
-h_regulars = [u'낳', u'넣', u'좋']
-
 def drop_l(characters):
     def rule(x, y):
         if padchim(x[-1]) in [u'ᆯ'] and \
-           x not in h_regulars and \
            y[0] in characters:
             return (u'drop %s' % padchim(x[-1]),
                                 x[:-1] + 
@@ -50,7 +47,6 @@ def drop_l(characters):
 def drop_l_and_borrow_padchim(characters):
     def rule(x, y):
         if padchim(x[-1]) in [u'ᆯ'] and \
-           x not in h_regulars and \
            y[0] in characters:
             return (u'drop %s borrow padchim' % padchim(x[-1]),
                                               x[:-1] + 
@@ -88,6 +84,7 @@ merge_rules.append(vowel_contraction(u'ㅡ', u'ㅓ', u'ㅓ'))
 merge_rules.append(vowel_contraction(u'ㅜ', u'ㅓ', u'ㅝ'))
 merge_rules.append(vowel_contraction(u'ㅗ', u'ㅏ', u'ㅘ'))
 merge_rules.append(vowel_contraction(u'ㅚ', u'ㅓ', u'ㅙ'))
+merge_rules.append(vowel_contraction(u'ㅙ', u'ㅓ', u'ㅙ'))
 merge_rules.append(vowel_contraction(u'ㅘ', u'ㅓ', u'ㅘ'))
 merge_rules.append(vowel_contraction(u'ㅝ', u'ㅓ', u'ㅝ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅏ', u'ㅏ'))
@@ -101,6 +98,8 @@ merge_rules.append(vowel_contraction(u'ㅒ', u'ㅓ', u'ㅒ'))
 merge_rules.append(vowel_contraction(u'ㅔ', u'ㅓ', u'ㅔ'))
 merge_rules.append(vowel_contraction(u'ㅕ', u'ㅓ', u'ㅕ'))
 merge_rules.append(vowel_contraction(u'ㅏ', u'ㅕ', u'ㅐ'))
+merge_rules.append(vowel_contraction(u'ㅖ', u'ㅓ', u'ㅖ'))
+merge_rules.append(vowel_contraction(u'ㅞ', u'ㅓ', u'ㅞ'))
 
 # 으 insertion
 merge_rules.append(insert_eh([u'면', u'세', u'십']))
@@ -151,6 +150,41 @@ class conjugation:
 
 conjugation = conjugation()
 
+def is_s_irregular(infinitive):
+    if infinitive in [u'내솟']:
+        return False
+    return match(infinitive[-1], u'*', u'*', u'ᆺ') and \
+         infinitive[-1] not in [u'벗', u'웃', u'씻', u'빗', u'앗', u'뺏']
+
+def is_l_irregular(infinitive):
+    if infinitive in [u'따르']:
+        return False
+    return match(infinitive[-1], u'ᄅ', u'ㅡ', None)
+
+def is_h_irregular(infinitive):
+    return padchim(infinitive[-1]) == u'ᇂ' and \
+           infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧']
+
+def is_p_irregular(infinitive):
+    if infinitive in [u'에굽', u'예굽']:
+        return False
+    if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업']:
+        return True
+    return match(infinitive[-1], u'*', u'*', u'ᆸ') and \
+           infinitive[-1] not in [u'잡', u'입', u'씹', u'줍', u'접',
+                                  u'좁', u'집', u'뽑', u'업']
+
+def is_d_irregular(infinitive):
+    if infinitive in [u'욱걷', u'치걷', u'덧묻', u'줄밑걷', 
+                      u'활걷', u'겉묻', u'그러묻', u'껴묻',
+                      u'뒤묻', u'부르돋', u'북돋']:
+        return False
+    elif infinitive in [u'깨닫']:
+        return True
+    return match(infinitive[-1], u'*', u'*', u'ᆮ') and \
+           infinitive[-1] not in [u'굳', u'믿', u'받', u'얻', u'벋', 
+                                  u'닫', u'뜯', u'딛', u'뻗']
+
 @conjugation
 def base(infinitive):
     if infinitive[-1] == u'다':
@@ -162,7 +196,7 @@ def base(infinitive):
 def base2(infinitive):
     infinitive = base(infinitive)
     new_infinitive = infinitive
-    if match(infinitive[-1], u'*', u'*', u'ᇂ') and infinitive not in h_regulars:
+    if is_h_irregular(infinitive):
         new_infinitive = merge(infinitive[:-1] + 
                                join(lead(infinitive[-1]),
                                     vowel(infinitive[-1])),
@@ -170,10 +204,8 @@ def base2(infinitive):
         conjugation.reasons.append(u'ㅎ irregular (%s -> %s)' % (infinitive,
                                                                 new_infinitive))
     # ㅂ irregular
-    elif match(infinitive[-1], u'*', u'*', u'ᆸ') and \
-       infinitive not in [u'잡', u'입', u'씹', u'넓', 
-                          u'좁', u'집', u'붙잡', u'뽑']:
-        if vowel(infinitive[-1]) == u'ㅗ':
+    elif is_p_irregular(infinitive):
+        if infinitive[-1] in [u'돕', u'곱']:
             new_vowel = u'ㅗ'
         else:
             new_vowel = u'ㅜ'
@@ -184,16 +216,14 @@ def base2(infinitive):
         conjugation.reasons.append(u'ㅂ irregular (%s -> %s)' % (infinitive, 
                                                                 new_infinitive))
     # ㄷ irregular
-    elif match(infinitive[-1], u'*', u'*', u'ᆮ') and \
-         infinitive not in [u'믿', u'받', u'얻', u'닫']:
+    elif is_d_irregular(infinitive):
         new_infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                        vowel(infinitive[-1]), 
                                                        u'ᆯ'))
         new_infinitive.original_padchim = u'ᆮ'
         conjugation.reasons.append(u'ㄷ irregular (%s -> %s)' % (infinitive,
                                                                 new_infinitive))
-    elif match(infinitive[-1], u'*', u'*', u'ᆺ') and \
-         infinitive not in [u'벗', u'웃', u'씻', u'빗']:
+    elif is_s_irregular(infinitive):
         new_infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                        vowel(infinitive[-1])))
         new_infinitive.hidden_padchim = True
@@ -204,9 +234,9 @@ def base2(infinitive):
 @conjugation
 def base3(infinitive):
     infinitive = base(infinitive)
-    if match(infinitive[-1], u'*', u'*', u'ᇂ') and infinitive not in h_regulars:
+    if is_h_irregular(infinitive):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
-    elif match(infinitive[-1], u'*', u'ㅗ', u'ᆸ'):
+    elif is_p_irregular(infinitive):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1])) + u'우'
     else:
         return base2(infinitive)
@@ -214,7 +244,7 @@ def base3(infinitive):
 @conjugation
 def base4(infinitive):
     infinitive = base(infinitive)
-    if padchim(infinitive[-1]) == u'ᇂ':
+    if is_h_irregular(infinitive):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
     else:
         return base2(infinitive)
@@ -223,10 +253,14 @@ def base4(infinitive):
 def declarative_present_informal_low(infinitive):
     infinitive = base2(infinitive)
     # 르 irregular
-    if match(infinitive[-1], u'ᄅ', u'ㅡ'):
-        new_base = infinitive[:-2] + join(lead(infinitive[-2]), vowel(infinitive[-2]), u'ᆯ')
-        if infinitive == u'푸르':
-            conjugation.reasons.append(u'irregular 푸르 -> 푸르러')
+    if is_l_irregular(infinitive):
+        new_base = infinitive[:-2] + join(lead(infinitive[-2]), 
+                                          vowel(infinitive[-2]), u'ᆯ')
+        if infinitive[-2:] in [u'푸르', u'이르']:
+            new_base = new_base + join(u'ᄅ', 
+                                       vowel(find_vowel_to_append(new_base)))
+            conjugation.reasons.append(u'irregular stem + %s -> %s' % 
+                                       (infinitive, new_base))
             return infinitive + u'러'
         elif find_vowel_to_append(infinitive[:-1]) == u'아':
             new_base += u'라'
@@ -257,7 +291,7 @@ def declarative_present_formal_high(infinitive):
 @conjugation
 def past_base(infinitive):
     ps = declarative_present_informal_low(infinitive)
-    if vowel(ps[-1]) in [u'ㅗ', u'ㅏ']:
+    if find_vowel_to_append(ps) == u'아':
         return merge(ps, u'았')
     else:
         return merge(ps, u'었')
