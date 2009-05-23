@@ -199,7 +199,7 @@ def base2(infinitive, regular=False):
     infinitive = base(infinitive, regular)
     
     if infinitive == u'뵙':
-        return u'봬'
+        return u'뵈'
     
     new_infinitive = infinitive
     if is_h_irregular(infinitive, regular):
@@ -240,6 +240,8 @@ def base2(infinitive, regular=False):
 @conjugation
 def base3(infinitive, regular=False):
     infinitive = base(infinitive, regular)
+    if infinitive == u'뵙':
+        return u'뵈'
     if is_h_irregular(infinitive, regular):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
     elif is_p_irregular(infinitive, regular):

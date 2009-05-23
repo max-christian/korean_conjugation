@@ -17,7 +17,7 @@ def test_declarative_present():
     assert declarative_present_informal_low(u'밧다') == u'밧아'
     assert declarative_present_informal_low(u'힘닿다') == u'힘닿아'
     assert declarative_present_informal_low(u'용솟다') == u'용솟아'
-    assert imperative_present_informal_low(u'쌓다') == u'쌓아'
+    assert declarative_present_informal_low(u'쌓다') == u'쌓아'
     assert declarative_present_informal_low(u'파묻다', regular=True) == u'파묻어'
     assert declarative_present_informal_low(u'부르걷다') == u'부르걷어'
     assert declarative_present_informal_low(u'되묻다') == u'되묻어'
@@ -68,7 +68,7 @@ def test_declarative_present():
     assert declarative_present_informal_low(u'묻다', regular=True) == u'묻어'
     assert declarative_present_informal_low(u'끄집다') == u'끄집어'
     assert declarative_present_informal_low(u'내리찧다') == u'내리찧어'
-    assert propositive_present_informal_low(u'헐벗다') == u'헐벗어'
+    assert declarative_present_informal_low(u'헐벗다') == u'헐벗어'
     assert declarative_present_informal_low(u'빼입다') == u'빼입어'
     assert declarative_present_informal_low(u'많다') == u'많아'
     assert declarative_present_informal_low(u'앗다') == u'앗아'
@@ -137,6 +137,7 @@ def test_past_base():
     assert past_base(u'드르다') == u'들렀'
 
 def test_declarative_past():
+    assert declarative_past_informal_low(u'뵙다') == u'뵀어'
     assert declarative_past_informal_low(u'쬐다') == u'쬈어'
     assert declarative_past_informal_low(u'하') == u'했어'
     assert declarative_past_informal_low(u'가') == u'갔어'
@@ -154,6 +155,7 @@ def test_future_base():
     assert future_base(u'가다') == u'갈'
     assert future_base(u'가늘다') == u'가늘'
     assert future_base(u'좋다') == u'좋을'
+    assert future_base(u'뵙다') == u'뵐'
 
 def test_declarative_future():
     assert declarative_future_informal_low(u'끌어넣다') == u'끌어넣을 거야'
@@ -219,12 +221,14 @@ def test_imperative_present():
     assert imperative_present_formal_low(u'굽다') == u'구워라'
     assert imperative_present_formal_low(u'살다') == u'살아라'
     assert imperative_present_formal_low(u'서') == u'서라'
+    assert imperative_present_formal_low(u'뵙다') == u'봬라'
 
     assert imperative_present_formal_high(u'가다') == u'가십시오'
     assert imperative_present_formal_high(u'걷다') == u'걸으십시오'
     assert imperative_present_formal_high(u'돕다') == u'도우십시오'
     assert imperative_present_formal_high(u'알다') == u'아십시오'
     assert imperative_present_formal_high(u'눕다') == u'누우십시오'
+    assert imperative_present_formal_high(u'뵙다') == u'뵈십시오'
 
 def test_propositive_present():
     assert propositive_present_informal_low(u'가') == u'가'
