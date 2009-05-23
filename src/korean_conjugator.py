@@ -163,7 +163,7 @@ def is_l_irregular(infinitive):
 
 def is_h_irregular(infinitive):
     return padchim(infinitive[-1]) == u'ᇂ' and \
-           infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧']
+           infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧', u'놓']
 
 def is_p_irregular(infinitive):
     if infinitive in [u'에굽', u'예굽']:
