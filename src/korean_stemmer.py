@@ -10,7 +10,13 @@ def iterate_chop_last(string):
     yield string
 
 def generate_stems(verb):
-    yield (False, verb[:-1] + join(lead(verb[-1]), u'ㅣ'))
+    if verb[-1] == u'해':
+        yield (False, verb[:-1] + u'하')
+    if vowel(verb[-1]) == u'ㅕ':
+        yield (False, verb[:-1] + join(lead(verb[-1]), u'ㅣ'))
+    if vowel(verb[-1]) == u'ㅐ':
+        yield (False, verb[:-1] + join(lead(verb[-1]), vowel(find_vowel_to_append(verb[:-1])), u'ᇂ'))
+    yield (False, verb[:-1] + join(lead(verb[-1]), u'ㅡ'))
     yield (True, verb)
     for p in [u'ᆮ', u'ᆸ',u'ᆯ', u'ᆺ', u'ᄂ']:
         yield (False, verb[:-1] + join(lead(verb[-1]), vowel(verb[-1]), p))
