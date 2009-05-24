@@ -170,7 +170,7 @@ def is_h_irregular(infinitive, regular=False):
 def is_p_irregular(infinitive, regular=False):
     if regular or infinitive in [u'에굽', u'예굽']:
         return False
-    if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업']:
+    if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업', u'묻잡', u'바잡']:
         return True
     return match(infinitive[-1], u'*', u'*', u'ᆸ') and \
            infinitive[-1] not in [u'잡', u'입', u'씹', u'줍', u'접',
@@ -181,11 +181,11 @@ def is_d_irregular(infinitive, regular=False):
                                  u'활걷', u'겉묻', u'그러묻', u'껴묻',
                                  u'뒤묻', u'부르돋', u'북돋', u'부르걷']:
         return False
-    elif infinitive in [u'깨닫', u'파묻']:
+    elif infinitive in [u'깨닫', u'파묻', u'가로닫']:
         return True
     return match(infinitive[-1], u'*', u'*', u'ᆮ') and \
            infinitive[-1] not in [u'굳', u'믿', u'받', u'얻', u'벋', 
-                                  u'닫', u'뜯', u'딛', u'뻗']
+                                  u'닫', u'뜯', u'딛', u'뻗', u'쏟']
 
 @conjugation
 def base(infinitive, regular=False):
@@ -214,7 +214,8 @@ def base2(infinitive, regular=False):
                                                                 new_infinitive))
     # ㅂ irregular
     elif is_p_irregular(infinitive, regular):
-        if infinitive[-1] in [u'돕', u'곱']:
+        # only some verbs get ㅗ (highly irregular)
+        if infinitive in [u'묻잡'] or infinitive[-1] in [u'돕', u'곱']:
             new_vowel = u'ㅗ'
         else:
             new_vowel = u'ㅜ'
