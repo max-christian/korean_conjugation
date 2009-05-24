@@ -14,13 +14,22 @@ def test_merge():
     assert merge(u'맡', u'세요') == u'맡으세요'
 
 def test_declarative_present():
+    assert declarative_present_informal_low(u'동트다') == u'동터'
+    assert declarative_present_informal_low(u'농트다') == u'농터'
+    assert declarative_present_informal_low(u'농트다') == u'농터'
+    assert declarative_present_informal_low(u'엇다') == u'엇어'
+    assert declarative_present_informal_low(u'푸다') == u'퍼'
+    assert declarative_present_informal_low(u'깃다') == u'깃어'
+    assert declarative_present_informal_low(u'그러다') == u'그래'
+    assert declarative_present_informal_low(u'애긋다') == u'애긋어'
+    assert declarative_present_informal_low(u'되묻다') == u'되물어'
     assert declarative_present_informal_low(u'밧다') == u'밧아'
     assert declarative_present_informal_low(u'힘닿다') == u'힘닿아'
     assert declarative_present_informal_low(u'용솟다') == u'용솟아'
     assert declarative_present_informal_low(u'쌓다') == u'쌓아'
     assert declarative_present_informal_low(u'파묻다', regular=True) == u'파묻어'
     assert declarative_present_informal_low(u'부르걷다') == u'부르걷어'
-    assert declarative_present_informal_low(u'되묻다') == u'되묻어'
+    assert declarative_present_informal_low(u'되묻다', regular=True) == u'되묻어'
     assert declarative_present_informal_low(u'뵙다') == u'봬'
     assert declarative_present_informal_low(u'놓다') == u'놓아'
     #assert declarative_present_informal_low(u'요러다') == u'요래'
@@ -137,6 +146,7 @@ def test_past_base():
     assert past_base(u'드르다') == u'들렀'
 
 def test_declarative_past():
+    assert declarative_past_informal_low(u'푸다') == u'펐어'
     assert declarative_past_informal_low(u'뵙다') == u'뵀어'
     assert declarative_past_informal_low(u'쬐다') == u'쬈어'
     assert declarative_past_informal_low(u'하') == u'했어'
