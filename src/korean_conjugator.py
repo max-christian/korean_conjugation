@@ -254,14 +254,6 @@ def base3(infinitive, regular=False):
         return base2(infinitive, regular)
 
 @conjugation
-def base4(infinitive, regular=False):
-    infinitive = base(infinitive, regular)
-    if is_h_irregular(infinitive, regular):
-        return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
-    else:
-        return base3(infinitive, regular)
-
-@conjugation
 def declarative_present_informal_low(infinitive, regular=False):
     infinitive = base2(infinitive, regular)
     # 르 irregular
