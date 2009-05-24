@@ -424,11 +424,11 @@ def propositive_present_formal_low(infinitive, regular=False):
 
 @conjugation
 def propositive_present_formal_high(infinitive, regular=False):
-    return merge(base3(infinitive, regular), u'읍시다')
+    return merge(base4(infinitive, regular), u'읍시다')
 
 @conjugation
 def connective_if(infinitive, regular=False):
-    return merge(base4(infinitive, regular), u'면')
+    return merge(base3(infinitive, regular), u'면')
 
 @conjugation
 def connective_and(infinitive, regular=False):

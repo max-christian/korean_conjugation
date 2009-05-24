@@ -279,6 +279,7 @@ def test_connectives():
     assert connective_if(u'알') == u'알면'
     assert connective_if(u'살') == u'살면'
     assert connective_if(u'푸르다') == u'푸르면'
+    assert connective_if(u'돕다') == u'도우면'
     
     assert connective_and(u'가다') == u'가고'
 
