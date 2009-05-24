@@ -153,7 +153,8 @@ conjugation = conjugation()
 def is_s_irregular(infinitive, regular=False):
     return match(infinitive[-1], u'*', u'*', u'ᆺ') and \
          infinitive[-1] not in [u'벗', u'웃', u'씻', u'빗', 
-                                u'앗', u'뺏', u'솟', u'밧']
+                                u'앗', u'뺏', u'솟', u'밧',
+                                u'긋', u'깃', u'엇']
 
 def is_l_irregular(infinitive, regular=False):
     if regular or infinitive in [u'따르']:
@@ -163,7 +164,7 @@ def is_l_irregular(infinitive, regular=False):
 def is_h_irregular(infinitive, regular=False):
     if regular:
         return False
-    return padchim(infinitive[-1]) == u'ᇂ' and \
+    return (padchim(infinitive[-1]) == u'ᇂ' or infinitive[-1] == u'러') and \
            infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧', u'놓', u'쌓', u'닿']
 
 def is_p_irregular(infinitive, regular=False):
@@ -178,8 +179,7 @@ def is_p_irregular(infinitive, regular=False):
 def is_d_irregular(infinitive, regular=False):
     if regular or infinitive in [u'욱걷', u'치걷', u'덧묻', u'줄밑걷', 
                                  u'활걷', u'겉묻', u'그러묻', u'껴묻',
-                                 u'뒤묻', u'부르돋', u'북돋', u'되묻',
-                                 u'부르걷']:
+                                 u'뒤묻', u'부르돋', u'북돋', u'부르걷']:
         return False
     elif infinitive in [u'깨닫', u'파묻']:
         return True
@@ -200,6 +200,9 @@ def base2(infinitive, regular=False):
     
     if infinitive == u'뵙':
         return u'뵈'
+    
+    if infinitive == u'푸':
+        return u'퍼'
     
     new_infinitive = infinitive
     if is_h_irregular(infinitive, regular):
@@ -282,6 +285,8 @@ def declarative_present_informal_low(infinitive, regular=False):
             return new_base
     elif infinitive[-1] == u'하':
         return merge(infinitive, u'여')
+    elif is_h_irregular(infinitive, regular):
+        return merge(infinitive, u'이')
     return merge(infinitive, find_vowel_to_append(infinitive))
 
 @conjugation
