@@ -259,7 +259,7 @@ def base4(infinitive, regular=False):
     if is_h_irregular(infinitive, regular):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
     else:
-        return base2(infinitive, regular)
+        return base3(infinitive, regular)
 
 @conjugation
 def declarative_present_informal_low(infinitive, regular=False):
@@ -424,7 +424,7 @@ def propositive_present_formal_low(infinitive, regular=False):
 
 @conjugation
 def propositive_present_formal_high(infinitive, regular=False):
-    return merge(base4(infinitive, regular), u'읍시다')
+    return merge(base3(infinitive, regular), u'읍시다')
 
 @conjugation
 def connective_if(infinitive, regular=False):

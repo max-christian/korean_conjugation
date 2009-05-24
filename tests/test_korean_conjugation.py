@@ -270,6 +270,7 @@ def test_propositive_present():
     assert propositive_present_formal_high(u'가') == u'갑시다'
     assert propositive_present_formal_high(u'살') == u'삽시다'
     assert propositive_present_formal_high(u'눕다') == u'누웁시다'
+    assert propositive_present_formal_high(u'돕다') == u'도웁시다'
 
 def test_connectives():
     assert connective_if(u'낫') == u'나으면'
