@@ -132,14 +132,14 @@ class conjugation:
         self.tense_order = []
         self.reasons = []
 
-    def perform(self, infinitive):
+    def perform(self, infinitive, regular=False):
         u'''perform returns the result of the application of all of the
             conjugation rules on one infinitive
          '''
         results = []
         for tense in self.tense_order:
             self.reasons = []
-            c = self.tenses[tense](infinitive)
+            c = self.tenses[tense](infinitive, regular)
             results.append((tense, c, self.reasons))
         return results
     
@@ -150,23 +150,25 @@ class conjugation:
 
 conjugation = conjugation()
 
-def is_s_irregular(infinitive):
-    if infinitive in [u'내솟']:
-        return False
+def is_s_irregular(infinitive, regular=False):
     return match(infinitive[-1], u'*', u'*', u'ᆺ') and \
-         infinitive[-1] not in [u'벗', u'웃', u'씻', u'빗', u'앗', u'뺏']
+         infinitive[-1] not in [u'벗', u'웃', u'씻', u'빗', 
+                                u'앗', u'뺏', u'솟', u'밧',
+                                u'긋', u'깃', u'엇']
 
-def is_l_irregular(infinitive):
-    if infinitive in [u'따르']:
+def is_l_irregular(infinitive, regular=False):
+    if regular or infinitive in [u'따르']:
         return False
     return match(infinitive[-1], u'ᄅ', u'ㅡ', None)
 
-def is_h_irregular(infinitive):
-    return padchim(infinitive[-1]) == u'ᇂ' and \
-           infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧', u'놓']
+def is_h_irregular(infinitive, regular=False):
+    if regular:
+        return False
+    return (padchim(infinitive[-1]) == u'ᇂ' or infinitive[-1] == u'러') and \
+           infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧', u'놓', u'쌓', u'닿']
 
-def is_p_irregular(infinitive):
-    if infinitive in [u'에굽', u'예굽']:
+def is_p_irregular(infinitive, regular=False):
+    if regular or infinitive in [u'에굽', u'예굽']:
         return False
     if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업']:
         return True
@@ -174,29 +176,36 @@ def is_p_irregular(infinitive):
            infinitive[-1] not in [u'잡', u'입', u'씹', u'줍', u'접',
                                   u'좁', u'집', u'뽑', u'업']
 
-def is_d_irregular(infinitive):
-    if infinitive in [u'욱걷', u'치걷', u'덧묻', u'줄밑걷', 
-                      u'활걷', u'겉묻', u'그러묻', u'껴묻',
-                      u'뒤묻', u'부르돋', u'북돋']:
+def is_d_irregular(infinitive, regular=False):
+    if regular or infinitive in [u'욱걷', u'치걷', u'덧묻', u'줄밑걷', 
+                                 u'활걷', u'겉묻', u'그러묻', u'껴묻',
+                                 u'뒤묻', u'부르돋', u'북돋', u'부르걷']:
         return False
-    elif infinitive in [u'깨닫']:
+    elif infinitive in [u'깨닫', u'파묻']:
         return True
     return match(infinitive[-1], u'*', u'*', u'ᆮ') and \
            infinitive[-1] not in [u'굳', u'믿', u'받', u'얻', u'벋', 
                                   u'닫', u'뜯', u'딛', u'뻗']
 
 @conjugation
-def base(infinitive):
+def base(infinitive, regular=False):
     if infinitive[-1] == u'다':
         return infinitive[:-1]
     else:
         return infinitive
 
 @conjugation
-def base2(infinitive):
-    infinitive = base(infinitive)
+def base2(infinitive, regular=False):
+    infinitive = base(infinitive, regular)
+    
+    if infinitive == u'뵙':
+        return u'뵈'
+    
+    if infinitive == u'푸':
+        return u'퍼'
+    
     new_infinitive = infinitive
-    if is_h_irregular(infinitive):
+    if is_h_irregular(infinitive, regular):
         new_infinitive = merge(infinitive[:-1] + 
                                join(lead(infinitive[-1]),
                                     vowel(infinitive[-1])),
@@ -204,7 +213,7 @@ def base2(infinitive):
         conjugation.reasons.append(u'ㅎ irregular (%s -> %s)' % (infinitive,
                                                                 new_infinitive))
     # ㅂ irregular
-    elif is_p_irregular(infinitive):
+    elif is_p_irregular(infinitive, regular):
         if infinitive[-1] in [u'돕', u'곱']:
             new_vowel = u'ㅗ'
         else:
@@ -216,14 +225,14 @@ def base2(infinitive):
         conjugation.reasons.append(u'ㅂ irregular (%s -> %s)' % (infinitive, 
                                                                 new_infinitive))
     # ㄷ irregular
-    elif is_d_irregular(infinitive):
+    elif is_d_irregular(infinitive, regular):
         new_infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                        vowel(infinitive[-1]), 
                                                        u'ᆯ'))
         new_infinitive.original_padchim = u'ᆮ'
         conjugation.reasons.append(u'ㄷ irregular (%s -> %s)' % (infinitive,
                                                                 new_infinitive))
-    elif is_s_irregular(infinitive):
+    elif is_s_irregular(infinitive, regular):
         new_infinitive = Geulja(infinitive[:-1] + join(lead(infinitive[-1]), 
                                                        vowel(infinitive[-1])))
         new_infinitive.hidden_padchim = True
@@ -232,28 +241,30 @@ def base2(infinitive):
     return new_infinitive
 
 @conjugation
-def base3(infinitive):
-    infinitive = base(infinitive)
-    if is_h_irregular(infinitive):
+def base3(infinitive, regular=False):
+    infinitive = base(infinitive, regular)
+    if infinitive == u'뵙':
+        return u'뵈'
+    if is_h_irregular(infinitive, regular):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
-    elif is_p_irregular(infinitive):
+    elif is_p_irregular(infinitive, regular):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1])) + u'우'
     else:
-        return base2(infinitive)
+        return base2(infinitive, regular)
 
 @conjugation
-def base4(infinitive):
-    infinitive = base(infinitive)
-    if is_h_irregular(infinitive):
+def base4(infinitive, regular=False):
+    infinitive = base(infinitive, regular)
+    if is_h_irregular(infinitive, regular):
         return infinitive[:-1] + join(lead(infinitive[-1]), vowel(infinitive[-1]))
     else:
-        return base2(infinitive)
+        return base2(infinitive, regular)
 
 @conjugation
-def declarative_present_informal_low(infinitive):
-    infinitive = base2(infinitive)
+def declarative_present_informal_low(infinitive, regular=False):
+    infinitive = base2(infinitive, regular)
     # 르 irregular
-    if is_l_irregular(infinitive):
+    if is_l_irregular(infinitive, regular):
         new_base = infinitive[:-2] + join(lead(infinitive[-2]), 
                                           vowel(infinitive[-2]), u'ᆯ')
         if infinitive[-2:] in [u'푸르', u'이르']:
@@ -274,153 +285,156 @@ def declarative_present_informal_low(infinitive):
             return new_base
     elif infinitive[-1] == u'하':
         return merge(infinitive, u'여')
+    elif is_h_irregular(infinitive, regular):
+        return merge(infinitive, u'이')
     return merge(infinitive, find_vowel_to_append(infinitive))
 
 @conjugation
-def declarative_present_informal_high(infinitive):
-    return merge(declarative_present_informal_low(infinitive), u'요')
+def declarative_present_informal_high(infinitive, regular=False):
+    return merge(declarative_present_informal_low(infinitive, regular), u'요')
 
 @conjugation
-def declarative_present_formal_low(infinitive):
-    return merge(base(infinitive), u'는다')
+def declarative_present_formal_low(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'는다')
 
 @conjugation
-def declarative_present_formal_high(infinitive):
-    return merge(base(infinitive), u'습니다')
+def declarative_present_formal_high(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'습니다')
 
 @conjugation
-def past_base(infinitive):
-    ps = declarative_present_informal_low(infinitive)
+def past_base(infinitive, regular=False):
+    ps = declarative_present_informal_low(infinitive, regular)
     if find_vowel_to_append(ps) == u'아':
         return merge(ps, u'았')
     else:
         return merge(ps, u'었')
 
 @conjugation
-def declarative_past_informal_low(infinitive):
-    return merge(past_base(infinitive), u'어')
+def declarative_past_informal_low(infinitive, regular=False):
+    return merge(past_base(infinitive, regular), u'어')
 
 @conjugation
-def declarative_past_informal_high(infinitive):
-    return merge(declarative_past_informal_low(infinitive), u'요')
+def declarative_past_informal_high(infinitive, regular=False):
+    return merge(declarative_past_informal_low(infinitive, regular), u'요')
 
 @conjugation
-def declarative_past_formal_low(infinitive):
-    return merge(past_base(infinitive), u'다')
+def declarative_past_formal_low(infinitive, regular=False):
+    return merge(past_base(infinitive, regular), u'다')
 
 @conjugation
-def declarative_past_formal_high(infinitive):
-    return merge(past_base(infinitive), u'습니다')
+def declarative_past_formal_high(infinitive, regular=False):
+    return merge(past_base(infinitive, regular), u'습니다')
 
 @conjugation
-def future_base(infinitive):
-    return merge(base3(infinitive), u'을')
+def future_base(infinitive, regular=False):
+    return merge(base3(infinitive, regular), u'을')
 
 @conjugation
-def declarative_future_informal_low(infinitive):
-    return merge(future_base(infinitive), u' 거야')
+def declarative_future_informal_low(infinitive, regular=False):
+    return merge(future_base(infinitive, regular), u' 거야')
 
 @conjugation
-def declarative_future_informal_high(infinitive):
-    return merge(future_base(infinitive), u' 거예요')
+def declarative_future_informal_high(infinitive, regular=False):
+    return merge(future_base(infinitive, regular), u' 거예요')
 
 @conjugation
-def declarative_future_formal_low(infinitive):
-    return merge(future_base(infinitive), u' 거다')
+def declarative_future_formal_low(infinitive, regular=False):
+    return merge(future_base(infinitive, regular), u' 거다')
 
 @conjugation
-def declarative_future_formal_high(infinitive):
-    return merge(future_base(infinitive), u' 겁니다')
+def declarative_future_formal_high(infinitive, regular=False):
+    return merge(future_base(infinitive, regular), u' 겁니다')
 
 @conjugation
-def declarative_future_conditional_informal_low(infinitive):
-    return merge(base(infinitive), u'겠어')
+def declarative_future_conditional_informal_low(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'겠어')
 
 @conjugation
-def declarative_future_conditional_informal_high(infinitive):
-    return merge(base(infinitive), u'겠어요')
+def declarative_future_conditional_informal_high(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'겠어요')
 
 @conjugation
-def declarative_future_conditional_formal_low(infinitive):
-    return merge(base(infinitive), u'겠다')
+def declarative_future_conditional_formal_low(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'겠다')
 
 @conjugation
-def declarative_future_conditional_formal_high(infinitive):
-    return merge(base(infinitive), u'겠습니다')
+def declarative_future_conditional_formal_high(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'겠습니다')
 
 @conjugation
-def inquisitive_present_informal_low(infinitive):
-    return merge(declarative_present_informal_low(infinitive), u'?')
+def inquisitive_present_informal_low(infinitive, regular=False):
+    return merge(declarative_present_informal_low(infinitive, regular), u'?')
 
 @conjugation
-def inquisitive_present_informal_high(infinitive):
-    return merge(declarative_present_informal_high(infinitive), u'?')
+def inquisitive_present_informal_high(infinitive, regular=False):
+    return merge(declarative_present_informal_high(infinitive, regular), u'?')
 
 @conjugation
-def inquisitive_present_formal_low(infinitive):
-    return merge(base(infinitive), u'니?')
+def inquisitive_present_formal_low(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'니?')
 
 @conjugation
-def inquisitive_present_formal_high(infinitive):
-    return merge(base(infinitive), u'습니까?')
+def inquisitive_present_formal_high(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'습니까?')
 
 @conjugation
-def inquisitive_past_informal_low(infinitive):
-    return declarative_past_informal_low(infinitive) + u'?'
+def inquisitive_past_informal_low(infinitive, regular=False):
+    return declarative_past_informal_low(infinitive, regular) + u'?'
 
 @conjugation
-def inquisitive_past_informal_high(infinitive):
-    return merge(declarative_past_informal_high(infinitive), u'?')
+def inquisitive_past_informal_high(infinitive, regular=False):
+    return merge(declarative_past_informal_high(infinitive, regular), u'?')
 
 @conjugation
-def inquisitive_past_formal_low(infinitive):
-    return merge(past_base(infinitive), u'니?')
+def inquisitive_past_formal_low(infinitive, regular=False):
+    return merge(past_base(infinitive, regular), u'니?')
 
 @conjugation
-def inquisitive_past_formal_high(infinitive):
-    return merge(past_base(infinitive), u'습니까?')
+def inquisitive_past_formal_high(infinitive, regular=False):
+    return merge(past_base(infinitive, regular), u'습니까?')
 
 @conjugation
-def imperative_present_informal_low(infinitive):
-    return declarative_present_informal_low(infinitive)
+def imperative_present_informal_low(infinitive, regular=False):
+    return declarative_present_informal_low(infinitive, regular)
 
 @conjugation
-def imperative_present_informal_high(infinitive):
-    return merge(base3(infinitive), u'세요')
+def imperative_present_informal_high(infinitive, regular=False):
+    return merge(base3(infinitive, regular), u'세요')
 
 @conjugation
-def imperative_present_formal_low(infinitive):
-    return merge(imperative_present_informal_low(infinitive), u'라')
+def imperative_present_formal_low(infinitive, regular=False):
+    return merge(imperative_present_informal_low(infinitive, regular), u'라')
 
 @conjugation
-def imperative_present_formal_high(infinitive):
-    return merge(base3(infinitive), u'십시오')
+def imperative_present_formal_high(infinitive, regular=False):
+    return merge(base3(infinitive, regular), u'십시오')
 
 @conjugation
-def propositive_present_informal_low(infinitive):
-    return declarative_present_informal_low(infinitive)
+def propositive_present_informal_low(infinitive, regular=False):
+    return declarative_present_informal_low(infinitive, regular)
 
 @conjugation
-def propositive_present_informal_high(infinitive):
-    return declarative_present_informal_high(infinitive)
+def propositive_present_informal_high(infinitive, regular=False):
+    return declarative_present_informal_high(infinitive, regular)
 
 @conjugation
-def propositive_present_formal_low(infinitive):
-    return merge(base(infinitive), u'자')
+def propositive_present_formal_low(infinitive, regular=False):
+    return merge(base(infinitive, regular), u'자')
 
 @conjugation
-def propositive_present_formal_high(infinitive):
-    return merge(base3(infinitive), u'읍시다')
+def propositive_present_formal_high(infinitive, regular=False):
+    return merge(base3(infinitive, regular), u'읍시다')
 
 @conjugation
-def connective_if(infinitive):
-    return merge(base4(infinitive), u'면')
+def connective_if(infinitive, regular=False):
+    return merge(base4(infinitive, regular), u'면')
 
 @conjugation
-def connective_and(infinitive):
-    return merge(base(infinitive), u'고')
+def connective_and(infinitive, regular=False):
+    infinitive = base(infinitive, regular)
+    return merge(base(infinitive, regular), u'고')
 
 @conjugation
-def nominal_ing(infinitive):
-    infinitive = base(infinitive)
-    return merge(base4(infinitive), u'음')
+def nominal_ing(infinitive, regular=False):
+    infinitive = base(infinitive, regular)
+    return merge(base3(infinitive, regular), u'음')
