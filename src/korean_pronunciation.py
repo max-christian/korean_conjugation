@@ -5,8 +5,11 @@
 from hangeul_utils import join, lead, vowel, padchim, find_vowel_to_append, match
 
 def consonant_combination_rule(x_padchim, y_lead, 
-                               new_padchim, new_lead):
+                               new_padchim, new_lead,
+                               y_vowel=None):
     def rule(x, y):
+        if y_vowel and vowel(y[0]) != y_vowel:
+            return
         if padchim(x[-1]) == x_padchim and \
            lead(y[0])     == y_lead:
             return x[:-1] + join(lead(x[-1]),
@@ -66,9 +69,11 @@ merge_rules.append(consonant_combination_rule(u'ᆨ', u'ᄉ', u'ᆨ', u'ᄊ'))
 #엎는 (flipping, participle form), pronounced (엄는)
 #ㅍㅁ becomes ㅁㅁ
 # ㄱㅎ becomes ㅋ
+merge_rules.append(consonant_combination_rule(u'ᆨ', u'ᄒ', None, u'ᄏ'))
 # 북한 (North Korea), pronounced (부칸)
 # ㅎㄱ becomes ㅋ
 # ㅎㄷ becomes ㅌ
+merge_rules.append(consonant_combination_rule(u'ᇂ', u'ᄃ', None, u'ᄐ'))
 # ㄷㅎ becomes ㅌ
 # ㅂㅎ becomes ㅍ
 # ㅎㅂ becomes ㅍ
@@ -76,7 +81,9 @@ merge_rules.append(consonant_combination_rule(u'ᆨ', u'ᄉ', u'ᆨ', u'ᄊ'))
 # ㅎㅈ becomes ㅊ
 # ㅎㅅ becomes ㅆ
 #ㄷ이 becomes 지
+merge_rules.append(consonant_combination_rule(u'ᆮ', u'ᄋ', None, u'ᄌ', y_vowel=u'ㅣ'))
 #ㅌ이 becomes 치
+merge_rules.append(consonant_combination_rule(u'ᇀ', u'ᄋ', None, u'ᄎ', y_vowel=u'ㅣ'))
 #ㄱㄹ becomes ㅇㄴ
 #ㄴㄹ becomes ㄹㄹ // uh oh-> // or sometimes ㄴㄴ
 # ㅁㄹ becomes ㅁㄴ
