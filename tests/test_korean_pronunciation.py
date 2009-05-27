@@ -12,7 +12,11 @@ def test_pronunciation():
                  (u'덧니',    u'던니'),
                  (u'했나',    u'핸나'),
                  (u'거짓말',  u'거진말'),
-                 (u'국수',    u'국쑤')]:
+                 (u'국수',    u'국쑤'),
+                 (u'북한',    u'부칸'),
+                 (u'그렇다',  u'그러타'),
+                 (u'받이',    u'바지'),
+                 (u'같이',    u'가치')]:
         yield check_pronunciation, x, y 
 
 def check_pronunciation(x, y):
