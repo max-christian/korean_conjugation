@@ -1,0 +1,48 @@
+<html>
+<head>
+<script language="javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js"></script>
+<script>
+function toggle(e) {
+    $(e).parent().parent().next('.explanation').toggle();
+    return false;
+}
+</script>
+<style>
+a {
+    text-decoration: none; 
+}
+.explanation { 
+    border: 1px dotted black; 
+}
+
+td.tense {
+    text-align: right;
+}
+</style>
+</head>
+<body>
+
+<table>
+<thead>
+<tr><td class="tense">tense</td><td>conjugation</td><td>pronunciation</td></tr>
+</thead>
+<tbody>
+{% for (tense, conjugation, pronunciation, reasons) in results %}
+<tr>
+    <td class="tense">{{ tense  }}</td> 
+    <td><a href="#" onclick="return toggle(this);">{{ conjugation }}</a></td>
+    <td>{{ '[%s]' % pronunciation if pronunciation != conjugation }}</td>
+</tr>
+<tr class="explanation" style="display: none;">
+    <td colspan="3">
+        <ol>
+        {% for reason in reasons %}
+            <li>{{ reason }}</li>
+        {% endfor %}
+        </ol>
+    </td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

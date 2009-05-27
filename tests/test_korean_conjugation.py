@@ -3,7 +3,7 @@
 from korean_conjugator import *
 
 def test_conjugation():
-    assert u'먹는다 [멍는다]' in (x[1] for x in conjugation.perform(u'먹다'))
+    assert u'멍는다' in (x[2] for x in conjugation.perform(u'먹다'))
 
 def test_base3():
     assert base3(u'돕다') == u'도우'

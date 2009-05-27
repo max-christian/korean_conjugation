@@ -142,9 +142,7 @@ class conjugation:
             self.reasons = []
             c = self.tenses[tense](infinitive, regular)
             p = pronunciation(c)
-            if p != c:
-                c += u' [%s]' % p
-            results.append((tense, c, self.reasons))
+            results.append((tense, c, p, self.reasons))
         return results
     
     def __call__(self, f):
