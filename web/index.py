@@ -28,7 +28,8 @@ class Root(object):
             except:
                 pass
             template = env.get_template('index.html')
-            return template.render(results=korean_conjugator.conjugation.perform(infinitive)).encode('utf-8')
+            return template.render(results=korean_conjugator.conjugation.perform(infinitive),
+                                   infinitive=infinitive).encode('utf-8')
         except Exception, e:
             return traceback.format_exception(*sys.exc_info())
 
