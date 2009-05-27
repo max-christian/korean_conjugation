@@ -3,6 +3,7 @@
 # (C) 2009 Dan Bravender
 
 from hangeul_utils import join, lead, vowel, padchim, find_vowel_to_append, match, Geulja
+from korean_pronunciation import pronunciation
 
 def no_padchim_rule(characters):
     u'''no_padchim_rule is a helper function for defining merges where a 
@@ -140,6 +141,9 @@ class conjugation:
         for tense in self.tense_order:
             self.reasons = []
             c = self.tenses[tense](infinitive, regular)
+            p = pronunciation(c)
+            if p != c:
+                c += u' [%s]' % p
             results.append((tense, c, self.reasons))
         return results
     
