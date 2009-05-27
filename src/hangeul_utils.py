@@ -33,6 +33,9 @@ def find_vowel_to_append(string):
             return u'어'
     return u'어'
 
+# Equations lifted directly from:
+# http://www.kfunigraz.ac.at/~katzer/korean_hangul_unicode.html
+
 def join(lead, vowel, padchim=None):
     '''join returns the unicode character that is composed of the
        lead, vowel and padchim that are passed in.
@@ -43,7 +46,8 @@ def join(lead, vowel, padchim=None):
         padchim_offset = ord(padchim) - ord(u'ᆨ')
     else:
         padchim_offset = -1
-    return unichr(padchim_offset + (vowel_offset) * 28 + (lead_offset) * 588 + 44032 + 1)
+    return unichr(padchim_offset + (vowel_offset) * 28 + (lead_offset) * 588 + \
+                  44032 + 1)
 
 def lead(character):
     '''lead returns the first consonant in a geulja
@@ -52,12 +56,14 @@ def lead(character):
 
 def vowel(character):
     padchim_character = padchim(character)
-    # padchim returns a character or True if there is a hidden padchim, but a hidden padchim doesn't make sense for this offset
+    # padchim returns a character or True if there is a hidden padchim, 
+    # but a hidden padchim doesn't make sense for this offset
     if not padchim_character or padchim_character == True:
         padchim_offset = -1
     else:
         padchim_offset = ord(padchim_character) - ord(u'ᆨ')
-    return unichr(int(((ord(character) - 44032 - padchim_offset) % 588) / 28) + ord(u'ㅏ'))
+    return unichr(int(((ord(character) - 44032 - padchim_offset) % 588) / 28)+ \
+                  ord(u'ㅏ'))
 
 def padchim(character):
     '''padchim returns the unicode padchim (the bottom) of a geulja.
@@ -77,4 +83,6 @@ def match(character, l='*', v='*', p='*'):
        geulja match patterns. * is used to represent any vowel or
        consonant.
     '''
-    return (lead(character) == l or l == u'*') and (vowel(character) == v or v == u'*') and (padchim(character) == p or p == u'*')
+    return (lead(character) == l or l == u'*') and \
+           (vowel(character) == v or v == u'*') and \
+           (padchim(character) == p or p == u'*')
