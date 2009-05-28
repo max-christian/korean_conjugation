@@ -4,33 +4,37 @@ import os
 import traceback
 sys.stdout = sys.stderr
 sys.path.append(os.path.realpath(__file__ + '/../../src'))
+from jinja2 import Environment, FileSystemLoader
 
 import atexit
 import threading
 import cherrypy
 import korean_conjugator
 
-cherrypy.config.update({'environment': 'embedded'})
-
-if cherrypy.engine.state == 0:
-    cherrypy.engine.start(blocking=False)
-    atexit.register(cherrypy.engine.stop)
+env = Environment(loader=FileSystemLoader(os.path.realpath(__file__ + '/../../templates')))
 
 class Root(object):
     @cherrypy.expose
-    def index(self, infinitive='하다'):
+    def index(self, infinitive='하다', regular=False):
         cherrypy.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
         try:
             try:
                 infinitive = infinitive.decode('utf-8')
             except:
                 pass
-            results = []
-            for x, y, z in korean_conjugator.conjugation.perform(infinitive):
-                results.append(x.replace('_', ' ') + ': ' + y) # + '[' + ' '.join(z) + ']')
-            return '<form method="get" action="."><input name="infinitive"></form>' + ('<br>'.join(results)).encode('utf-8')
+            results = korean_conjugator.conjugation.perform(infinitive, 
+                                                            regular=regular)
+            template = env.get_template('index.html')
+            return template.render(results=results,
+                                   infinitive=infinitive,
+                                   regular=regular
+                                  ).encode('utf-8')
         except Exception, e:
             return traceback.format_exception(*sys.exc_info())
 
     
-application = cherrypy.Application(Root(), None)
+def setup_server():
+    cherrypy.config.update({'environment': 'production',
+                            'log.screen': False,
+                            'show_tracebacks': False})
+    cherrypy.tree.mount(Root())
