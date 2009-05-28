@@ -20,16 +20,20 @@ if cherrypy.engine.state == 0:
 
 class Root(object):
     @cherrypy.expose
-    def index(self, infinitive='하다'):
+    def index(self, infinitive='하다', regular=False):
         cherrypy.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
         try:
             try:
                 infinitive = infinitive.decode('utf-8')
             except:
                 pass
+            results = korean_conjugator.conjugation.perform(infinitive, 
+                                                            regular=regular)
             template = env.get_template('index.html')
-            return template.render(results=korean_conjugator.conjugation.perform(infinitive),
-                                   infinitive=infinitive).encode('utf-8')
+            return template.render(results=results,
+                                   infinitive=infinitive,
+                                   regular=regular
+                                  ).encode('utf-8')
         except Exception, e:
             return traceback.format_exception(*sys.exc_info())
 

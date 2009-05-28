@@ -39,7 +39,10 @@ table {
 <tr>
     <td class="tense">infinitive</td>
     <td><input name="infinitive" size="10" value="{{ infinitive }}"></td>
-    <td><input type="submit" value="conjugate"></td>
+    <td>
+        <input type="submit" value="conjugate">
+        <input type="checkbox" name="regular" {{ 'checked' if regular }} value="on"> regular
+    </td>
 </tr>
 {% for (tense, conjugation, pronunciation, reasons) in results %}
 <tr>
