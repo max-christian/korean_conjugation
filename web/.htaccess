@@ -1,12 +1,5 @@
-Options ExecCGI FollowSymLinks
-DirectoryIndex index.py
-
-AddHandler cgi-script .py
-AddHandler wsgi-script .py
-
-RewriteBase /
-RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.py?infinitive=$1 [L,QSA]
-
+PythonPath "sys.path+['/home/dbravender/sites/korean-conjugation.git/web/']"
+SetHandler python-program
+PythonHandler cherrypy._cpmodpy::handler
+PythonOption cherrypy.setup index::setup_server
+PythonDebug On

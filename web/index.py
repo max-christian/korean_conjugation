@@ -11,12 +11,7 @@ import threading
 import cherrypy
 import korean_conjugator
 
-cherrypy.config.update({'environment': 'embedded'})
 env = Environment(loader=FileSystemLoader(os.path.realpath(__file__ + '/../../templates')))
-
-if cherrypy.engine.state == 0:
-    cherrypy.engine.start(blocking=False)
-    atexit.register(cherrypy.engine.stop)
 
 class Root(object):
     @cherrypy.expose
@@ -38,4 +33,8 @@ class Root(object):
             return traceback.format_exception(*sys.exc_info())
 
     
-application = cherrypy.Application(Root(), None)
+def setup_server():
+    cherrypy.config.update({'environment': 'production',
+                            'log.screen': False,
+                            'show_tracebacks': False})
+    cherrypy.tree.mount(Root())
