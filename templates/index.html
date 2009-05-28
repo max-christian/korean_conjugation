@@ -1,0 +1,94 @@
+<html>
+<head>
+<script language="javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js"></script>
+<script>
+function toggle(e) {
+    $(e).parent().parent().next('.explanation').toggle();
+    return false;
+}
+</script>
+<style>
+a {
+    text-decoration: none; 
+}
+.explanation { 
+    border: 1px dotted black; 
+}
+
+td.tense {
+    text-align: right;
+}
+body {
+    text-align: center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+</style>
+</head>
+<body>
+<form id="infinitive-form" action="." method="get">
+<table>
+<thead>
+<tr><td class="tense">tense</td><td>conjugation</td><td>pronunciation</td></tr>
+</thead>
+<tbody>
+<tr>
+    <td class="tense">infinitive</td>
+    <td><input name="infinitive" size="10" value="{{ infinitive }}"></td>
+    <td>
+        <input type="submit" value="conjugate">
+        <input type="checkbox" name="regular" {{ 'checked' if regular }} value="on"> regular
+    </td>
+</tr>
+{% for (tense, conjugation, pronunciation, reasons) in results %}
+<tr>
+    <td class="tense">{{ tense  }}</td> 
+    <td><a href="#" onclick="return toggle(this);">{{ conjugation }}</a></td>
+    <td>{{ '[%s]' % pronunciation if pronunciation != conjugation }}</td>
+</tr>
+<tr class="explanation" style="display: none;">
+    <td colspan="3">
+        <ol>
+        {% for reason in reasons %}
+            <li>{{ reason }}</li>
+        {% endfor %}
+        </ol>
+    </td>
+</tr>
+{% endfor %}
+</table>
+ </form>
+<script type="text/javascript"><!--
+google_ad_client = "pub-2323396850941501";
+/* korean verbs */
+google_ad_slot = "8477612575";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<!-- Piwik -->
+<a href="http://piwik.org" title="Website analytics" onclick="window.open(this.href);return(false);">
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://bravender.us/~dbravender/piwik/" : "http://bravender.us/~dbravender/piwik/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+<!--
+piwik_action_name = '';
+piwik_idsite = 5;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+//-->
+</script><object>
+<noscript><p>Website analytics <img src="http://bravender.us/~dbravender/piwik/piwik.php" style="border:0" alt="piwik"/></p>
+</noscript></object></a>
+<!-- /Piwik --> 
+</body>
+</html>

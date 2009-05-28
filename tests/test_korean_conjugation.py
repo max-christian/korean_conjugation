@@ -2,10 +2,14 @@
 
 from korean_conjugator import *
 
+def test_conjugation():
+    assert u'멍는다' in (x[2] for x in conjugation.perform(u'먹다'))
+
 def test_base3():
     assert base3(u'돕다') == u'도우'
 
 def test_merge():
+    conjugation.reasons = []
     assert merge(u'오', u'아요') == u'와요'
     assert conjugation.reasons == [u'vowel contraction [ㅗ + ㅏ -> ㅘ] (오 + 아요 -> 와요)']
     assert merge(u'오', u'아') == u'와'
