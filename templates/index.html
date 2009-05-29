@@ -30,7 +30,7 @@ table {
 </style>
 </head>
 <body>
-
+<form id="infinitive-form" action="." method="get">
 <table>
 <thead>
 <tr><td class="tense">tense</td><td>conjugation</td><td>pronunciation</td></tr>
@@ -38,11 +38,10 @@ table {
 <tbody>
 <tr>
     <td class="tense">infinitive</td>
+    <td><input name="infinitive" size="10" value="{{ infinitive }}"></td>
     <td>
-        <form id="infinitive-form" action="." method="get">
-        <input name="infinitive" size="10" value="{{ infinitive }}">
-        </form>
-    </td>
+        <input type="submit" value="conjugate">
+        <input type="checkbox" name="regular" {{ 'checked' if regular }} value="on"> regular
     </td>
 </tr>
 {% for (tense, conjugation, pronunciation, reasons) in results %}
@@ -62,6 +61,7 @@ table {
 </tr>
 {% endfor %}
 </table>
+ </form>
 <script type="text/javascript"><!--
 google_ad_client = "pub-2323396850941501";
 /* korean verbs */
