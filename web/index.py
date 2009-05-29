@@ -14,7 +14,7 @@ import korean_conjugator
 env = Environment(loader=FileSystemLoader(os.path.realpath(__file__ + '/../../templates')))
 
 class Root(object):
-    favicon_ico = cherrypy.tools.staticfile.handler(os.path.realpath(__file__) + '/../favicon.ico')
+    favicon_ico = cherrypy.tools.staticfile.handler(os.path.realpath(__file__ + '/../favicon.ico'))
 
     @cherrypy.expose
     def index(self, infinitive='하다', regular=False):
