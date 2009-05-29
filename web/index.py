@@ -19,6 +19,8 @@ if cherrypy.engine.state == 0:
     atexit.register(cherrypy.engine.stop)
 
 class Root(object):
+    favicon_ico = cherrypy.tools.staticfile.handler(os.path.realpath(__file__) + '/../favicon.ico')
+
     @cherrypy.expose
     def index(self, infinitive='하다'):
         cherrypy.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
