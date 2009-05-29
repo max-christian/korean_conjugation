@@ -38,3 +38,4 @@ def setup_server():
                             'log.screen': False,
                             'show_tracebacks': False})
     cherrypy.tree.mount(Root())
+    cherrypy.tree.mount(Root(), '/index.py')
