@@ -28,10 +28,11 @@ class Root(object):
             results = korean_conjugator.conjugation.perform(infinitive, 
                                                             regular=regular)
 
-            samples = ', '.join(map(lambda verb: '<a href="/?infinitive=%(verb)s">%(verb)s</a>' \
-                                                    % {'verb': verb},
-                                      [u'살다', u'오다', u'걷다', u'짓다', u'돕다', u'번거롭다',
-                                       u'푸르다', u'오르다']))
+            samples = ', '.join(map(lambda verb: '<a href="/?%(urlencoded)s">%(verb)s</a>' \
+               % {'urlencoded': urllib.urlencode({'infinitive': verb}), 
+                  'verb': verb},
+               [u'살다', u'오다', u'걷다', u'짓다', u'돕다', 
+                u'번거롭다', u'푸르다', u'오르다']))
             template = env.get_template('index.html')
             return template.render(year=datetime.now().year,
                                    results=results,
