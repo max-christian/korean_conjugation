@@ -4,6 +4,53 @@
 
 from hangeul_utils import join, lead, vowel, padchim
 
+padchim_to_lead = {
+    u'ᆨ': u'ᄀ',
+    u'ᆩ': u'ᄁ',
+    u'ᆫ': u'ᄂ',
+    u'ᆮ': u'ᄃ',
+    u'ᆯ': u'ᄅ',
+    u'ᆷ': u'ᄆ',
+    u'ᆸ': u'ᄇ',
+    u'ᆺ': u'ᄉ',
+    u'ᆻ': u'ᄊ',
+    u'ᆼ': u'ᄋ',
+    u'ᆽ': u'ᄌ',
+    u'ᆾ': u'ᄎ',
+    u'ᆿ': u'ᄏ',
+    u'ᇀ': u'ᄐ',
+    u'ᇁ': u'ᄑ',
+    u'ᇂ': u'ᄒ'
+}
+
+def move_padchim_to_replace_eung(x, y):
+    if padchim(x[-1]) in padchim_to_lead.keys() and lead(y[0]) == u'ᄋ':
+        return (x[:-1] + join(lead(x[-1]),
+                             vowel(x[-1])),
+                join(padchim_to_lead[padchim(x[-1])],
+                     vowel(y[0]),
+                     padchim(y[0])) + \
+                y[1:])
+
+
+def change_to_d(*changers):
+    def rule(x, y):
+        if padchim(x[-1]) in changers:
+            return (x[:-1] + join(lead(x[-1]),
+                                 vowel(x[-1]),
+                                 u'ᆮ'),
+                    y)
+    return rule
+
+def change_to_p(*changers):
+    def rule(x, y):
+        if padchim(x[-1]) in changers:
+            return (x[:-1] + join(lead(x[-1]),
+                                 vowel(x[-1]),
+                                 u'ᆸ'),
+                    y)
+    return rule
+
 def consonant_combination_rule(x_padchim=u'*', y_lead=u'*', 
                                new_padchim=u'*', new_lead=u'*',
                                y_vowel=None):
@@ -12,13 +59,13 @@ def consonant_combination_rule(x_padchim=u'*', y_lead=u'*',
             return
         if (padchim(x[-1]) == x_padchim or x_padchim == u'*') and \
            (lead(y[0]) == y_lead or y_lead == u'*'):
-            return x[:-1] + join(lead(x[-1]),
+            return (x[:-1] + join(lead(x[-1]),
                                  vowel(x[-1]), 
-                                 new_padchim == u'*' and padchim(x[-1]) or new_padchim) + \
-                            join(new_lead == u'*' and lead(y[0]) or new_lead,
-                                 vowel(y[0]),
-                                 padchim(y[0])) + \
-                   y[1:]
+                                 new_padchim == u'*' and padchim(x[-1]) or new_padchim),
+                    join(new_lead == u'*' and lead(y[0]) or new_lead,
+                         vowel(y[0]),
+                         padchim(y[0])) + \
+                    y[1:])
     return rule
 
 # WARNING: Please be careful when adding/modifying rules since padchim 
@@ -31,6 +78,8 @@ def consonant_combination_rule(x_padchim=u'*', y_lead=u'*',
 # merge rules is a list of rules that are applied in order when merging 
 #             pronunciation rules
 merge_rules = []
+
+merge_rules.append(consonant_combination_rule(u'ᇂ', u'ᄋ', None, u'ᄋ'))
 
 # ㄱㄴ becomes ㅇㄴ
 merge_rules.append(consonant_combination_rule(u'ᆨ', u'ᄂ', u'ᆼ', u'ᄂ'))
@@ -110,17 +159,15 @@ merge_rules.append(consonant_combination_rule(u'ᆷ', u'ᄅ', u'ᆷ', u'ᄂ'))
 merge_rules.append(consonant_combination_rule(u'ᆼ', u'ᄅ', u'ᆼ', u'ᄂ'))
 # ㅂㄹ becomes ㅁㄴ
 merge_rules.append(consonant_combination_rule(u'ᆸ', u'ᄅ', u'ᆷ', u'ᄂ'))
+# ㅅ ㅎ becomes ㅌ
+merge_rules.append(consonant_combination_rule(u'ᆺ', u'ᄒ', None, u'ᄐ'))
 
 # 받침 followed by ㅇ: replace ㅇ with 받침 (use second 받침 if there are two). Otherwise, 받침 followed by consonant:
+merge_rules.append(move_padchim_to_replace_eung)
 
 #    * ㄱ, ㅋ: like ㄱ
-merge_rules.append(consonant_combination_rule(u'ᆸ', u'ᄅ', u'ᆷ', u'ᄂ'))
-#    * ㄴ: like ㄴ
 #    * ㄷ, ㅅ, ㅈ, ㅊ, ㅌ, ㅎ: like ㄷ
-#    * ㄹ: like /l/
-#    * ㅁ: like ㅁ
 #    * ㅂ, ㅍ: like ㅂ
-#    * ㅇ: like /ng/
 
 # Double padchim rules
 merge_rules.append(consonant_combination_rule(u'ᆱ', u'ᄋ', u'ᆯ', u'ᄆ'))
@@ -131,17 +178,29 @@ merge_rules.append(consonant_combination_rule(u'ᆶ', u'*', None, u'ᄅ'))
 merge_rules.append(consonant_combination_rule(u'ᆬ', u'ᄋ', u'ᆫ', u'ᄌ'))
 merge_rules.append(consonant_combination_rule(u'ᆬ', u'*', u'ᆫ', u'*'))
 
+# 학교 -> 학꾜
+merge_rules.append(consonant_combination_rule(u'ᆨ', u'ᄀ', u'ᆨ', u'ᄁ'))
 
-merge_rules.append(lambda x, y: x + y)
+# 밥솥-> 밥쏟
+merge_rules.append(consonant_combination_rule(u'ᆸ', u'ᄉ', u'ᆸ', u'ᄊ'))
+
+merge_rules.append(change_to_d(u'ᆺ', u'ᆻ', u'ᆽ', u'ᆾ', u'ᇀ', u'ᇂ'))
+
+merge_rules.append(change_to_p(u'ᇁ'))
+
+merge_rules.append(lambda x, y: (x, y))
 
 def apply_rules(x, y):
     u'''apply_rules concatenates every element in a list using the rules to 
         merge the strings
      '''
     for i, rule in enumerate(merge_rules):
-        result = rule(x, y)
-        if result:
-            return result
+        merge = rule(x, y)
+        if merge:
+            x, y = merge
+    return x + y
 
 def pronunciation(word):
-    return reduce(apply_rules, iter(word))
+    # Adding a null character to the end of the string and stripping it off
+    # so that rules that require more than one character still get called
+    return reduce(apply_rules, iter(word + unichr(0)))[:-1]
