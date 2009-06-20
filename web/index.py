@@ -5,6 +5,7 @@ import traceback
 sys.stdout = sys.stderr
 sys.path.append(os.path.realpath(__file__ + '/../../src'))
 from jinja2 import Environment, FileSystemLoader
+import urllib
 
 import atexit
 import threading
