@@ -10,6 +10,7 @@ import atexit
 import threading
 import cherrypy
 import korean_conjugator
+from datetime import datetime
 
 env = Environment(loader=FileSystemLoader(os.path.realpath(__file__ + '/../../templates')))
 
@@ -26,8 +27,15 @@ class Root(object):
                 pass
             results = korean_conjugator.conjugation.perform(infinitive, 
                                                             regular=regular)
+
+            samples = ', '.join(map(lambda verb: '<a href="/?infinitive=%(verb)s">%(verb)s</a>' \
+                                                    % {'verb': verb},
+                                      [u'살다', u'오다', u'걷다', u'짓다', u'돕다', u'번거롭다',
+                                       u'푸르다', u'오르다']))
             template = env.get_template('index.html')
-            return template.render(results=results,
+            return template.render(year=datetime.now().year,
+                                   results=results,
+                                   samples=samples,
                                    infinitive=infinitive,
                                    regular=regular
                                   ).encode('utf-8')
@@ -41,3 +49,6 @@ def setup_server():
                             'show_tracebacks': False})
     cherrypy.tree.mount(Root())
     cherrypy.tree.mount(Root(), '/index.py')
+
+def dev_server():
+    cherrypy.quickstart(Root())

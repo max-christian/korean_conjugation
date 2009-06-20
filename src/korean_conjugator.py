@@ -142,6 +142,7 @@ class conjugation:
             self.reasons = []
             c = self.tenses[tense](infinitive, regular)
             p = pronunciation(c)
+            tense = tense.replace('_', ' ')
             results.append((tense, c, p, self.reasons))
         return results
     

@@ -1,13 +1,13 @@
 <html>
 <head>
-<script language="javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js"></script>
-<script>
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js"></script>
+<script type="text/javascript">
 function toggle(e) {
     $(e).parent().parent().next('.explanation').toggle();
     return false;
 }
 </script>
-<style>
+<style type="text/css">
 a {
     text-decoration: none; 
 }
@@ -30,6 +30,8 @@ table {
 </style>
 </head>
 <body>
+<p>dongsa.net shows you how to conjugate and pronounce Korean verbs</p>
+<p>Give these a try: {{ samples }}.</p> 
 <form id="infinitive-form" action="." method="get">
 <table>
 <thead>
@@ -62,6 +64,15 @@ table {
 {% endfor %}
 </table>
  </form>
+<p>The source code for this website and the corresponding Korean conjugation and pronunciation modules are available at <a href="http://github.com/dbravender/korean_conjugation/tree/master">github</a>.</p>
+<p>&copy;{{ year }} <a href="http://dan.bravender.us">Dan Bravender</a>. Please contact me if you have discovered a bug: <script type="text/javascript">
+
+e = 'dan.b' + 'ravender' + String.fromCharCode(60 + 4) + 'gm' + 'ail.c' + 'om'
+
+document.write('<a href="mailto:' + e + '">' + e + '</a>')
+
+</script></p>
+
 <script type="text/javascript"><!--
 google_ad_client = "pub-2323396850941501";
 /* korean verbs */
