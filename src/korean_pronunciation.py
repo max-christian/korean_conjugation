@@ -33,21 +33,12 @@ def move_padchim_to_replace_eung(x, y):
                 y[1:])
 
 
-def change_to_d(*changers):
+def change_padchim_pronunciation(to, changers):
     def rule(x, y):
         if padchim(x[-1]) in changers:
             return (x[:-1] + join(lead(x[-1]),
                                  vowel(x[-1]),
-                                 u'ᆮ'),
-                    y)
-    return rule
-
-def change_to_p(*changers):
-    def rule(x, y):
-        if padchim(x[-1]) in changers:
-            return (x[:-1] + join(lead(x[-1]),
-                                 vowel(x[-1]),
-                                 u'ᆸ'),
+                                 to),
                     y)
     return rule
 
@@ -184,9 +175,12 @@ merge_rules.append(consonant_combination_rule(u'ᆨ', u'ᄀ', u'ᆨ', u'ᄁ'))
 # 밥솥-> 밥쏟
 merge_rules.append(consonant_combination_rule(u'ᆸ', u'ᄉ', u'ᆸ', u'ᄊ'))
 
-merge_rules.append(change_to_d(u'ᆺ', u'ᆻ', u'ᆽ', u'ᆾ', u'ᇀ', u'ᇂ'))
+# 있습니다 -> 이씀니다
+merge_rules.append(consonant_combination_rule(u'ᆻ', u'ᄉ', None, u'ᄊ'))
 
-merge_rules.append(change_to_p(u'ᇁ'))
+merge_rules.append(change_padchim_pronunciation(changers=(u'ᆺ', u'ᆻ', u'ᆽ', u'ᆾ', u'ᇀ', u'ᇂ'), to=u'ᆮ'))
+
+merge_rules.append(change_padchim_pronunciation(changers=(u'ᇁ',), to=u'ᆸ'))
 
 merge_rules.append(lambda x, y: (x, y))
 
