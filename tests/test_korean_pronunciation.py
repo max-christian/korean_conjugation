@@ -4,8 +4,8 @@ from korean_pronunciation import pronunciation
 
 def test_pronunciation():
     for x, y in [(u'국물',       u'궁물'),
-                 (u'격노하다',    u'경노하다'),
-                 (u'큌넷',       u'큉넷'),
+                 (u'격노하다',   u'경노하다'),
+                 (u'큌넷',       u'큉넫'),
                  (u'부엌문',     u'부엉문'),
                  (u'닫는',       u'단는'),
                  (u'묻몸',       u'문몸'),
@@ -41,10 +41,20 @@ def test_pronunciation():
                  (u'강력',       u'강녁'),
                  (u'잡록',       u'잠녹'),
                  (u'앉아',       u'안자'),
-                 (u'잃어버리다',  u'이러버리다'),
+                 (u'잃어버리다', u'이러버리다'),
                  (u'앉는',       u'안는'),
                  (u'닮다',       u'담다'),
-                 (u'닮아',       u'달마')]:
+                 (u'닮아',       u'달마'),
+                 (u'못하다',     u'모타다'),
+                 (u'학교',       u'학꾜'),
+                 (u'손이',       u'소니'),
+                 (u'산에',       u'사네'),
+                 (u'돈을',       u'도늘'),
+                 (u'문으로',     u'무느로'),
+                 (u'좋은',       u'조은'),
+                 (u'낳다',       u'나타'),
+                 (u'옷',         u'옫'),
+                 (u'앞',         u'압')]:
         yield check_pronunciation, x, y 
 
 def check_pronunciation(x, y):
