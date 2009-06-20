@@ -1,1 +1,1 @@
-PYTHONPATH=src:web nosetests -s
+PYTHONPATH=src:web nosetests -s --with-coverage --cover-erase --cover-package=`./get_coverage.py`
