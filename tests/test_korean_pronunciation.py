@@ -54,7 +54,8 @@ def test_pronunciation():
                  (u'좋은',       u'조은'),
                  (u'낳다',       u'나타'),
                  (u'옷',         u'옫'),
-                 (u'앞',         u'압')]:
+                 (u'앞',         u'압'),
+                 (u'요?',        u'요?')]:
         yield check_pronunciation, x, y 
 
 def check_pronunciation(x, y):
