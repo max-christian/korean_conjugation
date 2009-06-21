@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from hangeul_utils import *
+from qc import forall, a_unicode
 
 def test_find_vowel_to_append():
     assert find_vowel_to_append(u'아프') == u'아'
@@ -13,6 +14,10 @@ def test_join():
     assert join(u'ᄀ', u'ㅏ') == u'가'
     assert join(u'ᄆ', u'ㅕ', u'ᆫ') == u'면'
     assert join(u'ᄈ', u'ㅙ', u'ᆶ') == u'뾇'
+
+@forall(character=a_unicode(minunicode=ord(u'가'), maxunicode=ord(u'힣'),size=(1,1)))
+def test_join_randomly(character):
+    assert join(lead(character), vowel(character), padchim(character)) == character
 
 def test_lead():
     assert lead(u'가') == u'ᄀ'
