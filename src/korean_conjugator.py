@@ -201,6 +201,11 @@ def base(infinitive, regular=False):
 def base2(infinitive, regular=False):
     infinitive = base(infinitive, regular)
     
+    if infinitive == u'아니':
+        infinitive = Geulja(u'아니')
+        infinitive.hidden_padchim = True
+        return infinitive
+    
     if infinitive == u'뵙':
         return u'뵈'
     
@@ -247,6 +252,10 @@ def base2(infinitive, regular=False):
 @conjugation
 def base3(infinitive, regular=False):
     infinitive = base(infinitive, regular)
+    if infinitive == u'아니':
+        return u'아니'
+    if infinitive == u'푸':
+        return u'푸'
     if infinitive == u'뵙':
         return u'뵈'
     if is_h_irregular(infinitive, regular):
@@ -257,8 +266,12 @@ def base3(infinitive, regular=False):
         return base2(infinitive, regular)
 
 @conjugation
-def declarative_present_informal_low(infinitive, regular=False):
+def declarative_present_informal_low(infinitive, regular=False, further_use=False):
     infinitive = base2(infinitive, regular)
+    if not further_use and ((infinitive == u'이' and not getattr(infinitive, 'hidden_padchim', False)) or \
+                            infinitive == u'아니'):
+        conjugation.reasons.append(u'야 irregular')
+        return infinitive + u'야'
     # 르 irregular
     if is_l_irregular(infinitive, regular):
         new_base = infinitive[:-2] + join(lead(infinitive[-2]), 
@@ -287,7 +300,12 @@ def declarative_present_informal_low(infinitive, regular=False):
 
 @conjugation
 def declarative_present_informal_high(infinitive, regular=False):
-    return merge(declarative_present_informal_low(infinitive, regular), u'요')
+    infinitive = base2(infinitive)
+    if (infinitive == u'이' and not getattr(infinitive, 'hidden_padchim', False)) or \
+       infinitive == u'아니':
+        conjugation.reasons.append(u'에요 irregular')
+        return infinitive + u'에요'
+    return merge(declarative_present_informal_low(infinitive, regular, further_use=True), u'요')
 
 @conjugation
 def declarative_present_formal_low(infinitive, regular=False):
@@ -299,7 +317,7 @@ def declarative_present_formal_high(infinitive, regular=False):
 
 @conjugation
 def past_base(infinitive, regular=False):
-    ps = declarative_present_informal_low(infinitive, regular)
+    ps = declarative_present_informal_low(infinitive, regular, further_use=True)
     if find_vowel_to_append(ps) == u'아':
         return merge(ps, u'았')
     else:
