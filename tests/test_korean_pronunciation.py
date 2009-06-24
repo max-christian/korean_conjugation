@@ -56,7 +56,8 @@ def test_pronunciation():
                  (u'옷',         u'옫'),
                  (u'앞',         u'압'),
                  (u'요?',        u'요?'),
-                 (u'있습니다',   u'이씀니다')]:
+                 (u'있습니다',   u'이씀니다'),
+                 (u'있다',       u'이따')]:
         yield check_pronunciation, x, y 
 
 def check_pronunciation(x, y):
