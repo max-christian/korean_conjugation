@@ -188,6 +188,8 @@ merge_rules.append(change_padchim_pronunciation(changers=(u'ᆺ', u'ᆻ', u'ᆽ'
 
 merge_rules.append(change_padchim_pronunciation(changers=(u'ᇁ',), to=u'ᆸ'))
 
+merge_rules.append(consonant_combination_rule(u'ᆮ', u'ᄃ', None, u'ᄄ'))
+
 merge_rules.append(lambda x, y: (x, y))
 
 def apply_rules(x, y):
