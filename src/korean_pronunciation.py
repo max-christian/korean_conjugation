@@ -209,9 +209,4 @@ def apply_rules(x, y):
 def pronunciation(word):
     # Adding a null character to the end of the string and stripping it off
     # so that rules that require more than one character still get called
-    if word.endswith('?'):
-        word = word[:-1]
-        append = '?'
-    else:
-        append = ''
-    return reduce(apply_rules, iter(word + unichr(0)))[:-1] + append
+    return reduce(apply_rules, iter(word + unichr(0)))[:-1]
