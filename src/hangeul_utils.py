@@ -21,6 +21,13 @@ class Geulja(unicode):
             g.original_padchim = self.original_padchim
         return g
 
+def is_hangeul(character):
+    assert len(character) == 1, 'is_hangeul only checks characters with a length of 1'
+
+    if ord(character) >= ord(u'가') and ord(character) <= ord(u'힣'):
+        return True
+    return False
+
 def find_vowel_to_append(string):
     for character in reversed(string):
         if character in [u'뜨', u'쓰', u'트']:

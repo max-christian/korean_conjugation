@@ -1,7 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from hangeul_utils import *
-from qc import forall, a_unicode
+from qc import forall, characters
+
+@forall(character=characters(minunicode=ord(u'가'), maxunicode=ord(u'힣')))
+def test_is_hanguel(character):
+    assert is_hangeul(character)
+
+@forall(character=characters(minunicode=ord(u'힣') + 1, maxunicode=65535))
+def test_is_not_hangeul_greater(character):
+    assert not is_hangeul(character)
+
+@forall(character=characters(minunicode=0, maxunicode=ord(u'가') + 1))
+def test_is_not_hangeul_lower(character):
+    assert not is_hangeul(character)
 
 def test_find_vowel_to_append():
     assert find_vowel_to_append(u'아프') == u'아'
@@ -15,7 +27,7 @@ def test_join():
     assert join(u'ᄆ', u'ㅕ', u'ᆫ') == u'면'
     assert join(u'ᄈ', u'ㅙ', u'ᆶ') == u'뾇'
 
-@forall(character=a_unicode(minunicode=ord(u'가'), maxunicode=ord(u'힣'),size=(1,1)))
+@forall(character=characters(minunicode=ord(u'가'), maxunicode=ord(u'힣')))
 def test_join_randomly(character):
     assert join(lead(character), vowel(character), padchim(character)) == character
 

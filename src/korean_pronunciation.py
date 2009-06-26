@@ -2,7 +2,7 @@
 
 # (C) 2009 Dan Bravender
 
-from hangeul_utils import join, lead, vowel, padchim
+from hangeul_utils import join, lead, vowel, padchim, is_hangeul
 
 padchim_to_lead = {
     u'ᆨ': u'ᄀ',
@@ -69,6 +69,12 @@ def consonant_combination_rule(x_padchim=u'*', y_lead=u'*',
 # merge rules is a list of rules that are applied in order when merging 
 #             pronunciation rules
 merge_rules = []
+
+def skip_non_hangeul(x, y):
+    if not is_hangeul(x[-1]):
+        return (x, y, True)
+
+merge_rules.append(skip_non_hangeul)
 
 merge_rules.append(consonant_combination_rule(u'ᇂ', u'ᄋ', None, u'ᄋ'))
 
@@ -190,7 +196,11 @@ def apply_rules(x, y):
      '''
     for i, rule in enumerate(merge_rules):
         merge = rule(x, y)
-        if merge:
+        if merge and len(merge) == 3:
+            x, y, stop = merge
+            if stop:
+                return x + y
+        elif merge:
             x, y = merge
     return x + y
 
