@@ -25,6 +25,7 @@ class Root(object):
             infinitive = infinitive.decode('utf-8')
         except:
             pass
+        infinitive = korean_conjugator.base(infinitive) + u'다'
         results = korean_conjugator.conjugation.perform(infinitive, 
                                                         regular=regular)
 
