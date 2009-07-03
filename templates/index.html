@@ -87,21 +87,16 @@ google_ad_height = 90;
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 <!-- Piwik -->
-<a href="http://piwik.org" title="Website analytics" onclick="window.open(this.href);return(false);">
 <script type="text/javascript">
-var pkBaseURL = (("https:" == document.location.protocol) ? "https://bravender.us/~dbravender/piwik/" : "http://bravender.us/~dbravender/piwik/");
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://dan.bravender.us/~dbravender/piwik/" : "http://dan.bravender.us/~dbravender/piwik/");
 document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+    var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 5);
+    piwikTracker.trackPageView();
+    piwikTracker.enableLinkTracking();
+} catch( err ) {}
 </script>
-<script type="text/javascript">
-<!--
-piwik_action_name = '';
-piwik_idsite = 5;
-piwik_url = pkBaseURL + "piwik.php";
-piwik_log(piwik_action_name, piwik_idsite, piwik_url);
-//-->
-</script><object>
-<noscript><p>Website analytics <img src="http://bravender.us/~dbravender/piwik/piwik.php" style="border:0" alt="piwik"/></p>
-</noscript></object></a>
-<!-- /Piwik --> 
+<!-- End Piwik Tag -->
 </body>
 </html>
