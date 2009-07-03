@@ -154,6 +154,8 @@ class conjugation:
 conjugation = conjugation()
 
 def is_s_irregular(infinitive, regular=False):
+    if regular: 
+        return False
     return match(infinitive[-1], u'*', u'*', u'ᆺ') and \
          infinitive[-1] not in [u'벗', u'웃', u'씻', u'빗', 
                                 u'앗', u'뺏', u'솟', u'밧',
