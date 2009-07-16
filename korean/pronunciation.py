@@ -2,7 +2,7 @@
 
 # (C) 2009 Dan Bravender
 
-from hangeul_utils import join, lead, vowel, padchim, is_hangeul
+from hangeul import join, lead, vowel, padchim, is_hangeul
 
 padchim_to_lead = {
     u'ᆨ': u'ᄀ',

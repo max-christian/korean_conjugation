@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from hangeul_utils import *
+from korean.hangeul import *
 from qc import forall, characters
 
 @forall(character=characters(minunicode=ord(u'가'), maxunicode=ord(u'힣')))

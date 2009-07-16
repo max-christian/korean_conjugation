@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from korean_conjugator import *
+from korean.conjugator import *
 
 def check(func, infinitive, expected):
     result = func(infinitive)

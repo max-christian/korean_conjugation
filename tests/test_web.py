@@ -1,4 +1,4 @@
-import index
+from korean.web import index
 
 def test_web():
     root = index.Root()
