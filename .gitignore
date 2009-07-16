@@ -2,3 +2,6 @@
 *.sw[pln]
 RCS
 .coverage
+lib
+bin
+include
