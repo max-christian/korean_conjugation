@@ -1,1 +1,13 @@
-Requires nose for testing and cherrypy for the web interface.
+==Installation==
+
+If you don't have easy_install, search for it on your favorite search engine and install it.
+
+Then, follow these steps to build a self-contained environment for running the development server:
+
+sudo easy_install pip
+sudo easy_install virtual_env
+virtualenv . --no-site-packages
+pip install -E . -r requirements.txt
+source bin/activate
+./test
+./dev_server

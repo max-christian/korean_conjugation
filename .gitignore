@@ -5,3 +5,5 @@ RCS
 lib
 bin
 include
+man
+docs
