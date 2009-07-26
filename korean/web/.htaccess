@@ -1,4 +1,4 @@
-PythonPath "sys.path+['/home/dbravender/sites/korean-conjugation.git/web/']"
+PythonPath "sys.path+['/home/dbravender/sites/korean-conjugation.git/korean/web/']"
 SetHandler python-program
 PythonHandler cherrypy._cpmodpy::handler
 PythonOption cherrypy.setup index::setup_server
