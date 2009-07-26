@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from korean_conjugator import *
+from korean.conjugator import *
 
 def test_conjugation():
     assert u'멍는다' in (x[2] for x in conjugation.perform(u'먹다'))

@@ -10,7 +10,7 @@ import urllib
 import atexit
 import threading
 import cherrypy
-import korean_conjugator
+import korean.conjugator
 from datetime import datetime
 
 env = Environment(loader=FileSystemLoader(os.path.realpath(__file__ + '/../../templates')))
@@ -25,8 +25,8 @@ class Root(object):
             infinitive = infinitive.decode('utf-8')
         except:
             pass
-        infinitive = korean_conjugator.base(infinitive) + u'다'
-        results = korean_conjugator.conjugation.perform(infinitive, 
+        infinitive = korean.conjugator.base(infinitive) + u'다'
+        results = korean.conjugator.conjugation.perform(infinitive, 
                                                         regular=regular)
 
         samples = ', '.join(map(lambda verb: '<a href="/?%(urlencoded)s">%(verb)s</a>' \

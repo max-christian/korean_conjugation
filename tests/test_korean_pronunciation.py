@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from korean_pronunciation import pronunciation
+from korean.pronunciation import pronunciation
 
 def test_pronunciation():
     for x, y in [(u'국물',       u'궁물'),

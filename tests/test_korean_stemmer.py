@@ -2,7 +2,7 @@
 
 # (C) 2009 Dan Bravender
 
-from korean_stemmer import *
+from korean.stemmer import *
 
 def test_iterate_chop_last():
     assert list(iterate_chop_last('fred')) == ['f', 'fr', 'fre', 'fred']

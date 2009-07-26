@@ -2,8 +2,8 @@
 
 # (C) 2009 Dan Bravender
 
-from hangeul_utils import join, lead, vowel, padchim, find_vowel_to_append, match, Geulja
-from korean_pronunciation import pronunciation
+from hangeul import join, lead, vowel, padchim, find_vowel_to_append, match, Geulja
+from pronunciation import pronunciation
 
 def no_padchim_rule(characters):
     u'''no_padchim_rule is a helper function for defining merges where a 

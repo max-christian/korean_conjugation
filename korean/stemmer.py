@@ -2,7 +2,7 @@
 
 # (C) 2009 Dan Bravender
 
-from korean_conjugator import *
+from korean.conjugator import *
 
 def iterate_chop_last(string):
     for i in reversed(range(1, len(string))):
