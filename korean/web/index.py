@@ -12,6 +12,7 @@ import threading
 import cherrypy
 import korean.conjugator
 from datetime import datetime
+import simplejson
 
 env = Environment(loader=FileSystemLoader(os.path.realpath(__file__ + '/../../templates')))
 
@@ -19,7 +20,7 @@ class Root(object):
     favicon_ico = cherrypy.tools.staticfile.handler(os.path.realpath(__file__ + '/../favicon.ico'))
 
     @cherrypy.expose
-    def index(self, infinitive='하다', regular=False):
+    def index(self, infinitive='하다', regular=False, json=False):
         cherrypy.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
         try:
             infinitive = infinitive.decode('utf-8')
@@ -29,6 +30,9 @@ class Root(object):
         results = korean.conjugator.conjugation.perform(infinitive, 
                                                         regular=regular)
 
+        if json:
+            return simplejson.dumps(results, ensure_ascii=False).encode('UTF-8')
+        
         samples = ', '.join(map(lambda verb: '<a href="/?%(urlencoded)s">%(verb)s</a>' \
            % {'urlencoded': urllib.urlencode({'infinitive': verb.encode('utf-8')}), 
               'verb': verb},
