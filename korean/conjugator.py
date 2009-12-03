@@ -175,7 +175,8 @@ def is_h_irregular(infinitive, regular=False):
 def is_p_irregular(infinitive, regular=False):
     if regular or infinitive in [u'에굽', u'예굽']:
         return False
-    if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업', u'묻잡', u'바잡']:
+    if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업',
+                      u'묻잡', u'바잡', u'줍']:
         return True
     return match(infinitive[-1], u'*', u'*', u'ᆸ') and \
            infinitive[-1] not in [u'잡', u'입', u'씹', u'줍', u'접',

@@ -21,8 +21,8 @@ def test_declarative_present():
     # needed a random verb to test regularifying ㅅ :-)
     assert declarative_present_informal_low(u'귯') == u'규어'
     assert declarative_present_informal_low(u'귯', regular=True) == u'귯어'
+    assert declarative_present_informal_low(u'줍다') == u'주워'
     assert declarative_present_informal_low(u'동트다') == u'동터'
-    assert declarative_present_informal_low(u'농트다') == u'농터'
     assert declarative_present_informal_low(u'농트다') == u'농터'
     assert declarative_present_informal_low(u'엇다') == u'엇어'
     assert declarative_present_informal_low(u'푸다') == u'퍼'

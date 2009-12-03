@@ -1,3 +1,5 @@
+pip-log.txt
+src
 *.pyc
 *.sw[pln]
 RCS
