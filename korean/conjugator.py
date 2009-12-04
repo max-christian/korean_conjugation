@@ -303,7 +303,7 @@ def declarative_present_informal_low(infinitive, regular=False, further_use=Fals
 
 @conjugation
 def declarative_present_informal_high(infinitive, regular=False):
-    infinitive = base2(infinitive)
+    infinitive = base2(infinitive, regular)
     if (infinitive == u'이' and not getattr(infinitive, 'hidden_padchim', False)) or \
        infinitive == u'아니':
         conjugation.reasons.append(u'에요 irregular')
