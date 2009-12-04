@@ -145,7 +145,8 @@ def test_declarative_present():
     assert declarative_present_informal_low(u'덥다') == u'더워'
     assert declarative_present_informal_low(u'푸르다') == u'푸르러'
     assert declarative_present_informal_low(u'번거롭다') == u'번거로워'
-    
+   
+    assert declarative_present_informal_high(u'굽다', regular=True) == u'굽어요'
     assert declarative_present_informal_high(u'가다') == u'가요'
 
     assert declarative_present_formal_low(u'가다') == u'간다'
