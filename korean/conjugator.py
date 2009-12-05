@@ -198,6 +198,20 @@ def is_d_irregular(infinitive, regular=False):
     return match(infinitive[-1], u'*', u'*', u'ᆮ') and \
            not not_d_irregular.get(infinitive, False)
 
+verb_types = {
+    u'ㅅ 불규칙 (irregular)': is_s_irregular,
+    u'ㄹ 불규칙 (irregular)': is_l_irregular,
+    u'ㅎ 불규칙 (irregular)': is_h_irregular,
+    u'ㅂ 불규칙 (irregular)': is_p_irregular,
+    u'ㄷ 불규칙 (irregular)': is_d_irregular
+}
+
+def verb_type(infinitive):
+    for irregular_name, func in verb_types.iteritems():
+        if func(base(infinitive)):
+            return irregular_name
+    return u'regular'
+
 @conjugation
 def base(infinitive, regular=False):
     if infinitive[-1] == u'다':
