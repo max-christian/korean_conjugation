@@ -33,6 +33,11 @@ table {
     margin-right: auto;
 }
 
+.type {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 </style>
 </head>
 <body>
@@ -43,6 +48,9 @@ table {
 {% if both_regular_and_irregular %}
 <div class="message">
 The verb "{{ infinitive }}" has both regular and irregular forms depending on its meaning. You can change which conjugation you are viewing by toggling the "regular" checkbox and clicking the "conjugate!" button.
+</div>
+<div class="type">
+{{ infinitive }} is a {{ verb_type }} verb
 </div>
 {% endif %}
 <table>
