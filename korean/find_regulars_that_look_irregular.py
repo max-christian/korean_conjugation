@@ -66,5 +66,5 @@ for infinitive, conjugated in data:
 # but I can't use it everywhere yet ;-)
 
 for key, value in results.iteritems():
-    print "'%s': [%s]".encode('utf-8') % (key, ', '.join(map(lambda x:u"u'%s'" % x, list(set(value)))))
+    print "'%s': [%s]".encode('utf-8') % (key, ', '.join(map(lambda x:u"(u'%s', True)" % x, list(set(value)))))
 
