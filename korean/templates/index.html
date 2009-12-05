@@ -16,7 +16,11 @@ a {
 .explanation { 
     border: 1px dotted black; 
 }
-
+.message {
+    background: red;
+    color: white;
+    text-decoration: bold;
+}
 td.tense {
     text-align: right;
 }
@@ -36,6 +40,11 @@ table {
 <p>I have a detailed explanation of what I learned while working on this project in my <a href="http://dan.bravender.us/2009/6/28/Announcing_dongsa.net.html">blog entry announcing the site</a>.</p>
 <p>Give these a try: {{ samples }}.</p> 
 <form id="infinitive-form" action="." method="get">
+{% if both_regular_and_irregular %}
+<div class="message">
+The verb "{{ infinitive }}" has both regular and irregular forms depending on its meaning. You can change which conjugation you are viewing by toggling the "regular" checkbox and clicking the "conjugate!" button.
+</div>
+{% endif %}
 <table>
 <thead>
 <tr><td class="tense">tense</td><td>conjugation</td><td>pronunciation</td></tr>
@@ -45,8 +54,10 @@ table {
     <td class="tense">infinitive</td>
     <td><input name="infinitive" size="10" value="{{ infinitive }}"></td>
     <td>
-        <input type="submit" value="conjugate">
+        <input type="submit" value="conjugate!">
+        {% if both_regular_and_irregular %}
         <input type="checkbox" name="regular" {{ 'checked' if regular }} value="on"> regular
+        {% endif %}
     </td>
 </tr>
 {% for (tense, conjugation, pronunciation, reasons) in results %}

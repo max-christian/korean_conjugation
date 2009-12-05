@@ -153,6 +153,13 @@ class conjugation:
 
 conjugation = conjugation()
 
+both_regular_and_irregular = [
+    u'일', u'곱', u'파묻', u'누르', u'묻', u'이르',
+    u'되묻', u'썰', u'붓', u'들까불', u'굽', u'걷',
+    u'뒤까불', u'까불'
+]
+
+
 not_p_irregular = [
     u'털썩이잡', u'넘겨잡', u'우접', u'입', u'맞접', u'문잡', u'다잡', u'까뒤집',
     u'배좁', u'목잡', u'끄집', u'잡', u'옴켜잡', u'검잡', u'되순라잡', u'내씹',
