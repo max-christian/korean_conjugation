@@ -153,45 +153,99 @@ class conjugation:
 
 conjugation = conjugation()
 
+not_p_irregular = [
+    u'털썩이잡', u'넘겨잡', u'우접', u'입', u'맞접', u'문잡', u'다잡', u'까뒤집',
+    u'배좁', u'목잡', u'끄집', u'잡', u'옴켜잡', u'검잡', u'되순라잡', u'내씹',
+    u'모집', u'따잡', u'엇잡', u'까집', u'겹집', u'줄통뽑', u'버르집', u'지르잡',
+    u'추켜잡', u'업', u'되술래잡', u'되접', u'좁디좁', u'더위잡', u'말씹',
+    u'내뽑', u'집', u'걸머잡', u'휘어잡', u'꿰입', u'황잡', u'에굽', u'내굽',
+    u'따라잡', u'맞뒤집', u'둘러업', u'늘잡', u'끄잡', u'우그려잡', u'어줍',
+    u'언걸입', u'들이곱', u'껴잡', u'곱접', u'훔켜잡', u'늦추잡', u'갈아입',
+    u'친좁', u'희짜뽑', u'마음잡', u'개미잡', u'옴씹', u'치잡', u'그러잡',
+    u'움켜잡', u'씹', u'비집', u'꼽', u'살잡', u'죄입', u'졸잡', u'가려잡',
+    u'뽑', u'걷 어잡', u'헐잡', u'돌라입', u'덧잡', u'얕잡', u'낫잡', u'부여잡',
+    u'맞붙잡', u'걸입', u'주름잡', u'걷어입', u'빌미잡', u'개잡', u'겉잡',
+    u'안쫑잡', u'좁', u'힘입', u'걷잡', u'바르집', u'감씹', u'짓씹', u'손잡',
+    u'포집', u'붙잡', u'낮잡', u'책잡', u'곱잡', u'흉잡', u'뒤집', u'땡잡',
+    u'어림잡', u'덧껴 입', u'수줍', u'뒤잡', u'꼬집', u'예굽', u'덮쳐잡',
+    u'헛잡', u'되씹', u'낮추잡', u'날파람잡', u'틀어잡', u'헤집', u'남의달잡',
+    u'바로잡', u'흠잡', u'파잡', u'얼추잡', u'손꼽', u'접', u'차려입', u'골라잡',
+    u'거머잡', u'후려잡', u'머줍', u'넉장뽑', u'사로잡', u'덧입', u'껴입',
+    u'얼입', u'우집', u'설잡', u'늦잡', u'비좁', u'고르잡', u'때려잡', u'떼집',
+    u'되잡', u'홈켜잡', u'내곱', u'곱씹', u'빼입', u'들이굽', u'새잡', u'이르집',
+    u'떨쳐입'
+]
+
+not_s_irregular = [
+    u'내솟', u'빗', u'드솟', u'비웃', u'뺏', u'샘솟', u'벗', u'들이웃', u'솟',
+    u'되뺏', u'빼앗', u'밧', u'애긋', u'짜드라웃', u'어그솟', u'들솟', u'씻',
+    u'빨가벗', u'깃', u'벌거벗', u'엇', u'되빼앗', u'웃', u'앗', u'헐벗',
+    u'용솟', u'덧솟', u'발가벗', u'뻘거벗', u'날솟', u'치솟'
+]
+
+not_d_irregular = [
+    u'맞받', u'내딛', u'내리받', u'벋', u'뒤닫', u'주고받', u'공얻', u'무뜯',
+    u'물 어뜯', u'여닫', u'그러묻', u'잇닫', u'덧묻', u'되받', u'뻗', u'올리닫',
+    u'헐뜯', u'들이닫', u'활걷', u'겉묻', u'닫', u'창받', u'건네받', u'물손받',
+    u'들이받', u'강요받', u'내리벋', u'받', u'이어받', u'부르걷', u'응받', u'검뜯',
+    u'인정받', u'내려딛', u'내쏟', u'내리뻗', u'너름받', u'세받', u'내돋', u'돌려받',
+    u'쥐어뜯', u'껴묻', u'본받', u'뒤받', u'강종받', u'내리닫', u'떠받', u'테받', u'내받',
+    u'흠뜯', u'두남받', u'치받', u'부르돋', u'대받', u'설굳', u'처닫', u'얻', u'들이돋',
+    u'돋', u'죄받', u'쏟', u'씨받', u'딱장받', u'치걷', u'믿', u'치벋', u'버림받', u'북돋',
+    u'딛', u'치고받', u'욱걷', u'물려받', u'뜯', u'줴뜯', u'넘겨받', u'안받', u'내뻗',
+    u'내리쏟', u'벋딛', u'뒤묻', u'뻗딛', u'치뻗', u'치닫', u'줄밑걷', u'굳', u'내닫',
+    u'내림받'
+]
+
+not_h_irregular = [
+    u'들이좋', u'터놓', u'접어놓', u'좋', u'풀어놓', u'내쌓', u'꼴좋', u'치쌓', u'물어넣',
+    u'잇닿', u'끝닿', u'그러넣', u'뽕놓', u'낳', u'내리찧', u'힘닿', u'내려놓', u'세놓',
+    u'둘러놓', u'들놓', u'맞찧', u'잡아넣', u'돌라쌓', u'덧쌓', u'갈라땋', u'주놓',
+    u'갈라놓', u'들이닿', u'집어넣', u'닿', u'의좋', u'막놓', u'내놓', u'들여놓', u'사놓',
+    u'썰레놓', u'짓찧', u'벋놓', u'찧', u'침놓', u'들이찧', u'둘러쌓', u'털어놓', u'담쌓',
+    u'돌라놓', u'되잡아넣', u'끌어넣', u'덧놓', u'맞닿', u'처넣', u'빻', u'뻥놓', u'내리쌓',
+    u'곱놓', u'설레발놓', u'우겨넣', u'놓', u'수놓', u'써넣', u'널어놓', u'덮쌓', u'연닿',
+    u'헛놓', u'돌려놓', u'되쌓', u'욱여넣', u'앗아넣', u'올려놓', u'헛방놓', u'날아놓',
+    u'뒤놓', u'업수놓', u'가로놓', u'맞놓', u'펴놓', u'내켜놓', u'쌓', u'끙짜놓', u'들이쌓',
+    u'겹쌓', u'기추놓', u'넣', u'불어넣', u'늘어놓', u'긁어놓', u'어긋놓', u'앞넣', u'눌러놓',
+    u'땋', u'들여쌓', u'빗놓', u'사이좋', u'되놓', u'헛불놓', u'몰아넣', u'먹놓', u'밀쳐놓',
+    u'살닿', u'피새놓', u'빼놓', u'하차놓', u'틀어넣'
+]
+
+not_l_irregular = [
+    u'우러르', u'따르', u'붙따르', u'늦치르', u'다다르', u'잇따르', u'치르'
+]
+
+
 def is_s_irregular(infinitive, regular=False):
     if regular: 
         return False
     return match(infinitive[-1], u'*', u'*', u'ᆺ') and \
-         infinitive[-1] not in [u'벗', u'웃', u'씻', u'빗', 
-                                u'앗', u'뺏', u'솟', u'밧',
-                                u'긋', u'깃', u'엇']
+         infinitive not in not_s_irregular
 
 def is_l_irregular(infinitive, regular=False):
-    if regular or infinitive in [u'따르']:
+    if regular:
         return False
-    return match(infinitive[-1], u'ᄅ', u'ㅡ', None)
+    return match(infinitive[-1], u'ᄅ', u'ㅡ', None) and \
+           infinitive not in not_l_irregular
 
 def is_h_irregular(infinitive, regular=False):
     if regular:
         return False
     return (padchim(infinitive[-1]) == u'ᇂ' or infinitive[-1] == u'러') and \
-           infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧', u'놓', u'쌓', u'닿']
+           infinitive not in not_h_irregular
 
 def is_p_irregular(infinitive, regular=False):
-    if regular or infinitive in [u'에굽', u'예굽']:
+    if regular:
         return False
-    if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업',
-                      u'묻잡', u'바잡', u'줍']:
-        return True
     return match(infinitive[-1], u'*', u'*', u'ᆸ') and \
-           infinitive[-1] not in [u'잡', u'입', u'씹', u'줍', u'접',
-                                  u'좁', u'집', u'뽑', u'업']
+           infinitive not in not_p_irregular
 
 def is_d_irregular(infinitive, regular=False):
-    if regular or infinitive in [u'욱걷', u'치걷', u'덧묻', u'줄밑걷', 
-                                 u'활걷', u'겉묻', u'그러묻', u'껴묻',
-                                 u'뒤묻', u'부르돋', u'북돋', u'부르걷']:
+    if regular:
         return False
-    elif infinitive in [u'깨닫', u'파묻', u'가로닫']:
-        return True
     return match(infinitive[-1], u'*', u'*', u'ᆮ') and \
-           infinitive[-1] not in [u'굳', u'믿', u'받', u'얻', u'벋', 
-                                  u'닫', u'뜯', u'딛', u'뻗', u'쏟']
+           infinitive not in not_d_irregular
 
 @conjugation
 def base(infinitive, regular=False):
