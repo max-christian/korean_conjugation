@@ -33,18 +33,12 @@ class Root(object):
         if json:
             return simplejson.dumps(results, ensure_ascii=False).encode('UTF-8')
         
-        samples = ', '.join(map(lambda verb: '<a href="/?%(urlencoded)s">%(verb)s</a>' \
-           % {'urlencoded': urllib.urlencode({'infinitive': verb.encode('utf-8')}), 
-              'verb': verb},
-           [u'살다', u'오다', u'걷다', u'짓다', u'돕다', 
-            u'번거롭다', u'푸르다', u'오르다']))
         template = env.get_template('index.html')
         both_regular_and_irregular = infinitive[:-1] in \
                                      korean.conjugator.both_regular_and_irregular
         verb_type = korean.conjugator.verb_type(infinitive[:-1])
         return template.render(year=datetime.now().year,
                                results=results,
-                               samples=samples,
                                infinitive=infinitive,
                                regular=regular,
                                verb_type=verb_type,

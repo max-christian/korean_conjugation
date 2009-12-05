@@ -42,13 +42,13 @@ table {
 </head>
 <body>
 <p>dongsa.net shows you how to conjugate and pronounce Korean verbs</p>
-<p>I have a detailed explanation of what I learned while working on this project in my <a href="http://dan.bravender.us/2009/6/28/Announcing_dongsa.net.html">blog entry announcing the site</a>.</p>
-<p>Give these a try: {{ samples }}.</p> 
+<p>More information can be found at my <a href="http://dan.bravender.us/2009/6/28/Announcing_dongsa.net.html">blog entry announcing the site</a>.</p>
 <form id="infinitive-form" action="." method="get">
 {% if both_regular_and_irregular %}
 <div class="message">
 The verb "{{ infinitive }}" has both regular and irregular forms depending on its meaning. You can change which conjugation you are viewing by toggling the "regular" checkbox and clicking the "conjugate!" button.
 </div>
+{% else %}
 <div class="type">
 {{ infinitive }} is a {{ verb_type }} verb
 </div>
