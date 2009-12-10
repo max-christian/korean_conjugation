@@ -153,44 +153,64 @@ class conjugation:
 
 conjugation = conjugation()
 
+both_regular_and_irregular = [
+    u'일', u'곱', u'파묻', u'누르', u'묻', u'이르',
+    u'되묻', u'썰', u'붓', u'들까불', u'굽', u'걷',
+    u'뒤까불', u'까불'
+]
+
+not_p_irregular = dict([(u'털썩이잡', True), (u'넘겨잡', True), (u'우접', True), (u'입', True), (u'맞접', True), (u'문잡', True), (u'다잡', True), (u'까뒤집', True), (u'배좁', True), (u'목잡', True), (u'끄집', True), (u'잡', True), (u'옴켜잡', True), (u'검잡', True), (u'되순라잡', True), (u'내씹', True), (u'모집', True), (u'따잡', True), (u'엇잡', True), (u'까집', True), (u'겹집', True), (u'줄통뽑', True), (u'버르집', True), (u'지르잡', True), (u'추켜잡', True), (u'업', True), (u'되술래잡', True), (u'되접', True), (u'좁디좁', True), (u'더위잡', True), (u'말씹', True), (u'내뽑', True), (u'집', True), (u'걸머잡', True), (u'휘어잡', True), (u'꿰입', True), (u'황잡', True), (u'에굽', True), (u'내굽', True), (u'따라잡', True), (u'맞뒤집', True), (u'둘러업', True), (u'늘잡', True), (u'끄잡', True), (u'우그려잡', True), (u'어줍', True), (u'언걸입', True), (u'들이곱', True), (u'껴잡', True), (u'곱 접', True), (u'훔켜잡', True), (u'늦추잡', True), (u'갈아입', True), (u'친좁', True), (u'희짜뽑', True), (u'마음잡', True), (u'개미잡', True), (u'옴씹', True), (u'치잡', True), (u'그러잡', True), (u' 움켜잡', True), (u'씹', True), (u'비집', True), (u'꼽', True), (u'살잡', True), (u'죄입', True), (u'졸잡', True), (u'가려잡', True), (u'뽑', True), (u'걷어잡', True), (u'헐잡', True), (u'돌라입', True), (u'덧잡', True), (u'얕잡', True), (u'낫잡', True), (u'부여잡', True), (u'맞붙잡', True), (u'걸입', True), (u'주름잡', True), (u'걷어입', True), (u'빌미잡', True), (u'개잡', True), (u'겉잡', True), (u'안쫑잡', True), (u'좁', True), (u'힘입', True), (u'걷잡', True), (u'바르집', True), (u'감씹', True), (u'짓씹', True), (u'손잡', True), (u'포집', True), (u'붙잡', True), (u'낮잡', True), (u'책잡', True), (u'곱잡', True), (u'흉잡', True), (u'뒤집', True), (u'땡잡', True), (u'어림잡', True), (u'덧껴입', True), (u'수줍', True), (u'뒤잡', True), (u'꼬집', True), (u'예굽', True), (u'덮쳐잡', True), (u'헛잡', True), (u'되씹', True), (u'낮추잡', True), (u'날파람잡', True), (u'틀어잡', True), (u'헤집', True), (u'남의달잡', True), (u'바로잡', True), (u'흠잡', True), (u'파잡', True), (u'얼추잡', True), (u'손꼽', True), (u'접', True), (u'차려입', True), (u'골라잡', True), (u'거머잡', True), (u'후려잡', True), (u'머줍', True), (u'넉장뽑', True), (u'사로잡', True), (u'덧입', True), (u'껴입', True), (u'얼입', True), (u'우집', True), (u'설잡', True), (u'늦잡', True), (u'비좁', True), (u'고르잡', True), (u'때려잡', True), (u'떼집', True), (u'되잡', True), (u'홈켜잡', True), (u'내곱', True), (u'곱씹', True), (u'빼입', True), (u'들이굽', True), (u'새잡', True), (u'이르집', True), (u'떨쳐입', True)])
+not_s_irregular = dict([(u'내솟', True), (u'빗', True), (u'드솟', True), (u'비웃', True), (u'뺏', True), (u'샘솟', True), (u'벗', True), (u'들이웃', True), (u'솟', True), (u'되뺏', True), (u'빼앗', True), (u'밧', True), (u'애긋', True), (u'짜드라웃', True), (u'어그솟', True), (u'들솟', True), (u'씻', True), (u'빨가벗', True), (u'깃', True), (u'벌거벗', True), (u'엇', True), (u'되빼앗', True), (u'웃', True), (u'앗', True), (u'헐벗', True), (u'용솟', True), (u'덧솟', True), (u'발가벗', True), (u'뻘거벗', True), (u'날솟', True), (u'치솟', True)])
+
+not_d_irregular = dict([(u'맞받', True), (u'내딛', True), (u'내리받', True), (u'벋', True), (u'뒤닫', True), (u'주고받', True), (u'공얻', True), (u'무뜯', True), (u'물어뜯', True), (u'여닫', True), (u'그러묻', True), (u'잇닫', True), (u'덧묻', True), (u'되받', True), (u'뻗', True), (u'올리닫', True), (u'헐뜯', True), (u'들이닫', True), (u'활걷', True), (u'겉묻', True), (u'닫', True), (u'창받', True), (u'건네받', True), (u'물손받', True), (u'들이받', True), (u'강요받', True), (u'내리벋', True), (u' 받', True), (u'이어받', True), (u'부르걷', True), (u'응받', True), (u'검뜯', True), (u'인정받', True), (u'내려딛', True), (u'내쏟', True), (u'내리뻗', True), (u'너름받', True), (u'세받', True), (u'내 돋', True), (u'돌려받', True), (u'쥐어뜯', True), (u'껴묻', True), (u'본받', True), (u'뒤받', True), (u'강종받', True), (u'내리닫', True), (u'떠받', True), (u'테받', True), (u'내받', True), (u'흠뜯', True), (u'두남받', True), (u'치받', True), (u'부르돋', True), (u'대받', True), (u'설굳', True), (u' 처닫', True), (u'얻', True), (u'들이돋', True), (u'돋', True), (u'죄받', True), (u'쏟', True), (u'씨받', True), (u'딱장받', True), (u'치걷', True), (u'믿', True), (u'치벋', True), (u'버림받', True), (u'북돋', True), (u'딛', True), (u'치고받', True), (u'욱걷', True), (u'물려받', True), (u'뜯', True), (u'줴뜯', True), (u'넘겨받', True), (u'안받', True), (u'내뻗', True), (u'내리쏟', True), (u'벋딛', True), (u'뒤묻', True), (u'뻗딛', True), (u'치뻗', True), (u'치닫', True), (u'줄밑걷', True), (u'굳', True), (u'내닫', True), (u'내림받', True)])
+
+not_h_irregular = dict([(u'들이좋', True), (u'터놓', True), (u'접어놓', True), (u'좋', True), (u'풀어놓', True), (u'내쌓', True), (u'꼴좋', True), (u'치쌓', True), (u'물어넣', True), (u'잇닿', True), (u'끝닿', True), (u'그러넣', True), (u'뽕놓', True), (u'낳', True), (u'내리찧', True), (u'힘닿', True), (u'내려놓', True), (u'세놓', True), (u'둘러놓', True), (u'들놓', True), (u'맞찧', True), (u'잡아넣', True), (u'돌라쌓', True), (u'덧쌓', True), (u'갈라땋', True), (u'주놓', True), (u'갈라놓', True), (u'들이닿', True), (u'집어넣', True), (u'닿', True), (u'의좋', True), (u'막놓', True), (u'내놓', True), (u'들여놓', True), (u'사놓', True), (u'썰레놓', True), (u'짓찧', True), (u'벋놓', True), (u'찧', True), (u'침놓', True), (u'들이찧', True), (u'둘러쌓', True), (u'털어놓', True), (u'담쌓', True), (u'돌라놓', True), (u'되잡아넣', True), (u'끌어넣', True), (u'덧놓', True), (u'맞닿', True), (u'처넣', True), (u'빻', True), (u'뻥놓', True), (u'내리쌓', True), (u'곱놓', True), (u'설레발놓', True), (u'우겨넣', True), (u'놓', True), (u'수놓', True), (u'써넣', True), (u'널어놓', True), (u'덮쌓', True), (u'연닿', True), (u'헛놓', True), (u'돌려놓', True), (u'되쌓', True), (u'욱여넣', True), (u'앗아넣', True), (u'올려놓', True), (u'헛방놓', True), (u'날아놓', True), (u'뒤놓', True), (u'업수놓', True), (u'가로놓', True), (u'맞놓', True), (u'펴놓', True), (u'내켜놓', True), (u'쌓', True), (u'끙짜놓', True), (u'들이쌓', True), (u'겹쌓', True), (u'기추놓', True), (u'넣', True), (u'불어넣', True), (u'늘어놓', True), (u'긁어놓', True), (u'어긋놓', True), (u'앞넣', True), (u'눌러놓', True), (u'땋', True), (u'들여쌓', True), (u'빗놓', True), (u'사이좋', True), (u'되놓', True), (u'헛불놓', True), (u'몰아넣', True), (u'먹놓', True), (u'밀쳐놓', True), (u'살닿', True), (u'피새놓', True), (u'빼놓', True), (u'하차놓', True), (u'틀어넣', True)])
+
+not_l_irregular = dict([(u'우러르', True), (u'따르', True), (u'붙따르', True), (u'늦치르', True), (u'다다르', True), (u'잇따르', True), (u'치르', True)])
+
 def is_s_irregular(infinitive, regular=False):
     if regular: 
         return False
     return match(infinitive[-1], u'*', u'*', u'ᆺ') and \
-         infinitive[-1] not in [u'벗', u'웃', u'씻', u'빗', 
-                                u'앗', u'뺏', u'솟', u'밧',
-                                u'긋', u'깃', u'엇']
+           not not_s_irregular.get(infinitive, False)
 
 def is_l_irregular(infinitive, regular=False):
-    if regular or infinitive in [u'따르']:
+    if regular:
         return False
-    return match(infinitive[-1], u'ᄅ', u'ㅡ', None)
+    return match(infinitive[-1], u'ᄅ', u'ㅡ', None) and \
+           not not_l_irregular.get(infinitive, False)
 
 def is_h_irregular(infinitive, regular=False):
     if regular:
         return False
     return (padchim(infinitive[-1]) == u'ᇂ' or infinitive[-1] == u'러') and \
-           infinitive[-1] not in [u'낳', u'넣', u'좋', u'찧', u'놓', u'쌓', u'닿']
+           not not_h_irregular.get(infinitive, False)
 
 def is_p_irregular(infinitive, regular=False):
-    if regular or infinitive in [u'에굽', u'예굽']:
+    if regular:
         return False
-    if infinitive in [u'바잡', u'빛접', u'숫접', u'흉업', u'묻잡', u'바잡']:
-        return True
     return match(infinitive[-1], u'*', u'*', u'ᆸ') and \
-           infinitive[-1] not in [u'잡', u'입', u'씹', u'줍', u'접',
-                                  u'좁', u'집', u'뽑', u'업']
+           not not_p_irregular.get(infinitive, False)
 
 def is_d_irregular(infinitive, regular=False):
-    if regular or infinitive in [u'욱걷', u'치걷', u'덧묻', u'줄밑걷', 
-                                 u'활걷', u'겉묻', u'그러묻', u'껴묻',
-                                 u'뒤묻', u'부르돋', u'북돋', u'부르걷']:
+    if regular:
         return False
-    elif infinitive in [u'깨닫', u'파묻', u'가로닫']:
-        return True
     return match(infinitive[-1], u'*', u'*', u'ᆮ') and \
-           infinitive[-1] not in [u'굳', u'믿', u'받', u'얻', u'벋', 
-                                  u'닫', u'뜯', u'딛', u'뻗', u'쏟']
+           not not_d_irregular.get(infinitive, False)
+
+verb_types = {
+    u'ㅅ 불규칙 동사 (irregular verb)': is_s_irregular,
+    u'ㄹ 불규칙 동사 (irregular verb)': is_l_irregular,
+    u'ㅎ 불규칙 동사 (irregular verb)': is_h_irregular,
+    u'ㅂ 불규칙 동사 (irregular verb)': is_p_irregular,
+    u'ㄷ 불규칙 동사 (irregular verb)': is_d_irregular
+}
+
+def verb_type(infinitive):
+    for irregular_name, func in verb_types.iteritems():
+        if func(base(infinitive)):
+            return irregular_name
+    return u'regular verb'
 
 @conjugation
 def base(infinitive, regular=False):
@@ -302,7 +322,7 @@ def declarative_present_informal_low(infinitive, regular=False, further_use=Fals
 
 @conjugation
 def declarative_present_informal_high(infinitive, regular=False):
-    infinitive = base2(infinitive)
+    infinitive = base2(infinitive, regular)
     if (infinitive == u'이' and not getattr(infinitive, 'hidden_padchim', False)) or \
        infinitive == u'아니':
         conjugation.reasons.append(u'에요 irregular')

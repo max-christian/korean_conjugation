@@ -2,6 +2,14 @@
 
 from korean.conjugator import *
 
+def test_type():
+    assert verb_type(u'낫다')   == u'ㅅ 불규칙 동사 (irregular verb)'
+    assert verb_type(u'모르다') == u'ㄹ 불규칙 동사 (irregular verb)'
+    assert verb_type(u'까맣다') == u'ㅎ 불규칙 동사 (irregular verb)'
+    assert verb_type(u'춥다')   == u'ㅂ 불규칙 동사 (irregular verb)'
+    assert verb_type(u'캐묻다') == u'ㄷ 불규칙 동사 (irregular verb)'
+    assert verb_type(u'알다')   == u'regular verb'
+
 def test_conjugation():
     assert u'멍는다' in (x[2] for x in conjugation.perform(u'먹다'))
 
@@ -21,8 +29,9 @@ def test_declarative_present():
     # needed a random verb to test regularifying ㅅ :-)
     assert declarative_present_informal_low(u'귯') == u'규어'
     assert declarative_present_informal_low(u'귯', regular=True) == u'귯어'
+    assert declarative_present_informal_low(u'치르다') == u'치러'
+    assert declarative_present_informal_low(u'줍다') == u'주워'
     assert declarative_present_informal_low(u'동트다') == u'동터'
-    assert declarative_present_informal_low(u'농트다') == u'농터'
     assert declarative_present_informal_low(u'농트다') == u'농터'
     assert declarative_present_informal_low(u'엇다') == u'엇어'
     assert declarative_present_informal_low(u'푸다') == u'퍼'
@@ -145,7 +154,8 @@ def test_declarative_present():
     assert declarative_present_informal_low(u'덥다') == u'더워'
     assert declarative_present_informal_low(u'푸르다') == u'푸르러'
     assert declarative_present_informal_low(u'번거롭다') == u'번거로워'
-    
+   
+    assert declarative_present_informal_high(u'굽다', regular=True) == u'굽어요'
     assert declarative_present_informal_high(u'가다') == u'가요'
 
     assert declarative_present_formal_low(u'가다') == u'간다'
