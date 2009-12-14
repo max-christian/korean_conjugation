@@ -20,7 +20,7 @@ class Root(object):
     favicon_ico = cherrypy.tools.staticfile.handler(os.path.realpath(__file__ + '/../favicon.ico'))
 
     @cherrypy.expose
-    def index(self, infinitive='하다', regular=False, json=False):
+    def index(self, infinitive='하다', regular=False, json=False, **everything_else):
         cherrypy.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
         try:
             infinitive = infinitive.decode('utf-8')
