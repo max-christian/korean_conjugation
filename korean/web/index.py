@@ -11,6 +11,7 @@ import atexit
 import threading
 import cherrypy
 import korean.conjugator
+import korean.hangeul
 from datetime import datetime
 import simplejson
 
@@ -36,11 +37,14 @@ class Root(object):
         template = env.get_template('index.html')
         both_regular_and_irregular = infinitive[:-1] in \
                                      korean.conjugator.both_regular_and_irregular
+        not_korean = not all((korean.hangeul.is_hangeul(x) 
+                              for x in infinitive))
         verb_type = korean.conjugator.verb_type(infinitive[:-1])
         return template.render(year=datetime.now().year,
                                results=results,
                                infinitive=infinitive,
                                regular=regular,
+                               not_korean=not_korean,
                                verb_type=verb_type,
                                both_regular_and_irregular=both_regular_and_irregular
                               ).encode('utf-8')

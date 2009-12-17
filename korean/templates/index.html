@@ -59,6 +59,10 @@ table {
 <div class="message">
 The verb "{{ infinitive }}" has both regular and irregular forms depending on its meaning. You can change which conjugation you are viewing by toggling the "regular" checkbox and clicking the "conjugate!" button.
 </div>
+{% elif not_korean %}
+<div class="message">
+The verb "{{ infinitive }}" does not appear to be a Korean verb. Dongsa.net only understands Korean radicals input in 한글 (Hangeul, the Korean script). The default conjugation rules have been applied to the infinitive you entered but they might not make sense.
+</div>
 {% else %}
 <div class="type">
 {{ infinitive }} is a {{ verb_type }}.
