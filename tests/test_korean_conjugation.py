@@ -4,11 +4,12 @@ from korean.conjugator import *
 
 def test_type():
     assert verb_type(u'낫다')   == u'ㅅ 불규칙 동사 (irregular verb)'
-    assert verb_type(u'모르다') == u'ㄹ 불규칙 동사 (irregular verb)'
+    assert verb_type(u'모르다') == u'르 불규칙 동사 (irregular verb)'
     assert verb_type(u'까맣다') == u'ㅎ 불규칙 동사 (irregular verb)'
     assert verb_type(u'춥다')   == u'ㅂ 불규칙 동사 (irregular verb)'
     assert verb_type(u'캐묻다') == u'ㄷ 불규칙 동사 (irregular verb)'
-    assert verb_type(u'알다')   == u'regular verb'
+    assert verb_type(u'알다')   == u'ㄹ 불규칙 동사 (irregular verb)'
+    assert verb_type(u'가다')   == u'regular verb'
 
 def test_conjugation():
     assert u'멍는다' in (x[2] for x in conjugation.perform(u'먹다'))
