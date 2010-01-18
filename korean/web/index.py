@@ -37,7 +37,7 @@ class Root(object):
         template = env.get_template('index.html')
         both_regular_and_irregular = infinitive[:-1] in \
                                      korean.conjugator.both_regular_and_irregular
-        not_korean = not all((korean.hangeul.is_hangeul(x) 
+        not_korean = not all((korean.hangeul.is_hangeul(x) or x == ' '
                               for x in infinitive))
         verb_type = korean.conjugator.verb_type(infinitive[:-1])
         return template.render(year=datetime.now().year,
