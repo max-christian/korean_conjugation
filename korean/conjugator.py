@@ -158,41 +158,44 @@ not_l_euh_irregular = dict([(u'우러르', True), (u'따르', True), (u'붙따�
 
 not_l_irregular = dict()
 
+def after_last_space(infinitive):
+    return infinitive.split(' ')[-1]
+
 def is_s_irregular(infinitive, regular=False):
     if regular: 
         return False
     return match(infinitive[-1], u'*', u'*', u'ᆺ') and \
-           not not_s_irregular.get(infinitive, False)
+           not not_s_irregular.get(after_last_space(infinitive), False)
 
 def is_l_irregular(infinitive, regular=False):
     if regular:
         return False
     return match(infinitive[-1], u'*', u'*', u'ᆯ') and \
-           not not_l_irregular.get(infinitive, False)
+           not not_l_irregular.get(after_last_space(infinitive), False)
 
 def is_l_euh_irregular(infinitive, regular=False):
     if regular:
         return False
     return match(infinitive[-1], u'ᄅ', u'ㅡ', None) and \
-           not not_l_euh_irregular.get(infinitive, False)
+           not not_l_euh_irregular.get(after_last_space(infinitive), False)
 
 def is_h_irregular(infinitive, regular=False):
     if regular:
         return False
     return (padchim(infinitive[-1]) == u'ᇂ' or infinitive[-1] == u'러') and \
-           not not_h_irregular.get(infinitive, False)
+           not not_h_irregular.get(after_last_space(infinitive), False)
 
 def is_p_irregular(infinitive, regular=False):
     if regular:
         return False
     return match(infinitive[-1], u'*', u'*', u'ᆸ') and \
-           not not_p_irregular.get(infinitive, False)
+           not not_p_irregular.get(after_last_space(infinitive), False)
 
 def is_d_irregular(infinitive, regular=False):
     if regular:
         return False
     return match(infinitive[-1], u'*', u'*', u'ᆮ') and \
-           not not_d_irregular.get(infinitive, False)
+           not not_d_irregular.get(after_last_space(infinitive), False)
 
 verb_types = {
     u'ㅅ 불규칙 동사 (irregular verb)': is_s_irregular,

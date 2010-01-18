@@ -28,6 +28,7 @@ def test_merge():
 
 def test_declarative_present():
     assert declarative_present_informal_low(u'받다') == u'받아'
+    assert declarative_present_informal_low(u'주고 받다') == u'주고 받아'
     assert declarative_present_informal_low(u'민주적이다') == u'민주적이야'
     assert declarative_present_informal_high(u'민주적이다') == u'민주적이에요'
     # needed a random verb to test regularifying ㅅ :-)
