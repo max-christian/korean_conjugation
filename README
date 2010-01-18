@@ -9,5 +9,5 @@ sudo easy_install virtualenv
 virtualenv . --no-site-packages
 pip install -E . -r requirements.txt
 source bin/activate
-./test
+python test.py
 ./dev_server
