@@ -32,7 +32,7 @@ class Root(object):
                                                         regular=regular)
 
         if json:
-            return simplejson.dumps([[u'', u'<script>document.write("<a href=\"http://dongsa.net?infinitive=' + infinitive + '\">Click to conjugate!</a>");</script>']], ensure_ascii=False).encode('utf-8')
+            return simplejson.dumps([[],[],[],[u'', u'<script>document.write("<a href=\"http://dongsa.net?infinitive=' + infinitive + '\">Click to conjugate!</a>");</script>', u'', []]], ensure_ascii=False).encode('utf-8')
         
         template = env.get_template('index.html')
         both_regular_and_irregular = infinitive[:-1] in \
