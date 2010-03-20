@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+# (c) 2010 Dan Bravender - licensed under the AGPL 3.0
+
 import sys
 import os
 import traceback
