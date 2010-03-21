@@ -62,5 +62,5 @@ def setup_server():
     cherrypy.tree.mount(Root(), '/index.py')
 
 def dev_server():
-    cherrypy.config.update({'server.socket_port': 8888})
+    cherrypy.config.update({'server.socket_port': 9001})
     cherrypy.quickstart(Root())
