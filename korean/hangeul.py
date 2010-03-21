@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# (C) 2009 Dan Bravender
+# (C) 2010 Dan Bravender - licensed under the AGPL 3.0
 
 class Geulja(unicode):
     u'''Geulja is used to track modifications that have been made to

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+# (c) 2010 Dan Bravender - licensed under the AGPL 3.0
+
 import sys
 import os
 import traceback
@@ -24,6 +27,7 @@ class Root(object):
     def index(self, infinitive='하다', regular=False, json=False, **everything_else):
         cherrypy.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
         try:
+            infinitive = infinitive.strip()
             infinitive = infinitive.decode('utf-8')
         except:
             pass
