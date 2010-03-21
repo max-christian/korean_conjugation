@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# (c) 2010 Dan Bravender - licensed under the AGPL 3.0
+
 from hangeul_utils import *
 from korean_conjugator import *
 import time

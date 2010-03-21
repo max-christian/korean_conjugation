@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# (C) 2009 Dan Bravender
+# (C) 2009 Dan Bravender - licensed under the AGPL 3.0
 
 from hangeul import join, lead, vowel, padchim, is_hangeul
 
