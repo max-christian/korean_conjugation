@@ -27,6 +27,8 @@ def test_merge():
     assert merge(u'맡', u'세요') == u'맡으세요'
 
 def test_declarative_present():
+    assert declarative_present_informal_low(u'이르다', regular=True) == u'일러'
+    assert declarative_present_informal_low(u'이르다') == u'이르러'
     assert declarative_present_informal_low(u'받다') == u'받아'
     assert declarative_present_informal_low(u'주고 받다') == u'주고 받아'
     assert declarative_present_informal_low(u'민주적이다') == u'민주적이야'
