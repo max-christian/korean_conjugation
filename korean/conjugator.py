@@ -295,6 +295,9 @@ def declarative_present_informal_low(infinitive, regular=False, further_use=Fals
         conjugation.reasons.append(u'야 irregular')
         return infinitive + u'야'
     # 르 irregular
+    if regular and infinitive == u'이르':
+        return u'일러'
+
     if is_l_euh_irregular(infinitive, regular):
         new_base = infinitive[:-2] + join(lead(infinitive[-2]), 
                                           vowel(infinitive[-2]), u'ᆯ')
