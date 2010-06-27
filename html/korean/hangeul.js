@@ -94,8 +94,9 @@ hangeul = {
 }
 
 // Export functions to node
-if (exports) {
+try {
     for (f in hangeul) {
         exports[f] = hangeul[f];
     }
+} catch(e) {
 }

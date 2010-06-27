@@ -1,7 +1,10 @@
 // vim: set ts=4 sw=4 expandtab
 // (C) 2010 Dan Bravender - licensed under the AGPL 3.0
 
-var hangeul = require('./hangeul');
+try {
+    var hangeul = require('./hangeul');
+} catch(e) {
+}
 
 var pronunciation = {};
 
@@ -211,8 +214,9 @@ pronunciation.get_pronunciation = function(word) {
 };
 
 // Export functions to node
-if (exports) {
+try {
     for (f in pronunciation) {
         exports[f] = pronunciation[f];
     }
+} catch(e) {
 }
