@@ -21,7 +21,7 @@ class Geulja(unicode):
             g.original_padchim = self.original_padchim
         return g
 */
-hangeul = {
+var hangeul = {
     // Equations lifted directly from:
     // http://www.kfunigraz.ac.at/~katzer/korean_hangul_unicode.html
     is_hangeul: function(character) {
