@@ -238,3 +238,116 @@ assert.equal(conjugator.declarative_past_informal_low('하'), '했어');
 assert.equal(conjugator.declarative_past_informal_low('가'), '갔어');
 assert.equal(conjugator.declarative_past_informal_low('먹'), '먹었어');
 assert.equal(conjugator.declarative_past_informal_low('오'), '왔어');
+
+assert.equal(conjugator.declarative_past_informal_high('하다'), '했어요');
+assert.equal(conjugator.declarative_past_informal_high('가다'), '갔어요');
+
+assert.equal(conjugator.declarative_past_formal_low('가다'), '갔다');
+
+assert.equal(conjugator.declarative_past_formal_high('가다'), '갔습니다');
+
+assert.equal(conjugator.future_base('가다'), '갈');
+assert.equal(conjugator.future_base('가늘다'), '가늘');
+assert.equal(conjugator.future_base('좋다'), '좋을');
+assert.equal(conjugator.future_base('뵙다'), '뵐');
+
+assert.equal(conjugator.declarative_future_informal_low('끌어넣다'), '끌어넣을 거야');
+assert.equal(conjugator.declarative_future_informal_low('좁디좁다'), '좁디좁을 거야');
+assert.equal(conjugator.declarative_future_informal_low('가다'), '갈 거야');
+assert.equal(conjugator.declarative_future_informal_low('믿다'), '믿을 거야');
+assert.equal(conjugator.declarative_future_informal_low('알다'), '알 거야');
+
+assert.equal(conjugator.declarative_future_informal_high('하얗다'), '하얄 거예요');
+assert.equal(conjugator.declarative_future_informal_high('가다'), '갈 거예요');
+assert.equal(conjugator.declarative_future_informal_high('믿다'), '믿을 거예요');
+assert.equal(conjugator.declarative_future_informal_high('걷다'), '걸을 거예요');
+assert.equal(conjugator.declarative_future_informal_high('알다'), '알 거예요');
+
+assert.equal(conjugator.declarative_future_formal_low('가다'), '갈 거다');
+assert.equal(conjugator.declarative_future_formal_low('앉다'), '앉을 거다');
+assert.equal(conjugator.declarative_future_formal_low('알다'), '알 거다');
+
+assert.equal(conjugator.declarative_future_formal_high('가다'), '갈 겁니다');
+assert.equal(conjugator.declarative_future_formal_high('앉다'), '앉을 겁니다');
+assert.equal(conjugator.declarative_future_formal_high('알다'), '알 겁니다');
+
+assert.equal(conjugator.declarative_future_conditional_informal_low('가다'), '가겠어');
+
+assert.equal(conjugator.declarative_future_conditional_informal_high('가다'), '가겠어요');
+
+assert.equal(conjugator.declarative_future_conditional_formal_low('가다'), '가겠다');
+
+assert.equal(conjugator.declarative_future_conditional_formal_high('가다'), '가겠습니다');
+
+assert.equal(conjugator.inquisitive_present_informal_low('가다'), '가?');
+assert.equal(conjugator.inquisitive_present_informal_low('하다'), '해?');
+
+assert.equal(conjugator.inquisitive_present_informal_high('가다'), '가요?');
+
+assert.equal(conjugator.inquisitive_present_formal_low('가다'), '가니?');
+assert.equal(conjugator.inquisitive_present_formal_low('알다'), '아니?');
+
+assert.equal(conjugator.inquisitive_present_formal_high('가다'), '갑니까?');
+assert.equal(conjugator.inquisitive_present_formal_high('까맣다'), '까맣습니까?');
+
+assert.equal(conjugator.inquisitive_past_informal_low('가다'), '갔어?');
+/*
+
+assert.equal(conjugator.inquisitive_past_informal_high('가다'), '갔어요?');
+
+assert.equal(conjugator.inquisitive_past_formal_low('가다'), '갔니?');
+
+assert.equal(conjugator.inquisitive_past_formal_high('가다'), '갔습니까?');
+
+assert.equal(conjugator.imperative_present_informal_low('가다'), '가');
+
+assert.equal(conjugator.imperative_present_informal_high('가다'), '가세요');
+assert.equal(conjugator.imperative_present_informal_high('돕다'), '도우세요');
+assert.equal(conjugator.imperative_present_informal_high('걷다'), '걸으세요');
+assert.equal(conjugator.imperative_present_informal_high('눕다'), '누우세요');
+assert.equal(conjugator.imperative_present_informal_high('살다'), '사세요');
+assert.equal(conjugator.imperative_present_informal_high('걸다'), '거세요');
+
+assert.equal(conjugator.imperative_present_formal_low('가다'), '가라');
+assert.equal(conjugator.imperative_present_formal_low('굽다'), '구워라');
+assert.equal(conjugator.imperative_present_formal_low('살다'), '살아라');
+assert.equal(conjugator.imperative_present_formal_low('서'), '서라');
+assert.equal(conjugator.imperative_present_formal_low('뵙다'), '봬라');
+
+assert.equal(conjugator.imperative_present_formal_high('가다'), '가십시오');
+assert.equal(conjugator.imperative_present_formal_high('걷다'), '걸으십시오');
+assert.equal(conjugator.imperative_present_formal_high('돕다'), '도우십시오');
+assert.equal(conjugator.imperative_present_formal_high('알다'), '아십시오');
+assert.equal(conjugator.imperative_present_formal_high('눕다'), '누우십시오');
+assert.equal(conjugator.imperative_present_formal_high('뵙다'), '뵈십시오');
+
+assert.equal(conjugator.propositive_present_informal_low('가'), '가');
+
+assert.equal(conjugator.propositive_present_informal_high('가'), '가요');
+
+assert.equal(conjugator.propositive_present_formal_low('가'), '가자');
+
+assert.equal(conjugator.propositive_present_formal_high('가'), '갑시다');
+assert.equal(conjugator.propositive_present_formal_high('살'), '삽시다');
+assert.equal(conjugator.propositive_present_formal_high('눕다'), '누웁시다');
+assert.equal(conjugator.propositive_present_formal_high('돕다'), '도웁시다');
+
+assert.equal(conjugator.connective_if('낫'), '나으면');
+assert.equal(conjugator.connective_if('짓'), '지으면');
+assert.equal(conjugator.connective_if('짖'), '짖으면');
+assert.equal(conjugator.connective_if('가'), '가면');
+assert.equal(conjugator.connective_if('알'), '알면');
+assert.equal(conjugator.connective_if('살'), '살면');
+assert.equal(conjugator.connective_if('푸르다'), '푸르면');
+assert.equal(conjugator.connective_if('돕다'), '도우면');
+
+assert.equal(conjugator.connective_and('가다'), '가고');
+
+assert.equal(conjugator.nominal_ing('살다'), '삶');
+assert.equal(conjugator.nominal_ing('걷다'), '걸음');
+assert.equal(conjugator.nominal_ing('가져오다'), '가져옴');
+assert.equal(conjugator.nominal_ing('걷다'), '걸음');
+assert.equal(conjugator.nominal_ing('그렇다'), '그럼');
+assert.equal(conjugator.nominal_ing('까맣다'), '까맘');
+assert.equal(conjugator.nominal_ing('돕다'), '도움');
+*/

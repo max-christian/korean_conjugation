@@ -44,7 +44,7 @@ conjugator.vowel_contraction = function(vowel1, vowel2, new_vowel, trace) {
 
 conjugator.drop_l = function(x, y) {
     if (hangeul.padchim(x[x.length-1]) == 'ᆯ') {
-        //conjugation.reasons.append(u'drop ㄹ')
+        //conjugation.reasons.append('drop ㄹ')
         return x.substring(0, x.length-1) +
                hangeul.join(hangeul.lead(x[x.length-1]),
                             hangeul.vowel(x[x.length-1])) +
@@ -54,7 +54,7 @@ conjugator.drop_l = function(x, y) {
 
 conjugator.drop_l_and_borrow_padchim = function(x, y) {
     if (hangeul.padchim(x.charAt(x.length-1)) == 'ᆯ') {
-        //conjugation.reasons.append(u'drop %s borrow padchim' % padchim(x[-1]))
+        //conjugation.reasons.append('drop %s borrow padchim' % padchim(x[-1]))
         return x.substring(0, x.length-1) +
                hangeul.join(hangeul.lead(x[x.length-1]),
                             hangeul.vowel(x[x.length-1]),
@@ -264,7 +264,7 @@ conjugator.base2 = function(infinitive, regular) {
                                           hangeul.join(hangeul.lead(infinitive[infinitive.length-1]),
                                                        hangeul.vowel(infinitive[infinitive.length-1])),
                                           '이');
-        //conjugator.reasons.append(u'ㅎ irregular (%s -> %s)' % (infinitive,
+        //conjugator.reasons.append('ㅎ irregular (%s -> %s)' % (infinitive,
         //                                                        new_infinitive))
     } else if (conjugator.is_p_irregular(infinitive, regular)) {
         // only some verbs get ㅗ (highly irregular)
@@ -278,7 +278,7 @@ conjugator.base2 = function(infinitive, regular) {
                                           hangeul.join(hangeul.lead(infinitive[infinitive.length-1]),
                                                        hangeul.vowel(infinitive[infinitive.length-1])),
                                           hangeul.join('ᄋ', new_vowel))
-        //conjugation.reasons.append(u'ㅂ irregular (%s -> %s)' % (infinitive,
+        //conjugation.reasons.append('ㅂ irregular (%s -> %s)' % (infinitive,
         //                                                        new_infinitive))
     } else if (conjugator.is_d_irregular(infinitive, regular)) {
         new_infinitive = new hangeul.Geulja(infinitive.substring(0, infinitive.length-1) +
@@ -286,14 +286,14 @@ conjugator.base2 = function(infinitive, regular) {
                                             hangeul.vowel(infinitive[infinitive.length-1]),
                                              'ᆯ'));
         new_infinitive.original_padchim = 'ᆮ';
-        //conjugation.reasons.append(u'ㄷ irregular (%s -> %s)' % (infinitive,
+        //conjugation.reasons.append('ㄷ irregular (%s -> %s)' % (infinitive,
         //                                                        new_infinitive))
     } else if (conjugator.is_s_irregular(infinitive, regular)) {
         new_infinitive = new hangeul.Geulja(infinitive.substring(0, infinitive.length-1) +
                                             hangeul.join(hangeul.lead(infinitive[infinitive.length-1]),
                                             hangeul.vowel(infinitive[infinitive.length-1])));
         new_infinitive.hidden_padchim = true;
-        //conjugation.reasons.append(u'ㅅ irregular (%s -> %s [hidden padchim])' % 
+        //conjugation.reasons.append('ㅅ irregular (%s -> %s [hidden padchim])' % 
         //                           (infinitive, new_infinitive))
     }
     return new_infinitive;
@@ -329,7 +329,7 @@ conjugator.declarative_present_informal_low = function(infinitive, regular, furt
     infinitive = conjugator.base2(infinitive, regular);
     if (!further_use && ((infinitive[infinitive.length-1] == '이' && !infinitive.hidden_padchim) ||
                          infinitive == '아니')) {
-        //conjugation.reasons.append(u'야 irregular')
+        //conjugation.reasons.append('야 irregular')
         return infinitive + '야';
     }
     // 르 irregular
@@ -344,17 +344,17 @@ conjugator.declarative_present_informal_low = function(infinitive, regular, furt
         if (infinitive.substring(infinitive.length-2, infinitive.length) in {'푸르': true, '이르': true}) {
             new_base = new_base + hangeul.join('ᄅ',
                                                hangeul.vowel(hangeul.find_vowel_to_append(new_base)))
-            //conjugation.reasons.append(u'irregular stem + %s -> %s' % 
+            //conjugation.reasons.append('irregular stem + %s -> %s' % 
             //                           (infinitive, new_base))
             return infinitive + '러';
         } else if (hangeul.find_vowel_to_append(infinitive.substring(0, infinitive.length-1)) == '아') {
             new_base += '라'
-            //conjugation.reasons.append(u'르 irregular stem change [%s -> %s]' %
+            //conjugation.reasons.append('르 irregular stem change [%s -> %s]' %
             //                           (infinitive, new_base))
             return new_base;
         } else {
             new_base += '러';
-            //conjugation.reasons.append(u'르 irregular stem change [%s -> %s]' %
+            //conjugation.reasons.append('르 irregular stem change [%s -> %s]' %
             //                           (infinitive, new_base))
             return new_base;
         }
@@ -371,11 +371,11 @@ conjugator.declarative_present_informal_high = function(infinitive, regular) {
     infinitive = conjugator.base2(infinitive, regular)
     if ((infinitive.charAt(infinitive.length-1) == '이' && !infinitive.hidden_padchim) ||
         infinitive == '아니') {
-        //conjugation.reasons.append(u'에요 irregular')
+        //conjugation.reasons.append('에요 irregular')
         return infinitive + '에요';
     }
     return conjugator.merge(conjugator.declarative_present_informal_low(infinitive, regular, true), '요');
-}
+};
 conjugator.declarative_present_informal_high.conjugation = true;
 
 conjugator.declarative_present_formal_low = function(infinitive, regular) {
@@ -383,7 +383,7 @@ conjugator.declarative_present_formal_low = function(infinitive, regular) {
         return conjugator.drop_l_and_borrow_padchim(conjugator.base(infinitive, regular), '는다');
     }
     return conjugator.merge(conjugator.base(infinitive, regular), '는다');
-}
+};
 conjugator.declarative_present_formal_low.conjugation = true;
 
 conjugator.declarative_present_formal_high = function(infinitive, regular) {
@@ -391,7 +391,7 @@ conjugator.declarative_present_formal_high = function(infinitive, regular) {
         return conjugator.drop_l_and_borrow_padchim(conjugator.base(infinitive, regular), '습니다');
     }
     return conjugator.merge(conjugator.base(infinitive, regular), '습니다')
-}
+};
 conjugator.declarative_present_formal_high.conjugation = true;
 
 conjugator.past_base = function(infinitive, regular) {
@@ -401,154 +401,174 @@ conjugator.past_base = function(infinitive, regular) {
     } else {
         return conjugator.merge(ps, '었');
     }
-}
+};
 conjugator.past_base.conjugation = true;
 
 conjugator.declarative_past_informal_low = function(infinitive, regular) {
     return conjugator.merge(conjugator.past_base(infinitive, regular), '어');
-}
+};
 conjugator.declarative_past_informal_low.conjugation = true;
 
+conjugator.declarative_past_informal_high = function(infinitive, regular) {
+    return conjugator.merge(conjugator.declarative_past_informal_low(infinitive, regular), '요');
+};
+conjugator.declarative_past_informal_high.conjugation = true;
+
+conjugator.declarative_past_formal_low = function(infinitive, regular) {
+    return conjugator.merge(conjugator.past_base(infinitive, regular), '다');
+};
+conjugator.declarative_past_formal_low.conjugation = true;
+
+conjugator.declarative_past_formal_high = function(infinitive, regular) {
+    return conjugator.merge(conjugator.past_base(infinitive, regular), '습니다');
+};
+conjugator.declarative_past_formal_high.conjugation = true;
+
+conjugator.future_base = function(infinitive, regular) {
+    if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+        return conjugator.drop_l_and_borrow_padchim(conjugator.base3(infinitive, regular), '을');
+    }
+    return conjugator.merge(conjugator.base3(infinitive, regular), '을');
+};
+conjugator.future_base.conjugation = true;
+
+conjugator.declarative_future_informal_low = function(infinitive, regular) {
+    return conjugator.merge(conjugator.future_base(infinitive, regular), ' 거야');
+};
+conjugator.declarative_future_informal_low.conjugation = true;
+
+conjugator.declarative_future_informal_high = function(infinitive, regular) {
+    return conjugator.merge(conjugator.future_base(infinitive, regular), ' 거예요');
+};
+conjugator.declarative_future_informal_high.conjugation = true;
+
+conjugator.declarative_future_formal_low = function(infinitive, regular) {
+    return conjugator.merge(conjugator.future_base(infinitive, regular), ' 거다');
+};
+conjugator.declarative_future_formal_low.conjugation = true;
+
+conjugator.declarative_future_formal_high = function(infinitive, regular) {
+    return conjugator.merge(conjugator.future_base(infinitive, regular), ' 겁니다');
+};
+conjugator.declarative_future_formal_high.conjugation = true;
+
+conjugator.declarative_future_conditional_informal_low = function(infinitive, regular) {
+    return conjugator.merge(conjugator.base(infinitive, regular), '겠어');
+};
+conjugator.declarative_future_conditional_informal_low.conjugation = true;
+
+conjugator.declarative_future_conditional_informal_high = function(infinitive, regular) {
+    return conjugator.merge(conjugator.base(infinitive, regular), '겠어요');
+};
+conjugator.declarative_future_conditional_informal_high.conjugation = true;
+
+conjugator.declarative_future_conditional_formal_low = function(infinitive, regular) {
+    return conjugator.merge(conjugator.base(infinitive, regular), '겠다');
+};
+conjugator.declarative_future_conditional_formal_low.conjugation = true;
+
+conjugator.declarative_future_conditional_formal_high = function(infinitive, regular) {
+    return conjugator.merge(conjugator.base(infinitive, regular), '겠습니다');
+};
+conjugator.declarative_future_conditional_formal_high.conjugation = true;
+
+conjugator.inquisitive_present_informal_low = function(infinitive, regular) {
+    return conjugator.merge(conjugator.declarative_present_informal_low(infinitive, regular), '?');
+};
+conjugator.inquisitive_present_informal_low.conjugation = true;
+
+conjugator.inquisitive_present_informal_high = function(infinitive, regular) {
+    return conjugator.merge(conjugator.declarative_present_informal_high(infinitive, regular), '?');
+};
+conjugator.inquisitive_present_informal_high.conjugation = true;
+
+conjugator.inquisitive_present_formal_low = function(infinitive, regular) {
+    infinitive = conjugator.base(infinitive, regular);
+    if (conjugator.is_l_irregular(infinitive, regular)) {
+        return conjugator.drop_l(infinitive, '니?');
+    }
+    return conjugator.merge(infinitive, '니?');
+};
+conjugator.inquisitive_present_formal_low.conjugation = true;
+
+conjugator.inquisitive_present_formal_high = function(infinitive, regular) {
+    infinitive = conjugator.base(infinitive, regular);
+    if (conjugator.is_l_irregular(infinitive, regular)) {
+        return conjugator.drop_l_and_borrow_padchim(infinitive, '습니까?');
+    }
+    return conjugator.merge(infinitive, '습니까?');
+};
+conjugator.inquisitive_present_formal_high.conjugation = true;
+
+conjugator.inquisitive_past_informal_low = function(infinitive, regular) {
+    return conjugator.declarative_past_informal_low(infinitive, regular) + '?';
+};
+conjugator.inquisitive_past_informal_low.conjugation = true;
+
 /*
-@conjugation
-def declarative_past_informal_high(infinitive, regular=False):
-    return merge(declarative_past_informal_low(infinitive, regular), u'요')
 
-@conjugation
-def declarative_past_formal_low(infinitive, regular=False):
-    return merge(past_base(infinitive, regular), u'다')
+conjugator.inquisitive_past_informal_high(infinitive, regular):
+    return conjugator.merge(declarative_past_informal_high(infinitive, regular), '?')
 
-@conjugation
-def declarative_past_formal_high(infinitive, regular=False):
-    return merge(past_base(infinitive, regular), u'습니다')
 
-@conjugation
-def future_base(infinitive, regular=False):
-    if is_l_irregular(base(infinitive, regular)):
-        return drop_l_and_borrow_padchim(base3(infinitive, regular), u'을')
-    return merge(base3(infinitive, regular), u'을')
+conjugator.inquisitive_past_formal_low(infinitive, regular):
+    return conjugator.merge(past_base(infinitive, regular), '니?')
 
-@conjugation
-def declarative_future_informal_low(infinitive, regular=False):
-    return merge(future_base(infinitive, regular), u' 거야')
 
-@conjugation
-def declarative_future_informal_high(infinitive, regular=False):
-    return merge(future_base(infinitive, regular), u' 거예요')
+conjugator.inquisitive_past_formal_high(infinitive, regular):
+    return conjugator.merge(past_base(infinitive, regular), '습니까?')
 
-@conjugation
-def declarative_future_formal_low(infinitive, regular=False):
-    return merge(future_base(infinitive, regular), u' 거다')
 
-@conjugation
-def declarative_future_formal_high(infinitive, regular=False):
-    return merge(future_base(infinitive, regular), u' 겁니다')
-
-@conjugation
-def declarative_future_conditional_informal_low(infinitive, regular=False):
-    return merge(base(infinitive, regular), u'겠어')
-
-@conjugation
-def declarative_future_conditional_informal_high(infinitive, regular=False):
-    return merge(base(infinitive, regular), u'겠어요')
-
-@conjugation
-def declarative_future_conditional_formal_low(infinitive, regular=False):
-    return merge(base(infinitive, regular), u'겠다')
-
-@conjugation
-def declarative_future_conditional_formal_high(infinitive, regular=False):
-    return merge(base(infinitive, regular), u'겠습니다')
-
-@conjugation
-def inquisitive_present_informal_low(infinitive, regular=False):
-    return merge(declarative_present_informal_low(infinitive, regular), u'?')
-
-@conjugation
-def inquisitive_present_informal_high(infinitive, regular=False):
-    return merge(declarative_present_informal_high(infinitive, regular), u'?')
-
-@conjugation
-def inquisitive_present_formal_low(infinitive, regular=False):
-    infinitive = base(infinitive, regular)
-    if is_l_irregular(infinitive, regular):
-        return drop_l(infinitive, u'니?')
-    return merge(infinitive, u'니?')
-
-@conjugation
-def inquisitive_present_formal_high(infinitive, regular=False):
-    infinitive = base(infinitive, regular)
-    if is_l_irregular(infinitive, regular):
-        return drop_l_and_borrow_padchim(infinitive, u'습니까?')
-    return merge(infinitive, u'습니까?')
-
-@conjugation
-def inquisitive_past_informal_low(infinitive, regular=False):
-    return declarative_past_informal_low(infinitive, regular) + u'?'
-
-@conjugation
-def inquisitive_past_informal_high(infinitive, regular=False):
-    return merge(declarative_past_informal_high(infinitive, regular), u'?')
-
-@conjugation
-def inquisitive_past_formal_low(infinitive, regular=False):
-    return merge(past_base(infinitive, regular), u'니?')
-
-@conjugation
-def inquisitive_past_formal_high(infinitive, regular=False):
-    return merge(past_base(infinitive, regular), u'습니까?')
-
-@conjugation
-def imperative_present_informal_low(infinitive, regular=False):
+conjugator.imperative_present_informal_low(infinitive, regular):
     return declarative_present_informal_low(infinitive, regular)
 
-@conjugation
-def imperative_present_informal_high(infinitive, regular=False):
+
+conjugator.imperative_present_informal_high(infinitive, regular):
     if is_l_irregular(base(infinitive, regular)):
-        return drop_l(base3(infinitive, regular), u'세요')
-    return merge(base3(infinitive, regular), u'세요')
+        return drop_l(base3(infinitive, regular), '세요')
+    return conjugator.merge(base3(infinitive, regular), '세요')
 
-@conjugation
-def imperative_present_formal_low(infinitive, regular=False):
-    return merge(imperative_present_informal_low(infinitive, regular), u'라')
 
-@conjugation
-def imperative_present_formal_high(infinitive, regular=False):
+conjugator.imperative_present_formal_low(infinitive, regular):
+    return conjugator.merge(imperative_present_informal_low(infinitive, regular), '라')
+
+
+conjugator.imperative_present_formal_high(infinitive, regular):
     if is_l_irregular(base(infinitive, regular)):
-        return drop_l(base3(infinitive, regular), u'십시오')
-    return merge(base3(infinitive, regular), u'십시오')
+        return drop_l(base3(infinitive, regular), '십시오')
+    return conjugator.merge(base3(infinitive, regular), '십시오')
 
-@conjugation
-def propositive_present_informal_low(infinitive, regular=False):
+
+conjugator.propositive_present_informal_low(infinitive, regular):
     return declarative_present_informal_low(infinitive, regular)
 
-@conjugation
-def propositive_present_informal_high(infinitive, regular=False):
+
+conjugator.propositive_present_informal_high(infinitive, regular):
     return declarative_present_informal_high(infinitive, regular)
 
-@conjugation
-def propositive_present_formal_low(infinitive, regular=False):
-    return merge(base(infinitive, regular), u'자')
 
-@conjugation
-def propositive_present_formal_high(infinitive, regular=False):
+conjugator.propositive_present_formal_low(infinitive, regular):
+    return conjugator.merge(base(infinitive, regular), '자')
+
+
+conjugator.propositive_present_formal_high(infinitive, regular):
     infinitive = base(infinitive)
     if is_l_irregular(infinitive, regular):
-        return drop_l_and_borrow_padchim(base3(infinitive, regular), u'읍시다')
-    return merge(base3(infinitive, regular), u'읍시다')
+        return drop_l_and_borrow_padchim(base3(infinitive, regular), '읍시다')
+    return conjugator.merge(base3(infinitive, regular), '읍시다')
 
-@conjugation
-def connective_if(infinitive, regular=False):
-    return merge(base3(infinitive, regular), u'면')
 
-@conjugation
-def connective_and(infinitive, regular=False):
+conjugator.connective_if(infinitive, regular):
+    return conjugator.merge(base3(infinitive, regular), '면')
+
+
+conjugator.connective_and(infinitive, regular):
     infinitive = base(infinitive, regular)
-    return merge(base(infinitive, regular), u'고')
+    return conjugator.merge(base(infinitive, regular), '고')
 
-@conjugation
-def nominal_ing(infinitive, regular=False):
-    return merge(base3(infinitive, regular), u'음')
+
+conjugator.nominal_ing(infinitive, regular):
+    return conjugator.merge(base3(infinitive, regular), '음')
 */
 
 
