@@ -291,7 +291,6 @@ assert.equal(conjugator.inquisitive_present_formal_high('가다'), '갑니까?')
 assert.equal(conjugator.inquisitive_present_formal_high('까맣다'), '까맣습니까?');
 
 assert.equal(conjugator.inquisitive_past_informal_low('가다'), '갔어?');
-/*
 
 assert.equal(conjugator.inquisitive_past_informal_high('가다'), '갔어요?');
 
@@ -350,4 +349,3 @@ assert.equal(conjugator.nominal_ing('걷다'), '걸음');
 assert.equal(conjugator.nominal_ing('그렇다'), '그럼');
 assert.equal(conjugator.nominal_ing('까맣다'), '까맘');
 assert.equal(conjugator.nominal_ing('돕다'), '도움');
-*/
