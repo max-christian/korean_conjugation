@@ -1,29 +1,28 @@
 // vim: set ts=4 sw=4 expandtab
 // (C) 2010 Dan Bravender - licensed under the AGPL 3.0
 
-/*
-class Geulja(unicode):
-    u'''Geulja is used to track modifications that have been made to
-        characters. Currently, it keeps track of characters' original
-        padchims (for ㄷ -> ㄹ irregulars) and if the character has
-        no padchim but should be treated as if it does (for ㅅ 
-        irregulars). When substrings are extracted the Geulja class 
-        keeps these markers for the last character only.
-     '''
-    hidden_padchim = False
-    original_padchim = None
-    
-    def __getitem__(self, index):
-        g = Geulja(unicode.__getitem__(self, index))
-        # only keep the hidden padchim marker for the last item
-        if index == -1:
-            g.hidden_padchim = self.hidden_padchim
-            g.original_padchim = self.original_padchim
-        return g
+/*  Geulja is used to track modifications that have been made to
+    characters. Currently, it keeps track of characters' original
+    padchims (for ㄷ -> ㄹ irregulars) and if the character has
+    no padchim but should be treated as if it does (for ㅅ
+    irregulars). When substrings are extracted the Geulja class
+    keeps these markers for the last character only.
 */
+
+function Geulja(__value__) {
+    this.length = (this.__value__ = __value__ || "").length;
+    this.hidden_padchim = false;
+    this.original_padchim = null;
+};
+
+with(Geulja.prototype = new String) {
+    toString = valueOf = function() {
+        return this.__value__
+    };
+}
+
 var hangeul = {
-    // Equations lifted directly from:
-    // http://www.kfunigraz.ac.at/~katzer/korean_hangul_unicode.html
+    Geulja: Geulja,
     is_hangeul: function(character) {
         if (character.charCodeAt(0) >= '가'.charCodeAt(0) &&
             character.charCodeAt(0) <= '힣'.charCodeAt(0)) {
@@ -31,9 +30,8 @@ var hangeul = {
         }
         return false;
     },
-    find_vowel_to_append: function(string) {
-
-    },
+    // Equations lifted directly from:
+    // http://www.kfunigraz.ac.at/~katzer/korean_hangul_unicode.html
     lead: function(character) {
         return String.fromCharCode((Math.floor(character.charCodeAt(0) - 44032) / 588) + 4352);
     },
@@ -47,10 +45,12 @@ var hangeul = {
         return String.fromCharCode(Math.floor(((character.charCodeAt(0) - 44032 - padchim_offset) % 588) / 28) + 'ㅏ'.charCodeAt(0));
     },
     padchim: function(character) {
-    //if getattr(character, u'hidden_padchim', False):
-    //    return True
-    //if getattr(character, u'original_padchim', False):
-    //    return character.original_padchim
+        if (character.hidden_padchim) {
+            return true;
+        }
+        if (character.original_padchim) {
+            return character.original_padchim;
+        }
         p = String.fromCharCode(((character.charCodeAt(0) - 44032) % 28) + 'ᆨ'.charCodeAt(0) - 1)
         if (p.charCodeAt(0) == 4519) {
             return null;

@@ -3,6 +3,9 @@ var sys = require('sys'),
 
 fs.readdir('./test', function(err, files) {
     files.forEach(function(file) {
-        f = require('./test/' + file.replace('.js', ''));
+        if (file.indexOf('.js') > 0 && file.indexOf('.swp') == -1) {
+            sys.puts(file);
+            f = require('./test/' + file.replace('.js', ''));
+        }
     });
 });

@@ -3,8 +3,7 @@
 
 try {
     var hangeul = require('./hangeul');
-} catch(e) {
-}
+} catch(e) {}
 
 var pronunciation = {};
 
@@ -218,5 +217,4 @@ try {
     for (f in pronunciation) {
         exports[f] = pronunciation[f];
     }
-} catch(e) {
-}
+} catch(e) {}

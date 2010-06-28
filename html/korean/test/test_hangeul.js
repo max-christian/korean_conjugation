@@ -29,3 +29,16 @@ assert.equal(hangeul.match('아', 'ᄋ','ㅏ'), true);
 assert.equal(hangeul.match('아', 'ᄋ','ㅏ', null), true);
 assert.equal(hangeul.match('읽', '*', '*', 'ᆰ'), true);
 assert.equal(hangeul.match('읽', '*', '*', null), false);
+
+geulja = new hangeul.Geulja('나');
+geulja.hidden_padchim = true;
+assert.equal(hangeul.padchim(geulja), true);
+
+geulja = new hangeul.Geulja('걸');
+geulja.original_padchim = 'ㄷ';
+assert.equal(hangeul.padchim(geulja), 'ㄷ');
+
+geulja = new hangeul.Geulja('나');
+geulja.hidden_padchim = true;
+assert.equal(geulja[geulja.length-1], '나');
+assert.equal(geulja[geulja.length-1].hidden_padchim, '나');
