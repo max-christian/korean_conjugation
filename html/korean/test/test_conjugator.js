@@ -230,3 +230,11 @@ assert.equal(conjugator.past_base('기다리'), '기다렸');
 assert.equal(conjugator.past_base('기다리다'), '기다렸');
 assert.equal(conjugator.past_base('마르다'), '말랐');
 assert.equal(conjugator.past_base('드르다'), '들렀');
+
+assert.equal(conjugator.declarative_past_informal_low('푸다'), '펐어');
+assert.equal(conjugator.declarative_past_informal_low('뵙다'), '뵀어');
+assert.equal(conjugator.declarative_past_informal_low('쬐다'), '쬈어');
+assert.equal(conjugator.declarative_past_informal_low('하'), '했어');
+assert.equal(conjugator.declarative_past_informal_low('가'), '갔어');
+assert.equal(conjugator.declarative_past_informal_low('먹'), '먹었어');
+assert.equal(conjugator.declarative_past_informal_low('오'), '왔어');
