@@ -13,6 +13,16 @@ function Geulja(__value__) {
     this.length = (this.__value__ = __value__ || "").length;
     this.hidden_padchim = false;
     this.original_padchim = null;
+    this.charAt = function() {
+        result = String.prototype.charAt.apply(this, arguments);
+        if (arguments[0] == this.length - 1) {
+            result = new Geulja(result);
+            result.original_padchim = this.original_padchim;
+            result.hidden_padchim = this.hidden_padchim;
+        }
+        return result;
+
+    }
 };
 
 with(Geulja.prototype = new String) {
