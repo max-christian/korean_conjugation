@@ -24,14 +24,14 @@ conjugator.no_padchim_rule = function(characters) {
     }
 };
 
-conjugator.vowel_contraction = function(vowel1, vowel2, new_vowel) {
+conjugator.vowel_contraction = function(vowel1, vowel2, new_vowel, trace) {
     /* vowel contraction is a helper function for defining common contractions
        between a character without a padchim and a character that starts with
         'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했.
     */
     return function(x, y) {
         if (hangeul.match(x.charAt(x.length-1), '*', vowel1, null) &&
-            hangeul.match(y[0], 'ᄋ', vowel2)) {
+            hangeul.match(y.charAt(0), 'ᄋ', vowel2, '*')) {
             return ['vowel contraction [' + vowel1 + ' ' + vowel2 + ' -> ' + new_vowel + ']',
                     x.substring(0, x.length-1) +
                     hangeul.join(hangeul.lead(x.charAt(x.length-1)),

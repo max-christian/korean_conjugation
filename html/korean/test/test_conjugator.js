@@ -19,10 +19,12 @@ assert.deepEqual(rule('갔', '면'), ['padchim + consonant -> insert 으', '갔�
 
 assert.deepEqual(conjugator.lm_merge('살', '음'), ['ㄹ + ㅁ -> ᆱ', '삶']);
 
-assert.deepEqual(conjugator.merge('오', '아요'), '와요');
-assert.deepEqual(conjugator.merge('오', '아'), '와');
-assert.deepEqual(conjugator.merge('갔', '면'), '갔으면');
-assert.deepEqual(conjugator.merge('맡', '세요'), '맡으세요');
+assert.equal(conjugator.merge('오', '아요'), '와요');
+assert.equal(conjugator.merge('오', '아'), '와');
+assert.equal(conjugator.merge('갔', '면'), '갔으면');
+assert.equal(conjugator.merge('맡', '세요'), '맡으세요');
+assert.equal(conjugator.merge('맡', '세요'), '맡으세요');
+assert.equal(conjugator.merge('해', '었'), '했');
 //sys.puts(conjugator.reasons);
 //assert.deepEqual(conjugator.reasons, ['vowel contraction [ㅗ + ㅏ -> ㅘ] (오 + 아요 -> 와요)']);
 //
@@ -222,7 +224,6 @@ assert declarative_present_informal_high('민주적이다'), '민주적이에요
 assert.equal(conjugator.propositive_present_informal_low('꿰다'), '꿰');
 */
 
-sys.puts(conjugator.past_base('하'));
 assert.equal(conjugator.past_base('하'), '했');
 assert.equal(conjugator.past_base('가'), '갔');
 assert.equal(conjugator.past_base('기다리'), '기다렸');
