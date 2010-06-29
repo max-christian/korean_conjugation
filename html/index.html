@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE HTML>
+<html manifest="dongsa.manifest">
 <head>
 <link rel="stylesheet" href="blueprint/screen.css" type="text/css" media="screen, projection">
 <link rel="stylesheet" href="blueprint/print.css" type="text/css" media="print">
@@ -6,38 +7,44 @@
 <!--[if lt IE 8]><link rel="stylesheet" href="/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
 <title>dongsa.net</title>
 <meta name="verify-v1" content="nfSbiOgPUnEWsQ8h5APnRPOxK0HWpZtiMMHZZ+oaIZ4=" >
-<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js"></script>
+<script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="korean/hangeul.js" charset="utf-8"></script>
 <script type="text/javascript" src="korean/pronunciation.js" charset="utf-8"></script>
 <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
 <script type="text/javascript">
 //<![CDATA[
 var infinitive = decodeURI(location.search.split('=')[1]);
-if (!infinitive) {
+if (!infinitive || typeof(infinitive) == 'undefined' || infinitive == 'undefined') {
     infinitive = '하다';
 }
+
+function display_conjugation(infinitive) {
+    out = '';
+    conjugator.reasons = [];
+    for (conjugation in conjugator) {
+        if (conjugator[conjugation].conjugation) {
+            out += conjugation + ': ';
+            var conjugated = conjugator[conjugation](infinitive);
+            var pron = pronunciation.get_pronunciation(conjugated);
+            out += conjugated + (pron != conjugated ? ' [' + pron + ']' : '');
+            out += '<p>' + conjugator.reasons.join(' ') + '</p>';
+        }
+    }
+    $('#output').html(out);
+}
+
 $(document).ready(function() {
     $('#infinitive').val(infinitive);
+    display_conjugation(infinitive);
 });
 //]]>
 </script>
 </head>
 <body>
-<form method="get">
+<form method="get" onsubmit="display_conjugation($('#infinitive').val()); return false;">
 <label for="infinitive">infinitive</label><input name="infinitive" id="infinitive">
 </form>
-<script type="text/javascript">
-//<![CDATA[
-for (conjugation in conjugator) {
-    if (conjugator[conjugation].conjugation) {
-        document.write(conjugation + ': ');
-        var conjugated = conjugator[conjugation](infinitive);
-        var pron = pronunciation.get_pronunciation(conjugated);
-        document.write(conjugated + (pron != conjugated ? ' (' + pron + ')' : ''));
-        document.write('<p>' + conjugator.reasons.join(' ') + '</p>');
-    }
-}
-//]]>
-</script>
+<div id="output">
+</div>
 </body>
 </html>
