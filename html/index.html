@@ -1,6 +1,6 @@
 <html>
 <head>
-<link rel="stylesheet" href="blueprint/screen.css" type="text/css" media="screen, projection"> 
+<link rel="stylesheet" href="blueprint/screen.css" type="text/css" media="screen, projection">
 <link rel="stylesheet" href="blueprint/print.css" type="text/css" media="print">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <!--[if lt IE 8]><link rel="stylesheet" href="/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
@@ -12,21 +12,32 @@
 <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
 <script type="text/javascript">
 //<![CDATA[
-if (location.search) {
-    var infinitive = decodeURI(location.search.substring(1));
-    for (conjugation in conjugator) {
-        if (conjugator[conjugation].conjugation) {
-            document.write(conjugation + ': ');
-            var conjugated = conjugator[conjugation](infinitive);
-            var pron = pronunciation.get_pronunciation(conjugated);
-            document.write(conjugated + (pron != conjugated ? ' (' + pron + ')' : ''));
-            document.write('<p>' + conjugator.reasons.join(' ') + '</p>');
-        }
-    }
+var infinitive = decodeURI(location.search.split('=')[1]);
+if (!infinitive) {
+    infinitive = '하다';
 }
+$(document).ready(function() {
+    $('#infinitive').val(infinitive);
+});
 //]]>
 </script>
 </head>
 <body>
+<form method="get">
+<label for="infinitive">infinitive</label><input name="infinitive" id="infinitive">
+</form>
+<script type="text/javascript">
+//<![CDATA[
+for (conjugation in conjugator) {
+    if (conjugator[conjugation].conjugation) {
+        document.write(conjugation + ': ');
+        var conjugated = conjugator[conjugation](infinitive);
+        var pron = pronunciation.get_pronunciation(conjugated);
+        document.write(conjugated + (pron != conjugated ? ' (' + pron + ')' : ''));
+        document.write('<p>' + conjugator.reasons.join(' ') + '</p>');
+    }
+}
+//]]>
+</script>
 </body>
 </html>
