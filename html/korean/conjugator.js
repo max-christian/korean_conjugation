@@ -44,7 +44,7 @@ conjugator.vowel_contraction = function(vowel1, vowel2, new_vowel, trace) {
 
 conjugator.drop_l = function(x, y) {
     if (hangeul.padchim(x[x.length-1]) == 'ᆯ') {
-        //conjugation.reasons.append('drop ㄹ')
+        conjugator.reasons.push('drop ㄹ')
         return x.substring(0, x.length-1) +
                hangeul.join(hangeul.lead(x[x.length-1]),
                             hangeul.vowel(x[x.length-1])) +
@@ -54,7 +54,7 @@ conjugator.drop_l = function(x, y) {
 
 conjugator.drop_l_and_borrow_padchim = function(x, y) {
     if (hangeul.padchim(x.charAt(x.length-1)) == 'ᆯ') {
-        //conjugation.reasons.append('drop %s borrow padchim' % padchim(x[-1]))
+        conjugator.reasons.push('drop ' + hangeul.padchim(x.charAt(x.length-1)) + ' borrow padchim')
         return x.substring(0, x.length-1) +
                hangeul.join(hangeul.lead(x[x.length-1]),
                             hangeul.vowel(x[x.length-1]),
@@ -136,7 +136,7 @@ conjugator.merge = function(x, y) {
         if (!response) {
             output = rule(x, y);
             if (output) {
-                conjugator.reasons.push(output[0] ? output[0] : '' + ' (' + x + ' + ' + y + ' -> ' + output[1]);
+                conjugator.reasons.push((output[0] ? output[0] : '') + ' (' + x + ' + ' + y + ' -> ' + output[1] + ')');
                 response = output[1];
             }
         }
@@ -264,8 +264,7 @@ conjugator.base2 = function(infinitive, regular) {
                                           hangeul.join(hangeul.lead(infinitive.charAt(infinitive.length-1)),
                                                        hangeul.vowel(infinitive.charAt(infinitive.length-1))),
                                           '이');
-        //conjugator.reasons.append('ㅎ irregular (%s -> %s)' % (infinitive,
-        //                                                        new_infinitive))
+        conjugator.reasons.push('ㅎ irregular (' + infinitive + ' -> ' + new_infinitive + ')');
     } else if (conjugator.is_p_irregular(infinitive, regular)) {
         // only some verbs get ㅗ (highly irregular)
         if (infinitive in {'묻잡': true} ||
@@ -278,23 +277,20 @@ conjugator.base2 = function(infinitive, regular) {
                                           hangeul.join(hangeul.lead(infinitive.charAt(infinitive.length-1)),
                                                        hangeul.vowel(infinitive.charAt(infinitive.length-1))),
                                           hangeul.join('ᄋ', new_vowel))
-        //conjugation.reasons.append('ㅂ irregular (%s -> %s)' % (infinitive,
-        //                                                        new_infinitive))
+        conjugator.reasons.push('ㅂ irregular (' + infinitive + ' -> ' + new_infinitive + ')');
     } else if (conjugator.is_d_irregular(infinitive, regular)) {
         new_infinitive = new hangeul.Geulja(infinitive.substring(0, infinitive.length-1) +
                                             hangeul.join(hangeul.lead(infinitive.charAt(infinitive.length-1)),
                                             hangeul.vowel(infinitive.charAt(infinitive.length-1)),
                                              'ᆯ'));
         new_infinitive.original_padchim = 'ᆮ';
-        //conjugation.reasons.append('ㄷ irregular (%s -> %s)' % (infinitive,
-        //                                                        new_infinitive))
+        conjugator.reasons.push('ㄷ irregular (' + infinitive + ' -> ' + new_infinitive + ')');
     } else if (conjugator.is_s_irregular(infinitive, regular)) {
         new_infinitive = new hangeul.Geulja(infinitive.substring(0, infinitive.length-1) +
                                             hangeul.join(hangeul.lead(infinitive.charAt(infinitive.length-1)),
                                             hangeul.vowel(infinitive.charAt(infinitive.length-1))));
         new_infinitive.hidden_padchim = true;
-        //conjugation.reasons.append('ㅅ irregular (%s -> %s [hidden padchim])' % 
-        //                           (infinitive, new_infinitive))
+        conjugator.reasons.push('ㅅ irregular (' + infinitive + ' -> ' + new_infinitive + ' [hidden padchim])');
     }
     return new_infinitive;
 };
@@ -329,7 +325,7 @@ conjugator.declarative_present_informal_low = function(infinitive, regular, furt
     infinitive = conjugator.base2(infinitive, regular);
     if (!further_use && ((infinitive.charAt(infinitive.length-1) == '이' && !infinitive.hidden_padchim) ||
                          infinitive == '아니')) {
-        //conjugation.reasons.append('야 irregular')
+        conjugator.reasons.push('야 irregular');
         return infinitive + '야';
     }
     // 르 irregular
@@ -344,18 +340,15 @@ conjugator.declarative_present_informal_low = function(infinitive, regular, furt
         if (infinitive.substring(infinitive.length-2, infinitive.length) in {'푸르': true, '이르': true}) {
             new_base = new_base + hangeul.join('ᄅ',
                                                hangeul.vowel(hangeul.find_vowel_to_append(new_base)))
-            //conjugation.reasons.append('irregular stem + %s -> %s' % 
-            //                           (infinitive, new_base))
+            conjugator.reasons.push('irregular stem + ' + infinitive + ' -> ' + new_base);
             return infinitive + '러';
         } else if (hangeul.find_vowel_to_append(infinitive.substring(0, infinitive.length-1)) == '아') {
             new_base += '라'
-            //conjugation.reasons.append('르 irregular stem change [%s -> %s]' %
-            //                           (infinitive, new_base))
+            conjugator.reasons.push('르 irregular stem change [' + infinitive + ' -> ' + new_base + ']');
             return new_base;
         } else {
             new_base += '러';
-            //conjugation.reasons.append('르 irregular stem change [%s -> %s]' %
-            //                           (infinitive, new_base))
+            conjugator.reasons.push('르 irregular stem change [' + infinitive + ' -> ' + new_base + ']');
             return new_base;
         }
     } else if (infinitive.charAt(infinitive.length-1) == '하') {
@@ -371,7 +364,7 @@ conjugator.declarative_present_informal_high = function(infinitive, regular) {
     infinitive = conjugator.base2(infinitive, regular)
     if ((infinitive.charAt(infinitive.length-1) == '이' && !infinitive.hidden_padchim) ||
         infinitive == '아니') {
-        //conjugation.reasons.append('에요 irregular')
+        conjugator.reasons.push('에요 irregular')
         return infinitive + '에요';
     }
     return conjugator.merge(conjugator.declarative_present_informal_low(infinitive, regular, true), '요');

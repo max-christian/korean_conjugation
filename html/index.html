@@ -19,7 +19,8 @@ if (location.search) {
             document.write(conjugation + ': ');
             var conjugated = conjugator[conjugation](infinitive);
             var pron = pronunciation.get_pronunciation(conjugated);
-            document.write(conjugated + (pron != conjugated ? ' (' + pron + ')' : '') + '<br/>');
+            document.write(conjugated + (pron != conjugated ? ' (' + pron + ')' : ''));
+            document.write('<p>' + conjugator.reasons.join(' ') + '</p>');
         }
     }
 }
