@@ -283,6 +283,7 @@ assert.equal(conjugator.inquisitive_present_informal_low('가다'), '가?');
 assert.equal(conjugator.inquisitive_present_informal_low('하다'), '해?');
 
 assert.equal(conjugator.inquisitive_present_informal_high('가다'), '가요?');
+assert.equal(conjugator.inquisitive_present_informal_high('걷다'), '걸어요?');
 
 assert.equal(conjugator.inquisitive_present_formal_low('가다'), '가니?');
 assert.equal(conjugator.inquisitive_present_formal_low('알다'), '아니?');

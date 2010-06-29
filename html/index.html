@@ -12,7 +12,17 @@
 <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
 <script type="text/javascript">
 //<![CDATA[
-document.write(conjugator.declarative_past_informal_low('하다'));
+if (location.search) {
+    var infinitive = decodeURI(location.search.substring(1));
+    for (conjugation in conjugator) {
+        if (conjugator[conjugation].conjugation) {
+            document.write(conjugation + ': ');
+            var conjugated = conjugator[conjugation](infinitive);
+            var pron = pronunciation.get_pronunciation(conjugated);
+            document.write(conjugated + (pron != conjugated ? ' (' + pron + ')' : '') + '<br/>');
+        }
+    }
+}
 //]]>
 </script>
 </head>
