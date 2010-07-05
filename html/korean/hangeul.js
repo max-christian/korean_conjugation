@@ -31,21 +31,21 @@ with(Geulja.prototype = new String) {
     };
 }
 
-var hangeul = {
-    Geulja: Geulja,
-    is_hangeul: function(character) {
+var hangeul = function() {
+    this.Geulja = Geulja;
+    this.is_hangeul = function(character) {
         if (character.charCodeAt(0) >= '가'.charCodeAt(0) &&
             character.charCodeAt(0) <= '힣'.charCodeAt(0)) {
             return true;
         }
         return false;
-    },
+    };
     // Equations lifted directly from:
     // http://www.kfunigraz.ac.at/~katzer/korean_hangul_unicode.html
-    lead: function(character) {
+    this.lead = function(character) {
         return String.fromCharCode((Math.floor(character.charCodeAt(0) - 44032) / 588) + 4352);
-    },
-    vowel: function(character) {
+    };
+    this.vowel = function(character) {
         padchim_character = this.padchim(character);
         if (!padchim_character || padchim_character == true) {
             padchim_offset = -1;
@@ -53,8 +53,8 @@ var hangeul = {
             padchim_offset = padchim_character.charCodeAt(0) - 'ᆨ'.charCodeAt(0);
         }
         return String.fromCharCode(Math.floor(((character.charCodeAt(0) - 44032 - padchim_offset) % 588) / 28) + 'ㅏ'.charCodeAt(0));
-    },
-    padchim: function(character) {
+    };
+    this.padchim = function(character) {
         if (character.hidden_padchim) {
             return true;
         }
@@ -67,8 +67,8 @@ var hangeul = {
         } else {
             return p;
         }
-    },
-    join: function(lead, vowel, padchim) {
+    };
+    this.join = function(lead, vowel, padchim) {
         lead_offset = lead.charCodeAt(0) - 'ᄀ'.charCodeAt(0);
         vowel_offset = vowel.charCodeAt(0) - 'ㅏ'.charCodeAt(0);
         if (padchim) {
@@ -77,8 +77,8 @@ var hangeul = {
             padchim_offset = -1;
         }
         return String.fromCharCode(padchim_offset + (vowel_offset) * 28 + (lead_offset) * 588 + 44032 + 1);
-    },
-    find_vowel_to_append: function(string) {
+    };
+    this.find_vowel_to_append = function(string) {
         self = this;
         append = null;
         string.split('').reverse().forEach(function(character) {
@@ -95,13 +95,14 @@ var hangeul = {
         });
         if (!append) append = '어';
         return append;
-    },
-    match: function(character, l, v, p) {
+    };
+    this.match = function(character, l, v, p) {
         return (l == '*' || this.lead(character) == l) &&
                (v == '*' || this.vowel(character) == v) &&
                (p == '*' || this.padchim(character) == p)
-    }
-}
+    };
+    return this;
+}();
 
 // Export functions to node
 try {
