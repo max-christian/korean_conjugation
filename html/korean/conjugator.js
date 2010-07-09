@@ -579,6 +579,14 @@ conjugator.nominal_ing = function(infinitive, regular) {
 };
 conjugator.nominal_ing.conjugation = true;
 
+conjugator.conjugations = [];
+
+for (f in conjugator) {
+    if (f && conjugator[f].conjugation) {
+        conjugator.conjugations.push(f);
+    }
+}
+
 // Export functions to node
 try {
     for (f in conjugator) {
