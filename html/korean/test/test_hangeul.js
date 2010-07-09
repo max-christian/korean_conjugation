@@ -1,6 +1,8 @@
-var hangeul = require('../hangeul'),
-    assert  = require('assert'),
-    sys     = require('sys');
+try {
+    var hangeul = require('../hangeul'),
+        assert  = require('assert'),
+        sys     = require('sys');
+} catch(e) {}
 
 assert.equal(hangeul.is_hangeul('안'), true);
 

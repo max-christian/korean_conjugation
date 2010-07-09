@@ -1,13 +1,15 @@
-var p      = require('../pronunciation'),
-    assert = require('assert'),
-    sys    = require('sys');
+try {
+var pronunciation = require('../pronunciation'),
+    assert        = require('assert'),
+    sys           = require('sys');
+} catch(e) {}
 
-assert.deepEqual(p.move_padchim_to_replace_eung('학', '원'), ['하', '권']);
+assert.deepEqual(pronunciation.move_padchim_to_replace_eung('학', '원'), ['하', '권']);
 
-to_digut = p.change_padchim_pronunciation('ᆮ', {'ᆺ': true, 'ᆻ': true, 'ᆽ': true, 'ᆾ': true, 'ᇀ': true, 'ᇂ': true});
+to_digut = pronunciation.change_padchim_pronunciation('ᆮ', {'ᆺ': true, 'ᆻ': true, 'ᆽ': true, 'ᆾ': true, 'ᇀ': true, 'ᇂ': true});
 assert.deepEqual(to_digut('했', ''), ['핻', '']);
 
-giyuk_to_eung = p.consonant_combination_rule('ᆨ', 'ᄆ', 'ᆼ', 'ᄆ');
+giyuk_to_eung = pronunciation.consonant_combination_rule('ᆨ', 'ᄆ', 'ᆼ', 'ᄆ');
 assert.deepEqual(giyuk_to_eung('국', '물'), ['궁', '물']);
 
 [['국물',       '궁물'],
@@ -68,5 +70,5 @@ assert.deepEqual(giyuk_to_eung('국', '물'), ['궁', '물']);
  ['있다',       '이따']].forEach(function(test_data) {
      input = test_data[0];
      expected = test_data[1];
-     assert.equal(p.get_pronunciation(input), expected);
+     assert.equal(pronunciation.get_pronunciation(input), expected);
 });
