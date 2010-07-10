@@ -587,6 +587,21 @@ for (f in conjugator) {
     }
 }
 
+conjugator.display_conjugations = function(infinitive, callback) {
+    out = '';
+    conjugator.reasons = [];
+    for (conjugation in conjugator) {
+        if (conjugator[conjugation].conjugation) {
+            out += conjugation + ': ';
+            var conjugated = conjugator[conjugation](infinitive);
+            var pron = pronunciation.get_pronunciation(conjugated);
+            out += conjugated + (pron != conjugated ? ' [' + pron + ']' : '');
+            out += '<p>' + conjugator.reasons.join(' ') + '</p>';
+        }
+    }
+    callback(out);
+};
+
 // Export functions to node
 try {
     for (f in conjugator) {

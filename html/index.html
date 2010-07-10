@@ -13,35 +13,31 @@
 <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
 <script type="text/javascript">
 //<![CDATA[
+function update(infinitive) {
+    try {
+        conjugator.display_conjugations(infinitive, function(output) {
+            $('#output').html(output);
+        });
+    } catch(e) {
+        $('#output').load('/ajax?infinitive=' + infinitive);
+    }
+}
+
 var infinitive = decodeURI(location.search.split('=')[1]);
 if (!infinitive || typeof(infinitive) == 'undefined' || infinitive == 'undefined') {
     infinitive = '하다';
 }
 
-function display_conjugation(infinitive) {
-    out = '';
-    conjugator.reasons = [];
-    for (conjugation in conjugator) {
-        if (conjugator[conjugation].conjugation) {
-            out += conjugation + ': ';
-            var conjugated = conjugator[conjugation](infinitive);
-            var pron = pronunciation.get_pronunciation(conjugated);
-            out += conjugated + (pron != conjugated ? ' [' + pron + ']' : '');
-            out += '<p>' + conjugator.reasons.join(' ') + '</p>';
-        }
-    }
-    $('#output').html(out);
-}
-
 $(document).ready(function() {
     $('#infinitive').val(infinitive);
-    display_conjugation(infinitive);
+    update(infinitive);
 });
+
 //]]>
 </script>
 </head>
 <body>
-<form method="get" onsubmit="display_conjugation($('#infinitive').val()); return false;">
+<form method="get" onsubmit="update($('#infinitive').val()); return false;">
 <label for="infinitive">infinitive</label><input name="infinitive" id="infinitive" />
 <input type="submit" value="conjugate" />
 </form>
