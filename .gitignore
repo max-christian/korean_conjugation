@@ -1,6 +1,6 @@
 korean/korean_verbs.sqlite3
 pip-log.txt
-src
+/src
 *.pyc
 *.sw[pln]
 RCS
