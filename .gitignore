@@ -1,12 +1,13 @@
 korean/korean_verbs.sqlite3
 pip-log.txt
-src
+/src
 *.pyc
 *.sw[pln]
 RCS
 .coverage
 lib
-bin
+/bin
 include
 man
 docs
+korean_verbs.sqlite3

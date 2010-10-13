@@ -1,0 +1,13 @@
+dd {
+    display: block;
+    background: darkblue;
+    color: white;
+    margin: 0;
+}
+
+dt {
+    display: block;
+    background: white;
+    color: black;
+    margin-bottom: 5px;
+}
