@@ -6,7 +6,7 @@ pip-log.txt
 RCS
 .coverage
 lib
-bin
+/bin
 include
 man
 docs
