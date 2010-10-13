@@ -592,11 +592,11 @@ conjugator.display_conjugations = function(infinitive, callback) {
     conjugator.reasons = [];
     for (conjugation in conjugator) {
         if (conjugator[conjugation].conjugation) {
-            out += conjugation + ': ';
+            out += '<dd>' + conjugation.replace(/_/g, ' ') + '</dd>';
             var conjugated = conjugator[conjugation](infinitive);
             var pron = pronunciation.get_pronunciation(conjugated);
-            out += conjugated + (pron != conjugated ? ' [' + pron + ']' : '');
-            out += '<p>' + conjugator.reasons.join(' ') + '</p>';
+            out += '<dt>' + conjugated + (pron != conjugated ? ' [' + pron + ']' : '') + '</dt>';
+            //out += '<p>' + conjugator.reasons.join(' ') + '</p>';
         }
     }
     callback(out);
