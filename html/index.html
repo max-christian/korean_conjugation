@@ -10,6 +10,12 @@
 <script type="text/javascript" src="korean/hangeul.js" charset="utf-8"></script>
 <script type="text/javascript" src="korean/pronunciation.js" charset="utf-8"></script>
 <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
+<script type="text/javascript" src='scripts/jsim_common.js'></script>
+<script type="text/javascript" src='scripts/jsim_keycode.js'></script>
+<script type="text/javascript" src='scripts/jsim_caret.js'></script>
+<script type="text/javascript" src='scripts/jsim.js'></script>
+<script type="text/javascript" src='scripts/johab.js'></script>
+<script type="text/javascript" src='scripts/jsim_hangul.js'></script>
 <script type="text/javascript">
 //<![CDATA[
 function update(infinitive) {
@@ -28,6 +34,7 @@ if (!infinitive || typeof(infinitive) == 'undefined' || infinitive == 'undefined
 }
 
 $(document).ready(function() {
+    new JS_IM(document.getElementById('infinitive'), JS_IM_hangul);
     $('#infinitive').val(infinitive);
     update(infinitive);
 });
