@@ -12,17 +12,22 @@
 <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
 <script type="text/javascript">
 //<![CDATA[
-function update(infinitive) {
-    try {
-        conjugator.display_conjugations(infinitive, function(output) {
-            $('#output').html(output);
-            $('.show-reasons').click(function() {
-                $(this).parent().next().toggle();
-            });
+function update(infinitive, regular) {
+    conjugator.display_conjugations(infinitive, regular, function(output) {
+        $('#output').html(output);
+        $('.show-reasons').click(function() {
+            $(this).parent().next().slideToggle();
+            if ($(this).html() == '↰') {
+                $(this).html('↴');
+            } else {
+                $(this).html('↰');
+            }
         });
-    } catch(e) {
-        $('#output').load('/ajax?infinitive=' + infinitive);
-    }
+        $('#form-change').click(function() {
+            regular = !regular;
+            update(infinitive, regular);
+        });
+    });
 }
 
 var infinitive = decodeURI(location.search.split('=')[1]);
@@ -39,7 +44,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<form method="get" onsubmit="update($('#infinitive').val()); return false;">
+<form method="get" onsubmit="update($('#infinitive').val(), false); return false;">
 <label for="infinitive">infinitive</label><input size="7" name="infinitive" id="infinitive" />
 <input type="submit" value="conjugate" />
 </form>

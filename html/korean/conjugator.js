@@ -224,7 +224,10 @@ conjugator.verb_types = {
     'ㄷ 불규칙 동사 (irregular verb)': conjugator.is_d_irregular
 };
 
-conjugator.verb_type = function(infinitive) {
+conjugator.verb_type = function(infinitive, regular) {
+    if (regular) {
+        return 'regular verb';
+    }
     for (irregular_name in conjugator.verb_types) {
         func = conjugator.verb_types[irregular_name];
         if (func(conjugator.base(infinitive))) {
@@ -585,22 +588,33 @@ for (f in conjugator) {
     }
 }
 
-conjugator.display_conjugations = function(infinitive, callback) {
+conjugator.display_conjugations = function(infinitive, regular, callback) {
+    var both_regular_and_irregular = false;
+    infinitive = conjugator.base(infinitive, regular);
     out = '';
-    out += '<dd>verb type</dd>';
-    out += '<dt>' + conjugator.verb_type(infinitive) + '</dt>';
+    if (infinitive in conjugator.both_regular_and_irregular) {
+        both_regular_and_irregular = true;
+        out += '<dd class="warning">warning</dd>';
+        out += '<dt>This verb has both regular and irregular forms.</dt>';
+    }
+    out += '<div class="conjugation"><dd>verb type</dd>';
+    out += '<dt>' + conjugator.verb_type(infinitive, regular)
+    if (both_regular_and_irregular) {
+        out += ' <button id="form-change">view ' + (regular ? 'irregular' : 'regular') + ' form</button>';
+    }
+    out += '</dt></div>';
     for (conjugation in conjugator) {
         conjugator.reasons = [];
         if (conjugator[conjugation].conjugation) {
-            out += '<dd>' + conjugation.replace(/_/g, ' ') + '</dd>';
-            var conjugated = conjugator[conjugation](infinitive);
+            out += '<div class="conjugation"><dd>' + conjugation.replace(/_/g, ' ') + '</dd>';
+            var conjugated = conjugator[conjugation](infinitive, regular);
             var pron = pronunciation.get_pronunciation(conjugated);
-            out += '<dt>' + conjugated + (pron != conjugated ? ' [' + pron + ']' : '') + ' <span class="show-reasons">↴</span></dt>';
+            out += '<dt>' + conjugated + (pron != conjugated ? ' [' + pron + ']' : '') + ' <button class="show-reasons">↴</button></dt>';
             out += '<ol class="reasons">';
             for (reason in conjugator.reasons) {
                 out += '<li>' + conjugator.reasons[reason] + '</li>';
             }
-            out += '</ol>';
+            out += '</ol></div>';
             //out += '<p>' + conjugator.reasons.join(' ') + '</p>';
         }
     }

@@ -1,13 +1,18 @@
-* {
+html, body {
     background: black;
     color: white;
+    margin: 0;
+}
+
+dd, dt {
+    padding-left: 5px;
 }
 
 dd {
+    text-transform: capitalize;
     display: block;
-    background: darkblue;
-    color: white;
     margin: 0;
+    margin-top: 5px;
 }
 
 dt {
@@ -15,10 +20,14 @@ dt {
     margin-bottom: 5px;
 }
 
-.show-reasons {
-    color: darkblue;
+.conjugation {
+    border-bottom: 1px solid grey;
 }
 
 .reasons {
     display: none;
+}
+
+.warning {
+    color: red;
 }
