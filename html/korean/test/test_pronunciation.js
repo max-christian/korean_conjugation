@@ -67,7 +67,8 @@ assert.deepEqual(giyuk_to_eung('국', '물'), ['궁', '물']);
  ['요?',        '요?'],
  ['있습니다',   '이씀니다'],
  ['__요',       '__요'],
- ['있다',       '이따']].forEach(function(test_data) {
+ ['있다',       '이따'],
+ ['싫겠어',     '실게써']].forEach(function(test_data) {
      input = test_data[0];
      expected = test_data[1];
      assert.equal(pronunciation.get_pronunciation(input), expected);

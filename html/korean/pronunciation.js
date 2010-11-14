@@ -171,7 +171,8 @@ pronunciation.merge_rules = [
     // Double padchim rules
     pronunciation.consonant_combination_rule('ᆱ', 'ᄋ', 'ᆯ', 'ᄆ', null),
     pronunciation.consonant_combination_rule('ᆱ', '*', 'ᆷ', '*', null),
-    pronunciation.consonant_combination_rule('ᆶ', '*', null, 'ᄅ', null),
+    pronunciation.consonant_combination_rule('ᆶ', 'ᄋ', null, 'ᄅ', null),
+    pronunciation.consonant_combination_rule('ᆶ', '*', 'ᆯ', '*', null),
     pronunciation.consonant_combination_rule('ᆬ', 'ᄋ', 'ᆫ', 'ᄌ', null),
     pronunciation.consonant_combination_rule('ᆬ', '*', 'ᆫ', '*', null),
     // 학교 -> 학꾜
