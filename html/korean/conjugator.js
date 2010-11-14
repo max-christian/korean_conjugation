@@ -323,8 +323,9 @@ conjugator.base3.conjugation = true;
 
 conjugator.declarative_present_informal_low = function(infinitive, regular, further_use) {
     infinitive = conjugator.base2(infinitive, regular);
-    if (!further_use && ((infinitive.charAt(infinitive.length-1) == '이' && !infinitive.hidden_padchim) ||
-                         infinitive == '아니')) {
+    if (!further_use && ((infinitive == '이' && !infinitive.hidden_padchim) ||
+                         infinitive == '아니') ||
+                        (regular && infinitive.charAt(infinitive.length-1) == '이')) {
         conjugator.reasons.push('야 irregular');
         return infinitive + '야';
     }
@@ -362,7 +363,8 @@ conjugator.declarative_present_informal_low.conjugation = true;
 
 conjugator.declarative_present_informal_high = function(infinitive, regular) {
     infinitive = conjugator.base2(infinitive, regular)
-    if ((infinitive.charAt(infinitive.length-1) == '이' && !infinitive.hidden_padchim) ||
+    if ((infinitive == '이' && !infinitive.hidden_padchim) ||
+        (infinitive.charAt(infinitive.length-1) == '이' && regular) ||
         infinitive == '아니') {
         conjugator.reasons.push('에요 irregular')
         return infinitive + '에요';

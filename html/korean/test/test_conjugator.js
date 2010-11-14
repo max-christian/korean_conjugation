@@ -70,11 +70,14 @@ assert.equal(conjugator.base2('아니'), '아니');
 
 assert.equal(conjugator.base3('돕다'), '도우');
 
+assert.equal(conjugator.declarative_present_informal_low('모이다'), '모여');
+assert.equal(conjugator.declarative_present_informal_high('모이다'), '모여요');
 assert.equal(conjugator.declarative_present_informal_low('이르다', true), '일러');
 assert.equal(conjugator.declarative_present_informal_low('이르다'), '이르러');
 assert.equal(conjugator.declarative_present_informal_low('받다'), '받아');
 assert.equal(conjugator.declarative_present_informal_low('주고 받다'), '주고 받아');
-assert.equal(conjugator.declarative_present_informal_low('민주적이다'), '민주적이야');
+assert.equal(conjugator.declarative_present_informal_low('민주적이다', true), '민주적이야');
+assert.equal(conjugator.declarative_present_informal_high('민주적이다', true), '민주적이에요');
 // needed a random verb to test regularifying ㅅ :-)
 assert.equal(conjugator.declarative_present_informal_low('귯'), '규어');
 assert.equal(conjugator.declarative_present_informal_low('치르다'), '치러');
