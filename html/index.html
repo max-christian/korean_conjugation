@@ -16,6 +16,9 @@ function update(infinitive) {
     try {
         conjugator.display_conjugations(infinitive, function(output) {
             $('#output').html(output);
+            $('.show-reasons').click(function() {
+                $(this).parent().next().toggle();
+            });
         });
     } catch(e) {
         $('#output').load('/ajax?infinitive=' + infinitive);

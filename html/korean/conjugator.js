@@ -130,7 +130,6 @@ conjugator.merge = function(x, y) {
     /* concatenates every element in a list using the rules to
        merge the strings
     */
-    conjugator.reasons = [];
     var response = null;
     conjugator.merge_rules.forEach(function(rule) {
         if (!response) {
@@ -242,7 +241,6 @@ conjugator.base = function(infinitive, regular) {
         return infinitive;
     }
 };
-conjugator.base.conjugation = true;
 
 conjugator.base2 = function(infinitive, regular) {
     infinitive = conjugator.base(infinitive, regular);
@@ -294,7 +292,6 @@ conjugator.base2 = function(infinitive, regular) {
     }
     return new_infinitive;
 };
-conjugator.base2.conjugation = true;
 
 conjugator.base3 = function(infinitive, regular) {
     infinitive = conjugator.base(infinitive, regular);
@@ -319,7 +316,6 @@ conjugator.base3 = function(infinitive, regular) {
         return conjugator.base2(infinitive, regular);
     }
 };
-conjugator.base3.conjugation = true;
 
 conjugator.declarative_present_informal_low = function(infinitive, regular, further_use) {
     infinitive = conjugator.base2(infinitive, regular);
@@ -591,13 +587,20 @@ for (f in conjugator) {
 
 conjugator.display_conjugations = function(infinitive, callback) {
     out = '';
-    conjugator.reasons = [];
+    out += '<dd>verb type</dd>';
+    out += '<dt>' + conjugator.verb_type(infinitive) + '</dt>';
     for (conjugation in conjugator) {
+        conjugator.reasons = [];
         if (conjugator[conjugation].conjugation) {
             out += '<dd>' + conjugation.replace(/_/g, ' ') + '</dd>';
             var conjugated = conjugator[conjugation](infinitive);
             var pron = pronunciation.get_pronunciation(conjugated);
-            out += '<dt>' + conjugated + (pron != conjugated ? ' [' + pron + ']' : '') + '</dt>';
+            out += '<dt>' + conjugated + (pron != conjugated ? ' [' + pron + ']' : '') + ' <span class="show-reasons">↴</span></dt>';
+            out += '<ol class="reasons">';
+            for (reason in conjugator.reasons) {
+                out += '<li>' + conjugator.reasons[reason] + '</li>';
+            }
+            out += '</ol>';
             //out += '<p>' + conjugator.reasons.join(' ') + '</p>';
         }
     }

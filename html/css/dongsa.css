@@ -1,3 +1,8 @@
+* {
+    background: black;
+    color: white;
+}
+
 dd {
     display: block;
     background: darkblue;
@@ -7,7 +12,13 @@ dd {
 
 dt {
     display: block;
-    background: white;
-    color: black;
     margin-bottom: 5px;
+}
+
+.show-reasons {
+    color: darkblue;
+}
+
+.reasons {
+    display: none;
 }
