@@ -27,6 +27,9 @@ pronunciation.padchim_to_lead = {
 };
 
 pronunciation.move_padchim_to_replace_eung = function(x, y) {
+    if (hangeul.padchim(x[x.length-1]) == 'ᆼ') {
+        return;
+    }
     if (hangeul.padchim(x[x.length-1]) in pronunciation.padchim_to_lead &&
         hangeul.lead(y[0]) == 'ᄋ') {
         return [x.substring(0, x.length-1) + hangeul.join(hangeul.lead(x[x.length-1]),
@@ -170,6 +173,7 @@ pronunciation.merge_rules = [
     //    * ㅂ, ㅍ: like ㅂ
     // Double padchim rules
     pronunciation.consonant_combination_rule('ᆱ', 'ᄋ', 'ᆯ', 'ᄆ', null),
+    pronunciation.consonant_combination_rule('ᆹ', 'ᄋ', 'ᆸ', 'ᄉ', null),
     pronunciation.consonant_combination_rule('ᆱ', '*', 'ᆷ', '*', null),
     pronunciation.consonant_combination_rule('ᆶ', 'ᄋ', null, 'ᄅ', null),
     pronunciation.consonant_combination_rule('ᆶ', '*', 'ᆯ', '*', null),

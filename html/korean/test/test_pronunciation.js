@@ -12,7 +12,9 @@ assert.deepEqual(to_digut('했', ''), ['핻', '']);
 giyuk_to_eung = pronunciation.consonant_combination_rule('ᆨ', 'ᄆ', 'ᆼ', 'ᄆ');
 assert.deepEqual(giyuk_to_eung('국', '물'), ['궁', '물']);
 
-[['국물',       '궁물'],
+[
+ ['원숭이',     '원숭이'],
+ ['국물',       '궁물'],
  ['격노하다',   '경노하다'],
  ['큌넷',       '큉넫'],
  ['부엌문',     '부엉문'],
@@ -68,6 +70,7 @@ assert.deepEqual(giyuk_to_eung('국', '물'), ['궁', '물']);
  ['있습니다',   '이씀니다'],
  ['__요',       '__요'],
  ['있다',       '이따'],
+ ['없어',       '업써'],
  ['싫겠어',     '실게써']].forEach(function(test_data) {
      input = test_data[0];
      expected = test_data[1];
