@@ -1,7 +1,6 @@
 try {
 var pronunciation = require('../pronunciation'),
-    assert        = require('assert'),
-    sys           = require('sys');
+    assert        = require('assert');
 } catch(e) {}
 
 assert.deepEqual(pronunciation.move_padchim_to_replace_eung('학', '원'), ['하', '권']);

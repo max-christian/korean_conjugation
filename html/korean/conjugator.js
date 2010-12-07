@@ -609,7 +609,8 @@ conjugator.display_conjugations = function(infinitive, regular, callback) {
             out += '<div class="conjugation"><dd>' + conjugation.replace(/_/g, ' ') + '</dd>';
             var conjugated = conjugator[conjugation](infinitive, regular);
             var pron = pronunciation.get_pronunciation(conjugated);
-            out += '<dt>' + conjugated + (pron != conjugated ? ' [' + pron + ']' : '') + ' <button class="show-reasons">↴</button></dt>';
+            var romanized = romanization.romanize(pron);
+            out += '<dt>' + conjugated + ' [' + (pron != conjugated ? (pron + ' / ') : '') + romanized + ']' + ' <button class="show-reasons">↴</button></dt>';
             out += '<ol class="reasons">';
             for (reason in conjugator.reasons) {
                 out += '<li>' + conjugator.reasons[reason] + '</li>';

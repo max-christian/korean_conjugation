@@ -1,7 +1,6 @@
 try {
     var hangeul = require('../hangeul'),
-        assert  = require('assert'),
-        sys     = require('sys');
+        assert  = require('assert');
 } catch(e) {}
 
 assert.equal(hangeul.is_hangeul('안'), true);
@@ -14,6 +13,8 @@ assert.equal(hangeul.vowel('갓'), 'ㅏ');
 assert.equal(hangeul.vowel('빩'), 'ㅏ');
 assert.equal(hangeul.vowel('법'), 'ㅓ');
 assert.equal(hangeul.vowel('가'), 'ㅏ');
+
+assert.equal(hangeul.padchim('강'), 'ᆼ');
 
 assert.equal(hangeul.join('ᄀ', 'ㅏ'), '가');
 assert.equal(hangeul.join('ᄆ', 'ㅕ', 'ᆫ'), '면');

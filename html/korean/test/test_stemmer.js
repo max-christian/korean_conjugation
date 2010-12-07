@@ -1,7 +1,6 @@
 try {
     var stemmer = require('../stemmer'),
-        assert  = require('assert'),
-        sys     = require('sys');
+        assert  = require('assert');
 } catch(e) {}
 
 assert.deepEqual(stemmer.iterate_chop_last('fred'), ['f', 'fr', 'fre', 'fred']);

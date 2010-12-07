@@ -1,7 +1,6 @@
 try {
     var conjugator = require('../conjugator'),
-        assert     = require('assert'),
-        sys        = require('sys');
+        assert     = require('assert');
 } catch(e) {}
 
 var rule = conjugator.no_padchim_rule({'을': true, '습': true, '읍': true, '는': true, '음': true});
