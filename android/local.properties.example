@@ -1,0 +1,4 @@
+sdk.dir=/home/dbravender/android-sdk-linux_x86/
+ndk.dir=/home/dbravender/android-ndk-r5/
+key.store=/home/dbravender/projects/korean_conjugation/android/my.keystore
+key.alias=bravender

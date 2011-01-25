@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Dongsa" default="package">
+    <property file="local.properties" />
+    <property file="build.properties" />
+    <property file="default.properties" />
+
+    <path id="android.antlibs">
+        <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
+        <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
+        <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
+        <pathelement path="${sdk.dir}/tools/lib/apkbuilder.jar" />
+        <pathelement path="${sdk.dir}/tools/lib/jarutils.jar" />
+    </path>
+
+    <taskdef name="setup"
+        classname="com.android.ant.SetupTask"
+        classpathref="android.antlibs" />
+
+    <setup />
+
+    <target name="init" description="Initialization...">
+        <fail message="Ant 1.7.0 or higher is required. Please upgrade your ant.">
+            <condition>
+                <not>
+                    <antversion property="ant.version" atleast="1.7.0"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="package" depends="init, release" />
+    <target name="dbg" depends="init, debug" />
+
+    <target name="clean">
+        <echo message="Deleting temporary files..." />
+        <delete dir="gen" />
+        <delete dir="bin" />
+        <delete dir="res/drawable" />
+        <delete dir="out" />
+        <delete dir="obj" />
+        <echo message="DONE (Deleting temporary files)" />
+    </target>
+</project>
