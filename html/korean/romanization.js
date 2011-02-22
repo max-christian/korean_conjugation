@@ -94,7 +94,7 @@ romanization.romanize = function(word) {
     return pronunciation_of_word
            .split('')
            .map(romanization.romanize_character)
-           .join('.');
+           .join('-');
 };
 
 // Export functions to node
