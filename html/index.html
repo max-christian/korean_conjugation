@@ -16,7 +16,10 @@
 <script type="text/javascript">
 //<![CDATA[
 function update(infinitive, regular) {
-    infinitive = infinitive.trim();
+    try {
+        // Some older versions of WebKit don't have String.trim...
+        infinitive = infinitive.trim();
+    } catch(c) {}
     conjugator.display_conjugations(infinitive, regular, function(output) {
         $('#output').html(output);
         $('.show-reasons').click(function() {
