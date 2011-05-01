@@ -40,18 +40,13 @@ public class Dongsa extends Activity {
         this.list = (ListView) findViewById(R.id.listview);
         this.list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.lnames));
 
+        edittext.setText("\ud558\ub2e4");
         engine.loadUrl("file:///android_asset/html/android.html");
     }
 
     public void clearList() {
         synchronized (this.lnames) {
             this.lnames.clear();
-            final ArrayAdapter adapter = (ArrayAdapter)this.list.getAdapter();
-            this.list.post(new Runnable() {
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                }
-            });
         }
     }
 
