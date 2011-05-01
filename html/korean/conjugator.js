@@ -608,6 +608,7 @@ conjugator.display_conjugations = function(infinitive, regular, callback) {
         if (conjugator[conjugation].conjugation) {
             out += '<div class="conjugation"><dd>' + conjugation.replace(/_/g, ' ') + '</dd>';
             var conjugated = conjugator[conjugation](infinitive, regular);
+            Android.add(conjugated);
             var pron = pronunciation.get_pronunciation(conjugated);
             var romanized = romanization.romanize(pron);
             out += '<dt>' + conjugated + ' <button class="show-reasons">↴</button></dt>';
@@ -619,6 +620,7 @@ conjugator.display_conjugations = function(infinitive, regular, callback) {
             out += '</ul></div>';
         }
     }
+    Android.displayList();
     callback(out);
 };
 

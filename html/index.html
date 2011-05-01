@@ -16,6 +16,7 @@
 <script type="text/javascript">
 //<![CDATA[
 function update(infinitive, regular) {
+    Android.showToast(infinitive);
     infinitive = infinitive.trim();
     conjugator.display_conjugations(infinitive, regular, function(output) {
         $('#output').html(output);
