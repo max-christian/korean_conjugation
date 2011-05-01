@@ -5,6 +5,11 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.Toast;
 import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.text.Editable;
 import android.content.Context;
 import android.content.res.Configuration;
 import java.util.ArrayList;
@@ -20,27 +25,51 @@ public class Dongsa extends Activity {
 
         this.lnames = new ArrayList<String>();
 
-        WebView engine = (WebView) findViewById(R.id.webview);
+        final WebView engine = new WebView(this);
         engine.getSettings().setJavaScriptEnabled(true);
         engine.addJavascriptInterface(new JavaScriptInterface(this), "Android");
+
+        final EditText edittext = (EditText) findViewById(R.id.searchEdit);
+        edittext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                engine.loadUrl("javascript:update('" + v.getText() + "', false);");
+                return true;
+            }
+        });
 
         this.list = (ListView) findViewById(R.id.listview);
         this.list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.lnames));
 
-        engine.loadUrl("file:///android_asset/html/index.html");
+        engine.loadUrl("file:///android_asset/html/android.html");
     }
 
-    public synchronized void clearList() {
-        this.lnames.clear();
-        ((ArrayAdapter)this.list.getAdapter()).notifyDataSetChanged();
+    public void clearList() {
+        synchronized (this.lnames) {
+            this.lnames.clear();
+            final ArrayAdapter adapter = (ArrayAdapter)this.list.getAdapter();
+            this.list.post(new Runnable() {
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
-    public synchronized void add(String item) {
-        this.lnames.add(item);
+    public void add(String item) {
+        synchronized (this.lnames) {
+            this.lnames.add(item);
+        }
     }
 
-    public synchronized void displayList() {
-        ((ArrayAdapter)this.list.getAdapter()).notifyDataSetChanged();
+    public void displayList() {
+        synchronized (this.lnames) {
+            final ArrayAdapter adapter = (ArrayAdapter)this.list.getAdapter();
+            this.list.post(new Runnable() {
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     @Override
@@ -64,6 +93,10 @@ public class Dongsa extends Activity {
 
         public void add(String item) {
             ((Dongsa)mContext).add(item);
+        }
+
+        public void displayList() {
+            ((Dongsa)mContext).displayList();
         }
     }
 }

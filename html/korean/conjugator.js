@@ -608,7 +608,6 @@ conjugator.display_conjugations = function(infinitive, regular, callback) {
         if (conjugator[conjugation].conjugation) {
             out += '<div class="conjugation"><dd>' + conjugation.replace(/_/g, ' ') + '</dd>';
             var conjugated = conjugator[conjugation](infinitive, regular);
-            Android.add(conjugated);
             var pron = pronunciation.get_pronunciation(conjugated);
             var romanized = romanization.romanize(pron);
             out += '<dt>' + conjugated + ' <button class="show-reasons">↴</button></dt>';
@@ -620,8 +619,27 @@ conjugator.display_conjugations = function(infinitive, regular, callback) {
             out += '</ul></div>';
         }
     }
-    Android.displayList();
     callback(out);
+};
+
+conjugator.each_conjugation = function(infinitive, regular, callback) {
+    infinitive = conjugator.base(infinitive, regular);
+    for (conjugation in conjugator) {
+        conjugator.reasons = [];
+        if (conjugator[conjugation].conjugation) {
+            var r = {};
+            r.infinitive = infinitive;
+            r.conjugation_name = conjugation.replace(/_/g, ' ');
+            r.conjugated = conjugator[conjugation](infinitive, regular);
+            r.pronunication = pronunciation.get_pronunciation(r.conjugated);
+            r.romanized = romanization.romanize(pronunciation);
+            r.reasons = [];
+            for (reason in conjugator.reasons) {
+                r.reasons.push(conjugator.reasons[reason]);
+            }
+            callback(r);
+        }
+    }
 };
 
 // Export functions to node
