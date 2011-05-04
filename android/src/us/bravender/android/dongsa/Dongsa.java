@@ -7,23 +7,22 @@ import android.widget.Toast;
 import android.widget.ListView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.SimpleAdapter;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.text.Editable;
 import android.content.Context;
 import android.content.res.Configuration;
 import java.util.ArrayList;
-import android.widget.ArrayAdapter;
+import java.util.HashMap;
 
 public class Dongsa extends Activity {
-    private ArrayList<String> lnames;
+    private ArrayList<HashMap<String,String>> conjugations = new ArrayList<HashMap<String,String>>();
     private ListView list;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        this.lnames = new ArrayList<String>();
 
         final WebView engine = new WebView(this);
         engine.getSettings().setJavaScriptEnabled(true);
@@ -38,27 +37,36 @@ public class Dongsa extends Activity {
         });
 
         this.list = (ListView) findViewById(R.id.listview);
-        this.list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.lnames));
+        this.list.setAdapter(new SimpleAdapter(
+            this,
+            this.conjugations,
+            R.layout.simple_expandable_list_item_2,
+            new String[] { "conjugation_name", "conjugated" },
+            new int[] { R.id.text1, R.id.text2 }
+        ));
 
         edittext.setText("\ud558\ub2e4");
         engine.loadUrl("file:///android_asset/html/android.html");
     }
 
     public void clearList() {
-        synchronized (this.lnames) {
-            this.lnames.clear();
+        synchronized (this.conjugations) {
+            this.conjugations.clear();
         }
     }
 
-    public void add(String item) {
-        synchronized (this.lnames) {
-            this.lnames.add(item);
+    public void add(String conjugation_name, String conjugated) {
+        synchronized (this.conjugations) {
+            HashMap<String,String> item = new HashMap<String,String>();
+            item.put("conjugation_name", conjugation_name);
+            item.put("conjugated", conjugated);
+            this.conjugations.add(item);
         }
     }
 
     public void displayList() {
-        synchronized (this.lnames) {
-            final ArrayAdapter adapter = (ArrayAdapter)this.list.getAdapter();
+        synchronized (this.conjugations) {
+            final SimpleAdapter adapter = (SimpleAdapter)this.list.getAdapter();
             this.list.post(new Runnable() {
                 public void run() {
                     adapter.notifyDataSetChanged();
@@ -86,12 +94,22 @@ public class Dongsa extends Activity {
             ((Dongsa)mContext).clearList();
         }
 
-        public void add(String item) {
-            ((Dongsa)mContext).add(item);
+        public void add(String conjugation_name, String conjugated) {
+            ((Dongsa)mContext).add(conjugation_name, conjugated);
         }
 
         public void displayList() {
             ((Dongsa)mContext).displayList();
+        }
+    }
+
+    public class ConjugationEntry {
+        public String conjugated;
+        public String conjugation_name;
+
+        public ConjugationEntry(String conjugation_name, String conjugated) {
+            this.conjugated = conjugated;
+            this.conjugation_name = conjugation_name;
         }
     }
 }

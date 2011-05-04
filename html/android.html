@@ -22,7 +22,7 @@ function update(infinitive, regular) {
     Android.clearList();
     conjugator.each_conjugation(infinitive, regular, function(r) {
         //TODO: need to handle verbs that have regular and irregulars
-        Android.add(r.conjugated);
+        Android.add(r.conjugation_name, r.conjugated);
     });
     Android.displayList();
 }
