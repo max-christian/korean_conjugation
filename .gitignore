@@ -13,3 +13,7 @@ include
 man
 docs
 korean_verbs.sqlite3
+*.pch
+.DS_Store
+/ios/build
+*.xcodeproj

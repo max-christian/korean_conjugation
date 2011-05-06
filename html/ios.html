@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html manifest="dongsa.manifest">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>dongsa.net</title>
+        <meta name="verify-v1" content="nfSbiOgPUnEWsQ8h5APnRPOxK0HWpZtiMMHZZ+oaIZ4=" >
+        <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="korean/hangeul.js" charset="utf-8"></script>
+        <script type="text/javascript" src="korean/pronunciation.js" charset="utf-8"></script>
+        <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            //<![CDATA[
+            function fetch_conjugations(infinitive) {
+                out = '';
+                conjugator.reasons = [];
+                for (conjugation in conjugator) {
+                    if (conjugator[conjugation].conjugation) {
+                        out += conjugation + ',';
+                        var conjugated = conjugator[conjugation](infinitive);
+                        out += conjugated + '\n';
+                    }
+                }
+                return out;
+            }
+            
+            function show_conjugation_detail(infinitive, conjugation) {
+                var conjugated = conjugator[conjugation](infinitive);
+                var pron = pronunciation.get_pronunciation(conjugated);
+
+                var out = "";
+                out += '<div class="title">Conjugation</div>';
+                out += '<div class="value">' + conjugation.replace(/_/g, ' ') + '</div>';
+                out += '<div class="title">Pronunciation</div>';
+                if (pron == conjugated)
+                    out += '<div class="value">(as written)</div>';
+                else
+                    out += '<div class="value">' + pron + '</div>';
+                out += '<div class="title">Real-world usage</div>';
+                out += '<div class="value"><a href=\'http://www.google.com/search?q="' + conjugated + '"\'>Google</a>';
+                out += '<div class="value"><a href=\'http://search.naver.com/search.naver?query="' + conjugated + '"\'>Naver</a>';
+                out += '<div class="value"><a href=\'http://search.daum.net/search?q="' + conjugated + '"\'>Daum</a>';
+
+                $('#detail').html(out);
+                
+                var baseURL = 'http://en.wiktionary.org';
+                $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+infinitive,
+                    function(json) {
+                        $('#warning').show();
+                        $('#warningverb').html(infinitive);  
+                        $('#licenseinfo').hide();
+                        if(json.parse.revid > 0) { // an exception occurs within this call if Wiktionary entry not found
+                            var sourceurl = baseURL + '/wiki/' + infinitive;
+                            $('#wikiinfo').html(json.parse.text['*']);
+                            $('#wikiinfo a').contents().unwrap();
+                            $('#wikiinfo .editsection').hide();
+                            $('#wikiinfo .toc').hide();
+                            $('#sourceurl').attr('href',sourceurl);
+                            $('#licenseinfo').show();
+                            $('#warning').hide();
+                        } 
+                    });
+            }
+            //]]>
+        </script>
+        
+        <style type="text/css">
+            div
+            {
+                font-family:AppleGothic;
+            }
+            .title 
+            {
+                clear:right;
+            }
+            .value
+            {
+                float:right;
+                margin-left:1em;
+            }
+            #licenseinfo
+            {
+                clear:both;
+                padding-top:1em;
+                font-size:x-small; 
+                display:none;
+            }
+            #wikiinfo
+            {
+                clear:both;
+            }
+            #warning
+            {
+                display:none;
+                color:white;
+                width:100%;
+                background:red;
+                text-align:center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="warning">No Wiktionary entry for <span id="warningverb">infinitive</span>.<br />Please check your spelling!</div>
+        <div id="detail"></div>
+        <div id="licenseinfo">
+            Modified original content <a id='sourceurl'>from Wiktionary</a>.
+            Text available under <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike License</a>.
+        </div>
+        <div id="wikiinfo"></div>
+    </body>
+</html>

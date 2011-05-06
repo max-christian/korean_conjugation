@@ -12,15 +12,24 @@
 @implementation DongsaAppDelegate
 
 @synthesize window;
-@synthesize viewController;
+@synthesize donationObserver;
 
+#ifdef HTML_INTERFACE
+@synthesize viewController;
+#endif
+
+#ifdef NATIVE_INTERFACE
+@synthesize navigationController = viewController;
+#endif
 
 #pragma mark -
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
-    // Override point for customization after application launch.
+    // In-app purchase initialisation
+    donationObserver = [[DonationObserver alloc] init];
+    [[SKPaymentQueue defaultQueue] addTransactionObserver:donationObserver];
 
     // Add the view controller's view to the window and display.
     [window addSubview:viewController.view];

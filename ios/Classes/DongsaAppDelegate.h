@@ -7,16 +7,35 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DonationObserver.h"
+
+#define NATIVE_INTERFACE
 
 @class DongsaViewController;
 
 @interface DongsaAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
+    DonationObserver* donationObserver;
+
+#ifdef HTML_INTERFACE
     DongsaViewController *viewController;
+#endif
+    
+#ifdef NATIVE_INTERFACE
+    UINavigationController* navigationController;
+#endif
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, assign) DonationObserver* donationObserver;
+
+#ifdef HTML_INTERFACE
 @property (nonatomic, retain) IBOutlet DongsaViewController *viewController;
+#endif
+
+#ifdef NATIVE_INTERFACE
+@property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
+#endif
 
 @end
 
