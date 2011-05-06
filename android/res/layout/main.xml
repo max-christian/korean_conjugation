@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-    <WebView android:id="@+id/web_engine"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent" />
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal">
+        <EditText android:layout_height="wrap_content" android:id="@+id/searchEdit"
+            android:layout_width="fill_parent"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
+    </LinearLayout>
+    <ListView android:layout_width="fill_parent"
+              android:layout_height="fill_parent" android:id="@+id/listview"/>
 </LinearLayout>
