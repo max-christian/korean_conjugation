@@ -631,8 +631,8 @@ conjugator.each_conjugation = function(infinitive, regular, callback) {
             r.infinitive = infinitive;
             r.conjugation_name = conjugation.replace(/_/g, ' ');
             r.conjugated = conjugator[conjugation](infinitive, regular);
-            r.pronunication = pronunciation.get_pronunciation(r.conjugated);
-            r.romanized = romanization.romanize(pronunciation);
+            r.pronunciation = pronunciation.get_pronunciation(r.conjugated);
+            r.romanized = romanization.romanize(r.pronunciation);
             r.reasons = [];
             for (reason in conjugator.reasons) {
                 r.reasons.push(conjugator.reasons[reason]);
