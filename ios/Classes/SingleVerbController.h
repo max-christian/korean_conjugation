@@ -10,13 +10,13 @@
 
 @interface SingleVerbController : UIViewController <UIWebViewDelegate> {
     NSString* infinitive;
-    NSString* tenseDescription;
+    NSString* conjugationName;
     UIWebView *webView;
     int linkCount;
 }
 
 @property (nonatomic, retain) NSString* infinitive;
-@property (nonatomic, retain) NSString* tenseDescription;
+@property (nonatomic, retain) NSString* conjugationName;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 
 @end

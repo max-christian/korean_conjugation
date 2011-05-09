@@ -10,10 +10,10 @@
 
 @interface CustomVerbCell : UITableViewCell {
     UILabel *conjugatedVerb;
-    UILabel *tenseDescription;
+    UILabel *conjugationName;
 }
 
 @property (nonatomic, retain) IBOutlet UILabel *conjugatedVerb;
-@property (nonatomic, retain) IBOutlet UILabel *tenseDescription;
+@property (nonatomic, retain) IBOutlet UILabel *conjugationName;
 
 @end

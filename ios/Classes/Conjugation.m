@@ -10,19 +10,19 @@
 
 
 @implementation Conjugation
-@synthesize tenseDescription;
+@synthesize conjugationName;
 @synthesize conjugatedVerb;
 
 - (ConjugationCategory)category {
-    if ([self.tenseDescription rangeOfString:@"[_\\b]past[_\\b]" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
+    if ([self.conjugationName rangeOfString:@"\\bpast\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
         return conjugationCategoryPast;
     }
     
-    if ([self.tenseDescription rangeOfString:@"[_\\b]future[_\\b]" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
+    if ([self.conjugationName rangeOfString:@"\\bfuture\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
         return conjugationCategoryFuture;
     }
 
-    if ([self.tenseDescription rangeOfString:@"[_\\b]present[_\\b]" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
+    if ([self.conjugationName rangeOfString:@"\\bpresent\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
         return conjugationCategoryPresent;
     }
 

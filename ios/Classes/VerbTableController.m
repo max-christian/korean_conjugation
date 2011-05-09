@@ -120,7 +120,7 @@
     }
     
     Conjugation* c = [[self relevantConjugations] objectAtIndex:indexPath.row];
-    cell.tenseDescription.text = [[c tenseDescription] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    cell.conjugationName.text = [c conjugationName];
     cell.conjugatedVerb.text = [c conjugatedVerb];
     return cell;
 }
@@ -169,7 +169,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CustomVerbCell* cell = (CustomVerbCell*)[tableView cellForRowAtIndexPath:indexPath];
-    [delegate verbTable:self didSelectConjugation:[cell.tenseDescription.text stringByReplacingOccurrencesOfString:@" " withString:@"_"] verb:cell.conjugatedVerb.text];
+    [delegate verbTable:self didSelectConjugation:cell.conjugationName.text verb:cell.conjugatedVerb.text];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

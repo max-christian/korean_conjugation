@@ -26,5 +26,5 @@
 @end
 
 @protocol VerbTableDelegate
-- (void) verbTable:(VerbTableController*)controller didSelectConjugation:(NSString*)tenseDescription verb:(NSString*)conjugatedVerb;
+- (void) verbTable:(VerbTableController*)controller didSelectConjugation:(NSString*)conjugationName verb:(NSString*)conjugatedVerb;
 @end

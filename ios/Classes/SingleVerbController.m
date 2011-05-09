@@ -12,7 +12,7 @@
 @implementation SingleVerbController
 
 @synthesize infinitive;
-@synthesize tenseDescription;
+@synthesize conjugationName;
 @synthesize webView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -58,7 +58,9 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView   
 {
-    NSString* javascript = [NSString stringWithFormat:@"show_conjugation_detail('%@','%@');", infinitive, tenseDescription];
+    NSString* javascript = [NSString stringWithFormat:@"fetch_conjugations('%@',true);", infinitive];
+    [self.webView stringByEvaluatingJavaScriptFromString:javascript];
+    javascript = [NSString stringWithFormat:@"show_conjugation_detail('%@');", conjugationName];
     [self.webView stringByEvaluatingJavaScriptFromString:javascript];
 }
 

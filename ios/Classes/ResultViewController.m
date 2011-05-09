@@ -112,6 +112,8 @@
         
         [self.navigationController pushViewController:beerFund animated:YES];
         [beerFund release];
+        self.tabBar.selectedItem = tabPresent;
+        [self tabBar:self.tabBar didSelectItem:(self.tabBar.selectedItem)];
     }
     
     [verbTable reloadData];
@@ -119,9 +121,9 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    NSString* jScript = [NSString stringWithFormat:@"fetch_conjugations('%@다');", verbStem];
+    NSString* jScript = [NSString stringWithFormat:@"fetch_conjugations('%@다',true);", verbStem];
     NSString* retVal = [self.webView stringByEvaluatingJavaScriptFromString:jScript];
-     
+    
     [verbTableController.conjugations removeAllObjects];
     
     for (NSString* line in [retVal componentsSeparatedByString:@"\n"]) {
@@ -129,7 +131,7 @@
         {
             NSArray* components = [line componentsSeparatedByString:@","];
             Conjugation* conjugation = [[Conjugation alloc] init];
-            conjugation.tenseDescription = [components objectAtIndex:0];
+            conjugation.conjugationName = [components objectAtIndex:0];
             conjugation.conjugatedVerb = [components objectAtIndex:1];
             [verbTableController.conjugations addObject:conjugation];
         }
@@ -139,11 +141,11 @@
     [verbTable reloadData];
 }
 
-- (void)verbTable:(VerbTableController *)controller didSelectConjugation:(NSString *)tenseDescription verb:(NSString*)conjugatedVerb
+- (void)verbTable:(VerbTableController *)controller didSelectConjugation:(NSString *)conjugationName verb:(NSString*)conjugatedVerb
 {
     SingleVerbController* detailViewController = [[SingleVerbController alloc] init];
     detailViewController.infinitive = [NSString stringWithFormat:@"%@다", verbStem];
-    detailViewController.tenseDescription = tenseDescription;
+    detailViewController.conjugationName = conjugationName;
     detailViewController.title = conjugatedVerb;
     [self.navigationController pushViewController:detailViewController animated:YES];
     [detailViewController release];

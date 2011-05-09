@@ -10,12 +10,12 @@
 
 @implementation CustomVerbCell
 @synthesize conjugatedVerb;
-@synthesize tenseDescription;
+@synthesize conjugationName;
 
 - (void)dealloc
 {
     [conjugatedVerb release];
-    [tenseDescription release];
+    [conjugationName release];
     [super dealloc];
 }
 

@@ -6,39 +6,44 @@
         <meta name="verify-v1" content="nfSbiOgPUnEWsQ8h5APnRPOxK0HWpZtiMMHZZ+oaIZ4=" >
         <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="korean/hangeul.js" charset="utf-8"></script>
+        <script type="text/javascript" src="korean/romanization.js" charset="utf-8"></script>
         <script type="text/javascript" src="korean/pronunciation.js" charset="utf-8"></script>
         <script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
         <script type="text/javascript">
             //<![CDATA[
-            function fetch_conjugations(infinitive) {
-                out = '';
+            var conjugations;
+            var infinitive;
+            
+            function fetch_conjugations(infinitive,regular) {
+                var out = '';
+                this.infinitive = infinitive;
+                conjugations = new Object;
                 conjugator.reasons = [];
-                for (conjugation in conjugator) {
-                    if (conjugator[conjugation].conjugation) {
-                        out += conjugation + ',';
-                        var conjugated = conjugator[conjugation](infinitive);
-                        out += conjugated + '\n';
-                    }
-                }
+                conjugator.each_conjugation(infinitive, regular, 
+                                            function(r) {
+                                                out += r.conjugation_name + ',';
+                                                out += r.conjugated + '\n';
+                                                conjugations[r.conjugation_name] = r;
+                                            });
                 return out;
             }
             
-            function show_conjugation_detail(infinitive, conjugation) {
-                var conjugated = conjugator[conjugation](infinitive);
-                var pron = pronunciation.get_pronunciation(conjugated);
-
+            function show_conjugation_detail(conjugation_name) {
+                var r = conjugations[conjugation_name];
                 var out = "";
                 out += '<div class="title">Conjugation</div>';
-                out += '<div class="value">' + conjugation.replace(/_/g, ' ') + '</div>';
+                out += '<div class="value">' + r.conjugation_name + '</div>';
                 out += '<div class="title">Pronunciation</div>';
-                if (pron == conjugated)
+                if (r.pronunciation == r.conjugated)
                     out += '<div class="value">(as written)</div>';
                 else
-                    out += '<div class="value">' + pron + '</div>';
+                    out += '<div class="value">' + r.pronunciation + '</div>';
+                out += '<div class="title">Romanised pronunciation</div>';
+                out += '<div class="value">' + r.romanized + '</div>';
                 out += '<div class="title">Real-world usage</div>';
-                out += '<div class="value"><a href=\'http://www.google.com/search?q="' + conjugated + '"\'>Google</a>';
-                out += '<div class="value"><a href=\'http://search.naver.com/search.naver?query="' + conjugated + '"\'>Naver</a>';
-                out += '<div class="value"><a href=\'http://search.daum.net/search?q="' + conjugated + '"\'>Daum</a>';
+                out += '<div class="value"><a href=\'http://www.google.com/search?q="' + r.conjugated + '"\'>Google</a>';
+                out += '<div class="value"><a href=\'http://search.naver.com/search.naver?query="' + r.conjugated + '"\'>Naver</a>';
+                out += '<div class="value"><a href=\'http://search.daum.net/search?q="' + r.conjugated + '"\'>Daum</a>';
 
                 $('#detail').html(out);
                 
@@ -64,7 +69,7 @@
         </script>
         
         <style type="text/css">
-            div
+            *
             {
                 font-family:AppleGothic;
             }

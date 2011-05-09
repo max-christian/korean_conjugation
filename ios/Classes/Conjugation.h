@@ -17,14 +17,14 @@ typedef enum {
 
 @interface Conjugation : NSObject {
     NSString* conjugatedVerb;
-    NSString* tenseDescription;
+    NSString* conjugationName;
     ConjugationCategory category;
 }
 
 - (NSComparisonResult)compare:(id)otherObject;
 
 @property (nonatomic, retain) NSString* conjugatedVerb;
-@property (nonatomic, retain) NSString* tenseDescription;
+@property (nonatomic, retain) NSString* conjugationName;
 @property (nonatomic, readonly) ConjugationCategory category;
 
 @end
