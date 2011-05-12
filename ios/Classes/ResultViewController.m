@@ -25,7 +25,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        regular = false;
     }
     return self;
 }
@@ -61,6 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    regular = false;
     self.title = [NSString stringWithFormat:@"%@다", verbStem];
     tabBar.selectedItem = tabPresent;
     verbTableController = [[VerbTableController alloc] init];
@@ -229,6 +229,7 @@
     detailViewController.infinitive = [NSString stringWithFormat:@"%@다", verbStem];
     detailViewController.conjugationName = conjugationName;
     detailViewController.title = conjugatedVerb;
+    detailViewController.regular = regular;
     [self.navigationController pushViewController:detailViewController animated:YES];
     [detailViewController release];
 }

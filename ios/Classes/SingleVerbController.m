@@ -14,6 +14,7 @@
 @synthesize infinitive;
 @synthesize conjugationName;
 @synthesize webView;
+@synthesize regular;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -60,7 +61,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView   
 {
-    NSString* javascript = [NSString stringWithFormat:@"fetch_conjugations('%@',true);", infinitive];
+    NSString* javascript = [NSString stringWithFormat:@"fetch_conjugations('%@',%@);", infinitive, regular? @"true":@"false"];
     [self.webView stringByEvaluatingJavaScriptFromString:javascript];
     javascript = [NSString stringWithFormat:@"show_conjugation_detail('%@');", conjugationName];
     [self.webView stringByEvaluatingJavaScriptFromString:javascript];

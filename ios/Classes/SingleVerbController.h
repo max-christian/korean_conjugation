@@ -11,6 +11,7 @@
 @interface SingleVerbController : UIViewController <UIWebViewDelegate> {
     NSString* infinitive;
     NSString* conjugationName;
+    bool regular;
     UIWebView *webView;
     int linkCount;
 }
@@ -18,5 +19,6 @@
 @property (nonatomic, retain) NSString* infinitive;
 @property (nonatomic, retain) NSString* conjugationName;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic) bool regular;
 
 @end
