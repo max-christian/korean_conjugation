@@ -26,6 +26,8 @@
 
 - (void)dealloc
 {
+    self.infinitive = nil;
+    self.conjugationName = nil;
     [webView release];
     [super dealloc];
 }

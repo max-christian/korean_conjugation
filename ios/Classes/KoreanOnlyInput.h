@@ -11,7 +11,7 @@
 
 @interface KoreanOnlyInput : NSObject <UITextFieldDelegate>
 {
-
+    NSMutableCharacterSet* koreanUnicode; 
 }
 
 @end

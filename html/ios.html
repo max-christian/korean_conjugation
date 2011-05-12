@@ -19,7 +19,7 @@
                 this.infinitive = infinitive;
                 conjugations = new Object;
                 conjugator.reasons = [];
-                conjugator.each_conjugation(infinitive, regular, 
+                conjugator.each_conjugation(infinitive,regular, 
                                             function(r) {
                                                 out += r.conjugation_name + ',';
                                                 out += r.conjugated + '\n';
@@ -28,24 +28,25 @@
                 return out;
             }
             
+            function both_regular_and_irregular() {
+                var base = conjugator.base(this.infinitive,false); // 'regular' parameter is unused
+                return (base in conjugator.both_regular_and_irregular);
+            }
+            
             function show_conjugation_detail(conjugation_name) {
                 var r = conjugations[conjugation_name];
-                var out = "";
-                out += '<div class="title">Conjugation</div>';
-                out += '<div class="value">' + r.conjugation_name + '</div>';
-                out += '<div class="title">Pronunciation</div>';
+                $("#conjugation_name").html(r.conjugation_name);
                 if (r.pronunciation == r.conjugated)
-                    out += '<div class="value">(as written)</div>';
+                    $("#pronunciation").html("(as written)");
                 else
-                    out += '<div class="value">' + r.pronunciation + '</div>';
-                out += '<div class="title">Romanised pronunciation</div>';
-                out += '<div class="value">' + r.romanized + '</div>';
-                out += '<div class="title">Real-world usage</div>';
-                out += '<div class="value"><a href=\'http://www.google.com/search?q="' + r.conjugated + '"\'>Google</a>';
-                out += '<div class="value"><a href=\'http://search.naver.com/search.naver?query="' + r.conjugated + '"\'>Naver</a>';
-                out += '<div class="value"><a href=\'http://search.daum.net/search?q="' + r.conjugated + '"\'>Daum</a>';
-
-                $('#detail').html(out);
+                    $("#pronunciation").html(r.pronunciation);
+                $("#romanized").html(r.romanized);
+                $("#googlelink").attr('href','http://www.google.com/search?q="' + r.conjugated + '"');
+                $("#naverlink").attr('href','http://search.naver.com/search.naver?query="' + r.conjugated + '"');
+                $("#daumlink").attr('href','http://search.daum.net/search?q="' + r.conjugated + '"');
+                for (reason in r.reasons) {
+                    $("#reasonlist").append('<li>' + r.reasons[reason] + '</li>');
+                }
                 
                 var baseURL = 'http://en.wiktionary.org';
                 $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+infinitive,
@@ -53,6 +54,7 @@
                         $('#warning').show();
                         $('#warningverb').html(infinitive);  
                         $('#licenseinfo').hide();
+                        $('#wikititle').hide();
                         if(json.parse.revid > 0) { // an exception occurs within this call if Wiktionary entry not found
                             var sourceurl = baseURL + '/wiki/' + infinitive;
                             $('#wikiinfo').html(json.parse.text['*']);
@@ -61,6 +63,7 @@
                             $('#wikiinfo .toc').hide();
                             $('#sourceurl').attr('href',sourceurl);
                             $('#licenseinfo').show();
+                            $('#wikititle').show();
                             $('#warning').hide();
                         } 
                     });
@@ -69,6 +72,10 @@
         </script>
         
         <style type="text/css">
+            body
+            {
+                margin:0em;
+            }
             *
             {
                 font-family:AppleGothic;
@@ -76,11 +83,14 @@
             .title 
             {
                 clear:right;
+                background:lightgrey;
+                padding:0.1em 0em 0.1em 0.5em;
             }
             .value
             {
                 float:right;
                 margin-left:1em;
+                padding:0.1em 0.5em 0.1em 0em;
             }
             #licenseinfo
             {
@@ -88,10 +98,12 @@
                 padding-top:1em;
                 font-size:x-small; 
                 display:none;
+                text-align:center;
             }
             #wikiinfo
             {
                 clear:both;
+                padding:0em 0.5em;
             }
             #warning
             {
@@ -101,15 +113,37 @@
                 background:red;
                 text-align:center;
             }
+            #reasonlist
+            {
+                margin:0px;
+                font-size:small;
+                padding-left:0.5em;
+                margin-left:0.5em;
+            }
         </style>
     </head>
     <body>
         <div id="warning">No Wiktionary entry for <span id="warningverb">infinitive</span>.<br />Please check your spelling!</div>
-        <div id="detail"></div>
+        <div class="title">Conjugation</div>
+        <div class="value" id="conjugation_name"></div>
+        <div class="title">Conjugation rules</div>
+        <div class="value">
+            <ol id="reasonlist">
+            </ol>
+        </div>
+        <div class="title">Pronunciation</div>
+        <div class="value" id="pronunciation"></div>
+        <div class="title">Romanised pronunciation</div>
+        <div class="value" id="romanized"></div>
+        <div class="title">Real-world usage</div>
+        <div class="value"><a id="naverlink">Naver</a></div>
+        <div class="value"><a id="daumlink">Daum</a></div>
+        <div class="value"><a id="googlelink">Google</a></div>
+        <div class="title" id="wikititle">Definition</div>
+        <div id="wikiinfo"></div>
         <div id="licenseinfo">
             Modified original content <a id='sourceurl'>from Wiktionary</a>.
             Text available under <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike License</a>.
         </div>
-        <div id="wikiinfo"></div>
     </body>
 </html>

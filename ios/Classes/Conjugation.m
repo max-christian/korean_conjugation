@@ -12,25 +12,37 @@
 @implementation Conjugation
 @synthesize conjugationName;
 @synthesize conjugatedVerb;
+@synthesize category;
 
-- (ConjugationCategory)category {
-    if ([self.conjugationName rangeOfString:@"\\bpast\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
-        return conjugationCategoryPast;
+-(void) setConjugationName:(NSString *)newName
+{
+    if (conjugationName != newName)
+    {
+        [newName retain];
+        [conjugationName release];
+        conjugationName = newName;
     }
     
-    if ([self.conjugationName rangeOfString:@"\\bfuture\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
-        return conjugationCategoryFuture;
+    if ([self.conjugationName rangeOfString:@"\\bpast\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
+        category = conjugationCategoryPast;
+    } else if ([self.conjugationName rangeOfString:@"\\bfuture\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
+        category = conjugationCategoryFuture;
+    } else if ([self.conjugationName rangeOfString:@"\\bpresent\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
+        category = conjugationCategoryPresent;
+    } else {
+        category = conjugationCategoryOther;
     }
-
-    if ([self.conjugationName rangeOfString:@"\\bpresent\\b" options:(NSCaseInsensitiveSearch+NSRegularExpressionSearch)].location != NSNotFound) {
-        return conjugationCategoryPresent;
-    }
-
-    return conjugationCategoryOther;
 }
 
 - (NSComparisonResult)compare:(id)otherObject {
     return self.category > ((Conjugation*)otherObject).category;
+}
+
+- (void)dealloc
+{
+    self.conjugatedVerb = nil;
+    self.conjugationName = nil;
+    [super dealloc];
 }
 
 @end

@@ -47,10 +47,11 @@
 					<object class="IBUIImageView" id="927106612">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, -216}, {320, 460}}</string>
+						<string key="NSFrameSize">{320, 244}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="818894337"/>
+						<int key="IBUIContentMode">1</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
@@ -124,7 +125,6 @@
 						<string key="NSFrame">{{199, 123}, {32, 31}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">7</int>
@@ -411,7 +411,7 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="NS.key.0">background.png</string>
-			<string key="NS.object.0">{640, 920}</string>
+			<string key="NS.object.0">{640, 488}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">301</string>
 	</data>

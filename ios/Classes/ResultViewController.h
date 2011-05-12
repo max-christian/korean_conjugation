@@ -22,6 +22,8 @@
     VerbTableController* verbTableController;
     UIWebView *webView;
     NSString* verbStem;
+    bool regular;
+    bool addedUIForDualForm;
 }
 
 @property (nonatomic, retain) IBOutlet UITabBar *tabBar;
@@ -33,5 +35,10 @@
 @property (nonatomic, retain) IBOutlet VerbTableController* verbTableController;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) NSString* verbStem;
+
+- (void)loadConjugations;
+- (void)addUIForDualForm;
+- (void)setUIForForm;
+- (void)switchVerbForm:(id)sender;
 
 @end

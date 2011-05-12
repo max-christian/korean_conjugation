@@ -21,13 +21,14 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.conjugations = [[NSMutableArray alloc] init];
+        self->conjugations = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void)dealloc
 {
+    self.conjugationFilter = nil;
     [self.conjugations release];
     [super dealloc];
 }

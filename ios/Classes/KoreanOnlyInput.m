@@ -10,8 +10,6 @@
 
 @implementation KoreanOnlyInput
 
-NSMutableCharacterSet* koreanUnicode; 
-
 - (id)init
 {
     self = [super init];
@@ -21,7 +19,7 @@ NSMutableCharacterSet* koreanUnicode;
         // 0x3130 - 0x318F : Hangul Compatibility Jamo (96)
         // 0xAC00 - 0xD7A3 : Hangul Syllables (11172)
         
-        koreanUnicode = [[[NSMutableCharacterSet alloc] init] retain];
+        koreanUnicode = [[NSMutableCharacterSet alloc] init];
         NSRange range;
         
         range.location = 0x1100;

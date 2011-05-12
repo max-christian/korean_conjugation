@@ -25,20 +25,25 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        verbTableController = [[VerbTableController alloc] init];
+        regular = false;
     }
     return self;
 }
 
 - (void)dealloc
 {
+    tabBar.delegate = nil;
     [tabBar release];
     [tabPast release];
     [tabPresent release];
     [tabFuture release];
     [tabDonate release];
+    verbTable.delegate = nil;
+    verbTable.dataSource = nil;
     [verbTable release];
+    verbTableController.delegate = nil;
     [verbTableController release];
+    webView.delegate = nil;
     [webView release];
     [super dealloc];
 }
@@ -58,6 +63,7 @@
     [super viewDidLoad];
     self.title = [NSString stringWithFormat:@"%@다", verbStem];
     tabBar.selectedItem = tabPresent;
+    verbTableController = [[VerbTableController alloc] init];
     verbTable.delegate = verbTableController;
     verbTable.dataSource = verbTableController;
     verbTableController.delegate = self;
@@ -121,7 +127,13 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    NSString* jScript = [NSString stringWithFormat:@"fetch_conjugations('%@다',true);", verbStem];
+    [self loadConjugations];
+}
+
+- (void)loadConjugations
+{
+    NSString* infinitive = [NSString stringWithFormat:@"%@다", verbStem]; 
+    NSString* jScript = [NSString stringWithFormat:@"fetch_conjugations('%@',%@);", infinitive, regular? @"true":@"false"];
     NSString* retVal = [self.webView stringByEvaluatingJavaScriptFromString:jScript];
     
     [verbTableController.conjugations removeAllObjects];
@@ -134,11 +146,81 @@
             conjugation.conjugationName = [components objectAtIndex:0];
             conjugation.conjugatedVerb = [components objectAtIndex:1];
             [verbTableController.conjugations addObject:conjugation];
+            [conjugation release];
         }
     }
     
     [verbTableController.conjugations sortUsingSelector:@selector(compare:)];
     [verbTable reloadData];
+    
+    retVal = [self.webView stringByEvaluatingJavaScriptFromString:@"both_regular_and_irregular();"];
+    if ([retVal isEqualToString:@"true"]) {
+        if (!addedUIForDualForm)
+            [self addUIForDualForm];
+        [self setUIForForm];
+    }
+}
+
+- (void)addUIForDualForm 
+{
+    // Replace titleView
+    CGRect headerTitleSubtitleFrame = CGRectMake(0, 0, 140, 44);    
+    UIView* _headerTitleSubtitleView = [[[UILabel alloc] initWithFrame:headerTitleSubtitleFrame] autorelease];
+    _headerTitleSubtitleView.backgroundColor = [UIColor clearColor];
+    _headerTitleSubtitleView.autoresizesSubviews = YES;
+    
+    CGRect titleFrame = CGRectMake(0, 2, 140, 24);  
+    UILabel *titleView = [[[UILabel alloc] initWithFrame:titleFrame] autorelease];
+    titleView.backgroundColor = [UIColor clearColor];
+    titleView.font = [UIFont boldSystemFontOfSize:20];
+    titleView.textAlignment = UITextAlignmentCenter;
+    titleView.textColor = [UIColor whiteColor];
+    titleView.shadowColor = [UIColor darkGrayColor];
+    titleView.shadowOffset = CGSizeMake(0, -1);
+    titleView.adjustsFontSizeToFitWidth = YES;
+    [_headerTitleSubtitleView addSubview:titleView];
+    
+    CGRect subtitleFrame = CGRectMake(0, 24, 140, 44-24);   
+    UILabel *subtitleView = [[[UILabel alloc] initWithFrame:subtitleFrame] autorelease];
+    subtitleView.backgroundColor = [UIColor clearColor];
+    subtitleView.font = [UIFont systemFontOfSize:13];
+    subtitleView.textAlignment = UITextAlignmentCenter;
+    subtitleView.textColor = [UIColor lightGrayColor];
+    subtitleView.shadowColor = [UIColor darkGrayColor];
+    subtitleView.shadowOffset = CGSizeMake(0, -1);
+    subtitleView.adjustsFontSizeToFitWidth = YES;
+    [_headerTitleSubtitleView addSubview:subtitleView];
+    
+    _headerTitleSubtitleView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
+                                                 UIViewAutoresizingFlexibleRightMargin |
+                                                 UIViewAutoresizingFlexibleTopMargin |
+                                                 UIViewAutoresizingFlexibleBottomMargin);
+    
+    self.navigationItem.titleView = _headerTitleSubtitleView;
+    
+    UIBarButtonItem *regularButton = [[UIBarButtonItem alloc] initWithTitle:@"" 
+                                                                      style:UIBarButtonItemStyleBordered target:self action:@selector(switchVerbForm:)];      
+    self.navigationItem.rightBarButtonItem = regularButton;
+    [regularButton release];
+    addedUIForDualForm = true;
+}
+
+- (void)setUIForForm 
+{
+    UIView* headerTitleSubtitleView = self.navigationItem.titleView;
+    UILabel* titleView = [headerTitleSubtitleView.subviews objectAtIndex:0];
+    UILabel* subtitleView = [headerTitleSubtitleView.subviews objectAtIndex:1];
+    assert((titleView != nil) && (subtitleView != nil) && ([titleView isKindOfClass:[UILabel class]]) && ([subtitleView isKindOfClass:[UILabel class]]));
+    titleView.text = [NSString stringWithFormat:@"%@다", verbStem];
+    subtitleView.text = regular? @"Regular Form":@"Irregular Form";
+    
+    UIBarButtonItem* button = self.navigationItem.rightBarButtonItem;
+    button.title = regular? @"Irregular":@"Regular";
+}
+
+- (void)switchVerbForm:(id)sender {
+	regular = !regular;
+    [self loadConjugations];
 }
 
 - (void)verbTable:(VerbTableController *)controller didSelectConjugation:(NSString *)conjugationName verb:(NSString*)conjugatedVerb

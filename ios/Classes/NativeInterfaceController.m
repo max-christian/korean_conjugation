@@ -51,6 +51,7 @@
 
 - (void)viewDidUnload
 {
+    [verbField.delegate release];
     [verbField release];
     verbField = nil;
     [self setVerbField:nil];
@@ -84,6 +85,7 @@
     ResultViewController* rvc = [[ResultViewController alloc] init];
     rvc.verbStem = verbField.text;
     [self.navigationController pushViewController:rvc animated:YES];
+    [rvc release];
 }
 
 - (void) viewWillAppear:(BOOL)animated

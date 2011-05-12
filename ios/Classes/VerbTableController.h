@@ -19,7 +19,7 @@
     id <VerbTableDelegate> delegate;
 }
 
-@property (nonatomic, retain) NSMutableArray* conjugations;
+@property (nonatomic, assign) NSMutableArray* conjugations;
 @property (nonatomic, retain) NSPredicate* conjugationFilter;
 @property (nonatomic, retain) id <VerbTableDelegate> delegate;
 
